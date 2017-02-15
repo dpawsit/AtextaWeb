@@ -1,0 +1,9 @@
+const Users = require ('./db_models').Users;
+const Command = require ('./db_models').Command;
+const EmailRec = require ('./db_models').EmailRec;
+const TextRec = require ('./db_models').TextRec;
+const SlackRec = require ('./db_models').SlackRec;
+const GroupRecipients = require ('./db_models').GroupRecipients;
+const Groups = require ('./db_models').Groups;
+const MediumList = require ('./db_models').MediumList;
+const Message = require ('./db_models').Message;
