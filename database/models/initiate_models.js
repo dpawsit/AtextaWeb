@@ -7,4 +7,6 @@ const GroupRecipients = require ('./db_models').GroupRecipients;
 const Recipient = require('./db_models').Recipient;
 const Group = require ('./db_models').Group;
 const Message = require ('./db_models').Message;
-const SecretMessage = require('./db_models').SecretMessage
+const SecretMessage = require('./db_models').SecretMessage;
+const TriggeredCommands = require('./db_models').TriggeredCommands;
+const TriggeredSecrets = require('./db_models').TriggeredSecrets;

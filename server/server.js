@@ -3,6 +3,7 @@ const session = require('express-session')
 const path = require('path')
 const bodyParser = require('body-parser')
 const database = require('../database/config.js')
+const helmet = require('helmet');
 const port = process.env.PORT || 3000;
 
 const app = express()
@@ -16,9 +17,10 @@ app.use(session({
   saveUninitialized : false,
 }))
 
+app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-//app.use(express.static(path.join(__dirname, '../app/public')));
+app.use(express.static(path.join(__dirname, '../app/public')));
 
 const router = require('./router.js')(app);
 

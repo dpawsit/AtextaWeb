@@ -258,5 +258,7 @@ module.exports = {
   SecretCommand : SecretCommand,
   SecretTriggers : SecretTriggers,
   SecretResponse : SecretResponse,
-  SecretMessage : SecretMessage
+  SecretMessage : SecretMessage,
+  TriggeredCommands : TriggeredCommands,
+  TriggeredSecrets : TriggeredSecrets
 }
