@@ -1,6 +1,8 @@
 import React from 'react'
+import { MuiThemeProvider } from 'material-ui/styles';
 import Navbar from '../components/Navbar.jsx'
 import MessageList from './MessageList.jsx'
+
  
 class App extends React.Component {
 	constructor(props) {
@@ -8,10 +10,12 @@ class App extends React.Component {
 	}
 	render() {
 		return (
-			<div>
-				<Navbar	/>
-				<MessageList />
-			</div>
+			<MuiThemeProvider>
+				<div>
+					<Navbar	/>
+					<MessageList />
+				</div>
+			</MuiThemeProvider>
 		)
 	}
 }

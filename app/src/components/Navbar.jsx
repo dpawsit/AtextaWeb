@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import AppBar from 'material-ui/AppBar';
+import { AppBar } from 'material-ui';
 
 // const MyNavbar = () => (
 //   <AppBar
