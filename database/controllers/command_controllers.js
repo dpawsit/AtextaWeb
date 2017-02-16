@@ -120,5 +120,18 @@ module.exports.UpdateCommandMessage = (inputCommandId, newMessageInfo) => {
   })
 }
 
+module.exports.DeleteCommand = (inputCommandId) => {
+  return new Promise ((resolve, reject) => {
+    db.query('update Command set status = 0 where id = ?', 
+    {replacements : [inputCommandId], type: sequelize.QueryTypes.UPDATE})
+    .then(result => {
+      resolve(result)
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
 
 
