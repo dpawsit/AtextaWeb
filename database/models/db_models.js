@@ -56,7 +56,7 @@ var Recipient = db.define('Recipient', {
     allowNull : false,
     unique : false
   },
-  contact_ifno : {
+  contactInfo : {
     type : Sequelize.STRING,
     allowNull : false,
     unique : false
@@ -153,7 +153,7 @@ var SecretResponse = db.define('SecretResponse', {
     unique : false,
     allowNull : false
   },
-  triggerId : {
+  secretCommandId : {
     type : Sequelize.INTEGER,
     allowNull : true,
     unique : false
@@ -215,7 +215,7 @@ var SecretMessage = db.define('SecretMessage', {
     unique : false,
     allowNull : false
   },
-  SecretCommanId : {
+  secretCommanId : {
     type : Sequelize.INTEGER,
     unique : false,
     allowNull : true
