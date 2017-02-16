@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class MessageList extends React.Component {
 	constructor(props) {
@@ -10,11 +11,11 @@ class MessageList extends React.Component {
 	renderMessages(message) {
 		return(
 			<tr key={message.trigger}>
-	      <td><div contentEditable>{message.trigger}</div></td>
-	      <td>{message.medium}</td>
-	      <td>{message.text}</td>
-	      <td>{message.group}</td>
-	 	 	</tr>	
+				<td><div contentEditable>{message.trigger}</div></td>
+				<td>{message.medium}</td>
+				<td>{message.text}</td>
+				<td>{message.group}</td>
+			</tr>
 	 	 	)
 
 	}
@@ -34,22 +35,22 @@ class MessageList extends React.Component {
 			group: 'wife'
 		}]
 		return (
-			<table className="table table-hover">
-				<thead>
-					<tr>
-						<th>Trigger</th>
-						<th>Medium</th>
-						<th>Text</th>
-						<th>Group</th>
-					</tr>
-				</thead>
-				<tbody>
-					{exampleMessages.map(this.renderMessages)}
-					<tr>
-						<button type="button">add new</button>
-					</tr>
-				</tbody>
-			</table>
+			<div>
+				<table className="table table-hover">
+					<thead>
+						<tr>
+							<th>Trigger</th>
+							<th>Medium</th>
+							<th>Text</th>
+							<th>Group</th>
+						</tr>
+					</thead>
+					<tbody>
+						{exampleMessages.map(this.renderMessages)}
+					</tbody>
+				</table>
+				<RaisedButton type="button" label="add new Sean did this" secondary={true} />
+			</div>
 		)
 	}
 }
