@@ -22,6 +22,16 @@ router.get('/Groups/:userId', (req, res) => {
   })
 })
 
+router.get('/availableRecipients/:groupId/:type', (req, res) => {
+  gc.GetAvailableRecipients(req.params.groupId, req.params.type)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 router.put('/groupName/:groupId/:groupName', (req, res) => {
   gc.UpdateGroupName(req.params.groupId, req.params.groupName)
   .then(result => {
@@ -52,6 +62,15 @@ router.delete('/Recipient/:recipientId', (req, res) => {
   })
 })
 
+router.delete('/GroupRecipient/:groupId/:recId', (req, res) => {
+  gc.RemoveRecipient(req.params.groupId, req.params.recId)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
 router.delete('/Group/:groupId', (req, res) => {
   gc.DeleteGroup(req.parms.groupId)
   .then(result => {

@@ -119,6 +119,36 @@ module.exports.UpdateRecipientInfo = (inputRecipId, inputInfo) => {
     })
   })
 }
+
+module.exports.RemoveRecipient = (inputGroupId, recId) => {
+ return new Promise ((resolve, reject) => {
+  GroupRecipients.destroy({
+    where : {
+      recipientId : recId,
+      groupId : inputGroupId
+    }
+  })
+  .then(result => {
+    resolve(result);
+  })
+  .catch(error => {
+    reject(error);
+  })
+ })
+}
+
+module.exports.GetAvailableRecipients = (groupId, type) => {
+  return new Promise ((resolve, reject) => {
+    db.query('select name, contactInfo from Recipient where mediumType = ? and id not in (select recipientId from GroupRecipients where groupId = ?)',
+    {replacements : [type, groupId], type : sequelize.QueryTypes.SELECT})
+    .then(availableUsers => {
+      resolve(availableUsers);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
 //delete recipient
 // input : recId
 module.exports.DeleteRecipient = (recId) => {
@@ -129,7 +159,7 @@ module.exports.DeleteRecipient = (recId) => {
           id : recId
         }
       }),
-      GroupRecipients.delete({
+      GroupRecipients.destroy({
         where : {
           recipientId : recId
         }
