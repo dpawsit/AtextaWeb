@@ -1,5 +1,6 @@
-import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react'
+import { RaisedButton } from 'material-ui'
+import { connect } from 'react-redux'
 
 class MessageList extends React.Component {
 	constructor(props) {
@@ -8,51 +9,64 @@ class MessageList extends React.Component {
 		this.renderMessages = this.renderMessages.bind(this)
 	}
 
-	renderMessages(message) {
-		return(
-			<tr key={message.trigger}>
-				<td><div contentEditable>{message.trigger}</div></td>
-				<td>{message.medium}</td>
-				<td>{message.text}</td>
-				<td>{message.group}</td>
-			</tr>
-	 	 	)
 
+	renderMessages(messages) {
+		let groups = messages.map(message => {
+			return message.group.name
+		})
+		console.log('the groups are', groups)
+
+		function renderMessage(message) {
+			function renderGroups(groupName) {
+				return(
+					<option
+					value={groupName}>{groupName}</option>
+				)
+			}
+			return(
+				<tr key={message.trigger}>
+		      <td contentEditable>{message.trigger}</td>
+		      <td>{message.group.medium}</td>
+		      <td contentEditable>{message.text}</td>
+		      <td>
+			      	{message.group.name}
+		      	<select>
+			      	{groups.map(renderGroups)}
+		      	</select>
+		      </td>
+		 	 	</tr>	
+		 	 	)
+		}
+		return messages.map(renderMessage)
 	}
 	render() {
 		const style = {
 		  marginRight: 20,
 		};
-		let exampleMessages = [{
-			trigger: 'Running Late',
-			medium: 'Slack',
-			text: 'there was a meteor on the 405, imma be 10 mins late',
-			group: 'hrla12'
-		}, {
-			trigger: 'order food',
-			medium: 'Text',
-			text: 'I\'ll be home in 10 mins, please order me some pizza',
-			group: 'wife'
-		}]
+
 		return (
-			<div>
-				<table className="table table-hover">
-					<thead>
-						<tr>
-							<th>Trigger</th>
-							<th>Medium</th>
-							<th>Text</th>
-							<th>Group</th>
-						</tr>
-					</thead>
-					<tbody>
-						{exampleMessages.map(this.renderMessages)}
-					</tbody>
-				</table>
-				<RaisedButton type="button" label="add new Sean did this" secondary={true} />
-			</div>
+			<table className="table table-hover">
+				<thead>
+					<tr>
+						<th>Trigger</th>
+						<th>Medium</th>
+						<th>Text</th>
+						<th>Group</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.renderMessages(this.props.messages)}
+					<tr>
+						<RaisedButton type="button" label="add a new one" secondary={true} />
+					</tr>
+				</tbody>
+			</table>
 		)
 	}
 }
 
-export default MessageList
+function mapStateToProps({ messages }) {
+	return { messages };
+}
+
+export default connect(mapStateToProps)(MessageList)
