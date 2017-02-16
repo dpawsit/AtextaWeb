@@ -1,7 +1,7 @@
 var db = require('../config.js');
 var Sequelize = require('sequelize');
 
-var Users = db.define('Users', {
+var User = db.define('User', {
   email : {
     type : Sequelize.STRING,
     allowNull : false,
@@ -19,7 +19,7 @@ var Users = db.define('Users', {
   }
 })
 
-var Groups = db.define('Groups', {
+var Group = db.define('Group', {
   name : {
     type : Sequelize.STRING,
     allowNull : false,
@@ -30,8 +30,8 @@ var Groups = db.define('Groups', {
     allowNull : false,
     unique : false
   },
-  mediumId : {
-    type : Sequelize.INTEGER,
+  mediumType : {
+    type : Sequelize.CHAR,
     allowNull : false,
     unique : false
   }
@@ -43,47 +43,26 @@ var GroupRecipients = db.define('GroupRecipients', {
     allowNull : false,
     unique : false
   },
-  recId : {
+  recipientId : {
     type : Sequelize.STRING,
     allowNull : false,
     unique : false
   }
 })
 
-var TextRec = db.define('TextRec', {
+var Recipient = db.define('Recipient', {
   name : {
     type : Sequelize.STRING,
     allowNull : false,
     unique : false
   },
-  phone : {
-    type : Sequelize.INTEGER,
-    allowNull : false,
-    unique : false
-  }
-})
-
-var EmailRec = db.define('EmailRec', {
-  name : {
-    type : Sequelize.STRING,
-    allowNull : false,
-    unique : false
-  }, 
-  email : {
-    type : Sequelize.STRING,
-    allowNull : false,
-    unique : false
-  }
-})
-
-var SlackRec = db.define('SlackRec', {
-  name : {
+  contact_ifno : {
     type : Sequelize.STRING,
     allowNull : false,
     unique : false
   },
-  slackInfo : {
-    type : Sequelize.STRING,
+  mediumType : {
+    type : Sequelize.CHAR,
     allowNull : false,
     unique : false
   }
@@ -110,10 +89,88 @@ var Command = db.define('Command', {
     allowNull : false,
     unique : false   
   },
-  mediumId : {
+ verified : {
+   type : Sequelize.BOOLEAN,
+   allowNull : false,
+   defaulValue : false
+ },
+  status : {
     type : Sequelize.INTEGER,
+    defaulValue : 1,
     allowNull : false,
-    unique : false    
+    unique : false
+  }
+})
+
+var SecretCommand = db.define('SecretCommand', {
+ triggerId : {
+   type : Sequelize.INTEGER,
+   allowNull : false,
+   unique : false
+ },
+ userId : {
+   type : Sequelize.INTEGER,
+   allowNull : false,
+   unique : false
+ }, 
+ groupId : {
+   type : Sequelize.INTEGER,
+   allowNull : false,
+   unique : false
+ },
+ secretMessageId : {
+   type : Sequelize.INTEGER,
+   allowNull : false,
+   unique : false
+ },
+ responseId : {
+   type : Sequelize.INTEGER,
+   allowNull : false,
+   unique : false
+ },
+ verified : {
+   type : Sequelize.BOOLEAN,
+   allowNull : false,
+   defaulValue : false
+ },
+  status : {
+  type : Sequelize.INTEGER,
+  defaulValue : 1,
+  allowNull : false,
+  unique : false
+  }
+})
+
+var SecretResponse = db.define('SecretResponse', {
+  speech : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
+  },
+    count : {
+    type: Sequelize.INTEGER,
+    defaulValue : 0,
+    unique : false,
+    allowNull : false
+  },
+  triggerId : {
+    type : Sequelize.INTEGER,
+    allowNull : true,
+    unique : false
+  }
+})
+
+var SecretTriggers = db.define('SecretTriggers', {
+  name : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  },
+  count : {
+    type: Sequelize.INTEGER,
+    defaulValue : 0,
+    unique : false,
+    allowNull : false
   }
 })
 
@@ -125,32 +182,81 @@ var Message = db.define('Message', {
   },
   additionalContent : {
     type : Sequelize.STRING,
+    allowNull : true,
+    unique : false
+  },
+  count : {
+    type: Sequelize.INTEGER,
+    defaulValue : 0,
+    unique : false,
+    allowNull : false
+  },
+  commandId : {
+    type : Sequelize.INTEGER,
+    unique : false,
+    allowNull : true
+  }
+})
+
+var SecretMessage = db.define('SecretMessage', {
+  text : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
+  },
+  additionalContent : {
+    type : Sequelize.STRING,
+    allowNull : true,
+    unique : false
+  },
+  count : {
+    type: Sequelize.INTEGER,
+    defaulValue : 0,
+    unique : false,
+    allowNull : false
+  },
+  SecretCommanId : {
+    type : Sequelize.INTEGER,
+    unique : false,
+    allowNull : true
+  }
+})
+
+var TriggeredCommands = db.define('TriggeredCommands', {
+  commandId : {
+    type : Sequelize.INTEGER,
+    allowNull : false,
+    unique : false
+  },
+  userId : {
+    type : Sequelize.INTEGER,
     allowNull : false,
     unique : false
   }
 })
 
-var MediumList = db.define('MediumList', {
-  mediumId : {
+var TriggeredSecrets = db.define('TriggeredSecrets', {
+  SecretCommandId : {
     type : Sequelize.INTEGER,
     allowNull : false,
-    unique : true
+    unique : false
   },
-  mediumName : {
-    type : Sequelize.STRING,
+    userId : {
+    type : Sequelize.INTEGER,
     allowNull : false,
-    unique : true
+    unique : false
   }
 })
 
 module.exports = {
-  Users : Users,
-  Groups : Groups, 
+  User : User,
+  Group : Group, 
   GroupRecipients : GroupRecipients,
-  TextRec : TextRec,
-  EmailRec : EmailRec, 
-  SlackRec : SlackRec,
+  Recipient : Recipient,
   Command : Command,
   Message : Message,
-  MediumList : MediumList
+  SecretCommand : SecretCommand,
+  SecretTriggers : SecretTriggers,
+  SecretResponse : SecretResponse,
+  SecretMessage : SecretMessage
 }
