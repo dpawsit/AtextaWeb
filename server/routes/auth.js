@@ -36,14 +36,15 @@ const authenticateUser = (token) => {
   })
 }
 
-router.post('/', (req, res) => {
+router.post('/login', (req, res) => {
 
  var token = req.body.token;
 
  authenticateUser(token)
  .then(userInfo => {
-   userController(userInfo)
+   userController.UserLogin(userInfo)
    .then(userId => {
+     req.session.token = token;
      res.status(200).json(userId);
    })
    .catch(error => {
@@ -53,6 +54,11 @@ router.post('/', (req, res) => {
  .catch(error => {
    res.status(403).send(error);
  })
+})
+
+router.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.status(200).json({logout : true});
 })
 
 module.exports = router;
