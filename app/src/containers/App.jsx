@@ -7,7 +7,6 @@ import MessageList from './MessageList.jsx'
 import GroupList from './GroupList.jsx'
 import AddGroupModal from './addGroupModal.jsx'
 import AddMessageModal from './AddMessageModal.jsx'
-
  
 class App extends React.Component {
 	constructor(props) {
@@ -38,6 +37,7 @@ class App extends React.Component {
 	toggleAddMessageModal() {
 		this.setState({showAddMessageModal: !this.state.showAddMessageModal})
 	}
+
 	render() {
 		return (
 			<div>
