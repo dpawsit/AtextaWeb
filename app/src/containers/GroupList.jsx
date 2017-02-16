@@ -10,17 +10,22 @@ class GroupList extends React.Component {
 		this.renderGroups = this.renderGroups.bind(this)
 	}
 
-	renderGroups(message) {
+	renderGroups(group) {
+		function renderPeople(person) {
+			return(
+				<li>{person}</li>
+			)
+		}
 		return(
-			<tr key={message.trigger}>
-	      <td contentEditable>{message.group.name}</td>
-	      <td>some list of people 						
-	      		<FloatingActionButton mini={true}>
-				      <ContentAdd />
-				    </FloatingActionButton>
+			<tr key={group.group}>
+	      <td contentEditable>{group.group}</td>
+	      <td>
+	      <ul>
+	      	{group.people.map(renderPeople)}
+	      </ul>
 				</td>
-	      <td>{message.group.medium}</td>
-	      <td>{message.trigger}</td>
+	      <td>does group table have this?</td>
+	      <td>does group table have this?</td>
 	 	 	</tr>	
 	 	 	)
 
@@ -37,7 +42,7 @@ class GroupList extends React.Component {
 					</tr>
 				</thead>
 				<tbody>
-					{this.props.messages.map(this.renderGroups)}
+					{this.props.groups.map(this.renderGroups)}
 				<RaisedButton type="button" label="add a new one" secondary={true} />
 				</tbody>
 			</table>
@@ -45,8 +50,8 @@ class GroupList extends React.Component {
 	}
 }
 
-function mapStateToProps({ messages }) {
-	return { messages };
+function mapStateToProps({ messages, people, groups }) {
+	return { messages, people, groups };
 }
 
 export default connect(mapStateToProps)(GroupList)

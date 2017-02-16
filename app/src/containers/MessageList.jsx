@@ -11,16 +11,14 @@ class MessageList extends React.Component {
 
 
 	renderMessages(messages) {
-		let groups = messages.map(message => {
-			return message.group.name
-		})
-		console.log('the groups are', groups)
+		let groups = this.props.groups
 
 		function renderMessage(message) {
-			function renderGroups(groupName) {
+
+			function renderGroups(group) {
 				return(
 					<option
-					value={groupName}>{groupName}</option>
+					value={group.group}>{group.group}</option>
 				)
 			}
 			return(
@@ -65,8 +63,8 @@ class MessageList extends React.Component {
 	}
 }
 
-function mapStateToProps({ messages }) {
-	return { messages };
+function mapStateToProps({ messages, groups }) {
+	return { messages, groups };
 }
 
 export default connect(mapStateToProps)(MessageList)
