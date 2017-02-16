@@ -1,1 +1,21 @@
-/*use styles here
+.scrollable {
+	overflow: auto;
+	width: 75%;
+	margin: auto;
+	border: 2px solid blue;
+}
+
+.centered {
+	text-align: center;
+}
+
+.colorBox {
+	background-color: grey;
+	border: 1px solid black;
+	margin: 5px;
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+}
