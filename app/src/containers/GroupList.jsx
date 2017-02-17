@@ -1,5 +1,8 @@
 import React from 'react'
- 
+import { FloatingActionButton, RaisedButton } from 'material-ui'
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import { connect } from 'react-redux'
+
 class GroupList extends React.Component {
 	constructor(props) {
 		super(props)
@@ -8,29 +11,26 @@ class GroupList extends React.Component {
 	}
 
 	renderGroups(group) {
+		function renderPeople(person) {
+			return(
+				<li>{person}</li>
+			)
+		}
 		return(
-			<tr key={group.trigger}>
-	      <td><div contenteditable>{group.trigger}</div></td>
-	      <td>{group.medium}</td>
-	      <td>{group.text}</td>
-	      <td>{group.group}</td>
-	      <td><button type="button">Add a group</button></td>
+			<tr key={group.group}>
+	      <td contentEditable>{group.group}</td>
+	      <td>
+	      <ul>
+	      	{group.people.map(renderPeople)}
+	      </ul>
+				</td>
+	      <td>does group table have this?</td>
+	      <td>does group table have this?</td>
 	 	 	</tr>	
 	 	 	)
 
 	}
 	render() {
-		let exampleGroups = [{
-			trigger: 'Running Late',
-			medium: 'Slack',
-			text: 'there was a meteor on the 405, imma be 10 mins late',
-			group: 'hrla12'
-		}, {
-			trigger: 'order food',
-			medium: 'Text',
-			text: 'I\'ll be home in 10 mins, please order me some pizza',
-			group: 'wife'
-		}]
 		return (
 			<table className="table table-hover">
 				<thead>
@@ -42,14 +42,16 @@ class GroupList extends React.Component {
 					</tr>
 				</thead>
 				<tbody>
-					{exampleGroups.map(this.renderGroups)}
-					<tr>
-						<td>empty rows for addition?</td>
-					</tr>
+					{this.props.groups.map(this.renderGroups)}
+				<RaisedButton type="button" label="add a new one" secondary={true} />
 				</tbody>
 			</table>
 		)
 	}
 }
 
-export default GroupList
+function mapStateToProps({ messages, people, groups }) {
+	return { messages, people, groups };
+}
+
+export default connect(mapStateToProps)(GroupList)

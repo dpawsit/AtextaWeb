@@ -21,7 +21,7 @@ app.use(session({
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.all('*', util.checkUser);
+// app.all('*', util.checkUser);
 app.use(express.static(path.join(__dirname, '../app/public')));
 
 const router = require('./router.js')(app);
