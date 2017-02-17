@@ -6,12 +6,6 @@ var Group = Models.Group;
 var Recipient = Models.Recipient;
 var GroupRecipients = Models.GroupRecipients;
 
-
-//on creating a new group, 2 recipient arrays, 1: new recipients 2: from addres(id)
-//allow add post /newRecipient
-//update resolve to include recipient instances
-//insert a new group
-// input : userId, mediumId, GroupName
 module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipients) => {
  return new Promise ((resolve, reject) => {
    Group.create({
@@ -88,9 +82,6 @@ module.exports.AddRecipientToGroup = (inputGroupId, inputRecipIds) => {
     })
   })
 }
-//view all user groups and their associated recipients
-// input : userId
-// output : groupId, groupName, medium Type
 
 module.exports.GetUserGroups = (inputUserId) => {
   return new Promise ((resolve, reject) => {
@@ -123,9 +114,6 @@ module.exports.GetUserGroups = (inputUserId) => {
   })
 }
 
-//update existing group (only name is editable )
-// input : groupId + newName
-
 module.exports.UpdateGroupName = (inputGroupId, newGroupName) => {
   return new Promise ((resolve, reject) => {
     db.query('update Group set name = ? where id = ?', 
@@ -138,9 +126,6 @@ module.exports.UpdateGroupName = (inputGroupId, newGroupName) => {
     })
   })
 }
-
-//update specific recipient information
-// input : recId, name, contactInfo --- name and contactInfo should be in 1 object, pass undefined for the value not getting updated
 
 module.exports.UpdateRecipientInfo = (inputRecipId, inputInfo) => {
   return new Promise ((resolve, reject) => {
@@ -199,8 +184,7 @@ module.exports.GetAvailableRecipients = (userId, groupId, type) => {
     })
   })
 }
-//delete recipient
-// input : recId
+
 module.exports.DeleteRecipient = (recId) => {
   return new Promise ((resolve, reject) => {
     Promise.All([
@@ -223,7 +207,6 @@ module.exports.DeleteRecipient = (recId) => {
     })
   })
 }
-
 
 module.exports.DeleteGroup = (inputGroupId) => {
   return new Promise ((resolve, reject) => {
