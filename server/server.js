@@ -6,11 +6,7 @@ const database = require('../database/config.js')
 const helmet = require('helmet');
 const util = require('./server_util');
 const port = process.env.PORT || 3000;
-// const Promise = require('bluebird');
 
-// function initServer(){
-//   return new Promise (resolve, reject)
-// }
 const app = express()
 
 app.use(session({
@@ -30,7 +26,7 @@ app.use(express.static(path.join(__dirname, '../app/public')));
 
 const router = require('./router.js')(app);
 
-database.sync()
+database.sync({force: true})
   .then(res => {
     app.listen(port, function(){
       console.log('Listening on localhost:', port);
