@@ -3,6 +3,8 @@ const router = express.Router();
 const userController = require('../../database/controllers/user_controller');
 const Promise = require('bluebird');
 const https = require('https');
+const jwt = require('jsonwebtoken')
+const keys = require('../../keys')
 
 const authenticateUser = (token) => {
   console.log('into authenticater with', token)
@@ -37,16 +39,21 @@ const authenticateUser = (token) => {
 }
 
 router.post('/login', (req, res) => {
-
-//  var token = req.body.token;
 //  console.log('got into login post with token', token)
 //  authenticateUser(token)
 //  .then(userInfo => {
+ //console.log('we are in login post with profile:', req.body.profile, 'and secret:', keys.tokenSecret)
+  // let verfiy = jwt.verify(token, keys.tokenSecret, function(err, decoded) {
+  //   if(err) {
+  //     console.log('error verifying token', err)
+  //   } else {
+  //     console.log('decoded token:', decoded)
+  //   }
+  // })
 
-  let profile = JSON.parse(req.body.profile)
+  let profile = req.body.profile
   userController.UserLogin(profile)
   .then(userId => {
-    req.session.token = userId;
     res.status(200).json(userId);
   })
   .catch(error => {

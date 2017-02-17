@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
-import promise from 'redux-promise';
+import ReduxPromise from 'redux-promise';
 import { Router, browserHistory } from 'react-router'
 import { persistStore, autoRehydrate, storages } from 'redux-persist'
+
 
 import routes from './routes'
 import reducers from './reducers';
@@ -19,14 +20,9 @@ injectTapEventPlugin();
 function configureStore() {
 	return new Promise((resolve, rejct) => {
 		try {
-			const store = createStore(
-				reducers, 
-				undefined, 
-				compose(
-					autoRehydrate(),
-					applyMiddleware(promise)
-				)
-			)
+			const store = createStore(reducers, undefined, compose(
+					autoRehydrate(),applyMiddleware(ReduxPromise)))
+
 			persistStore(store, storages.asyncSessionStorage, ()=> resolve(store));
 		}
 		catch (error) {

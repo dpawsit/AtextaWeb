@@ -13,17 +13,16 @@ export default class AuthService{
 	}
 
 	_doAuthentication(authResult) {
-		console.log(JSON.stringify(authResult));
 		this.setToken(authResult.idToken)
-		this.lock.getUserInfo(authResult.accessToken, function(err, profile) {
-			if(err) {
-				console.log('could not get profile', err)
-			} else {
-				localStorage.setItem('accessToken', authResult.accessToken)
-				localStorage.setItem('profile', JSON.stringify(profile));
-			}
-
-		})
+		this.setAccesstoken(authResult.accessToken)
+		// this.lock.getUserInfo(authResult.accessToken, function(err, profile) {
+		// 	if(err) {
+		// 		console.log('could not get profile', err)
+		// 	} else {
+		// 		localStorage.setItem('accessToken', authResult.accessToken)
+		// 		localStorage.setItem('profile', JSON.stringify(profile));
+		// 	}
+		// })
 		// this.props.handleLogin(authResult.idToken)
 
 	}
@@ -38,18 +37,38 @@ export default class AuthService{
 
 	setToken(idToken) {
 		localStorage.setItem('id_token', idToken)
+		//connect redux action
+		//set token in state
+		//then redirect
+		//now can check against the state instead of local storage
 	}
 
 	getToken() {
 		return localStorage.getItem('id_token')
 	}
 
-	logout() {
-		localStorage.removeItem('accessToken')
+	setAccesstoken(accessToken) {
+		localStorage.setItem('accessToken', accessToken)
 	}
 
-	getProfile() {
-		return localStorage.getItem('profile')
+	getAccessToken() {
+		return localStorage.getItem('accessToken')
+	}
+
+	logout() {
+		localStorage.removeItem('id_token')
+	}
+
+	getProfile(token) {
+		return new Promise((resolve, reject)=>{
+			this.lock.getUserInfo(token, function(err, profile) {
+				if(err) {
+					reject(err)
+				} else {
+					resolve(profile)
+				}
+			})
+		})
 	}
 
 }
