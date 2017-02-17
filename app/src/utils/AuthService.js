@@ -13,6 +13,7 @@ export default class AuthService{
 	}
 
 	_doAuthentication(authResult) {
+		console.log(JSON.stringify(authResult));
 		this.setToken(authResult.idToken)
 		this.lock.getUserInfo(authResult.accessToken, function(err, profile) {
 			if(err) {

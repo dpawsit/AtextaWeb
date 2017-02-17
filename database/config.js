@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const cred = require('../keys.js');
 
-var db = new Sequelize('myAtexta', cred.username, cred.password, {
-  host: 'myatexta.c1qn5i5sh8u5.us-east-1.rds.amazonaws.com',
+var db = new Sequelize('atexta', cred.username, cred.password, {
+  host: 'atexta.c1qn5i5sh8u5.us-east-1.rds.amazonaws.com',
   port : 3306,
   dialect: 'mysql',
 

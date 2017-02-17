@@ -34,8 +34,12 @@ router.post('/newCommand', (req, res) => {
 
 router.post('/newMessage', (req, res) => {
   sc.NewSecretMessage(req.body.commandId, req.body.newMessage)
-  .then()
-  .catch()
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
 })
 
 router.put('/secretResponse', (req, res) => {

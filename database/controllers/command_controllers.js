@@ -7,7 +7,7 @@ var Message = Models.Message;
 
 module.exports.GetUserCommands = (inputUserId) => {
   return new Promise ((resolve, reject) => {
-    db.query('select C.name, C.groupId, C.verified, M.text, M.additionalContent, G.mediumType, G.name from Command C join Message M on C.id = M.commandId left outer join Group G on C.groupId = G.id where C.userId = ? and C.status = 1', 
+    db.query('select C.name, C.groupId, C.verified, M.text, M.additionalContent, G.mediumType, G.name from Commands C join Messages M on C.id = M.commandId left outer join Groups G on C.groupId = G.id where C.userId = ? and C.status = 1', 
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(Commands => {
       resolve(Commands)
@@ -20,7 +20,7 @@ module.exports.GetUserCommands = (inputUserId) => {
 
 module.exports.UpdateCommandGroup = (inputCommandId, NewGroupId) => {
   return new Promise ((resolve, reject) => {
-    db.query('update Command set groupId = ? where id = ?', 
+    db.query('update Commands set groupId = ? where id = ?', 
     {replacements : [NewGroupId, inputCommandId], type : sequelize.QueryTypes.UPDATE})
     .then(result => {
       resolve(result);
@@ -33,7 +33,7 @@ module.exports.UpdateCommandGroup = (inputCommandId, NewGroupId) => {
 
 module.exports.UpdateCommandName = (inputCommandId, NewCommandName) => {
   return new Promise ((resolve, reject) => {
-    db.query('update Command set name = ? where id = ?', 
+    db.query('update Commands set name = ? where id = ?', 
     {replacements : [NewCommandName, inputCommandId]})
     .then(result => {
       resolve(result);
@@ -56,7 +56,7 @@ module.exports.CreateNewCommand = (inputCommand) => {
         groupId : inputCommand.groupId,
         messageId : newMessage[0].id
       }).then(newCommand => {
-        db.query('update Message set commandId = ? where id = ?', 
+        db.query('update Messages set commandId = ? where id = ?', 
         {replacements : [newCommand[0].id, newMessage[0].id], type : sequelize.QueryTypes.UPDATE})
         .then(result => {
           resolve(newCommand);
@@ -81,7 +81,7 @@ module.exports.UpdateCommandMessage = (inputCommandId, newMessageInfo) => {
       text : newMessageInfo.text,
       additionalContent : newMessageInfo.additionalContent
     }).then(newMessage => {
-      db.query('update Command set messageId = ? where id = ?', 
+      db.query('update Commands set messageId = ? where id = ?', 
       {replacements : [newMessage[0].id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
       .then(result => {
         resolve(result);
@@ -98,7 +98,7 @@ module.exports.UpdateCommandMessage = (inputCommandId, newMessageInfo) => {
 
 module.exports.DeleteCommand = (inputCommandId) => {
   return new Promise ((resolve, reject) => {
-    db.query('update Command set status = 0 where id = ?', 
+    db.query('update Commands set status = 0 where id = ?', 
     {replacements : [inputCommandId], type: sequelize.QueryTypes.UPDATE})
     .then(result => {
       resolve(result)

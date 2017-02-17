@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, '../app/public')));
 
 const router = require('./router.js')(app);
 
-database.sync()
+database.sync({force: true})
   .then(res => {
     app.listen(port, function(){
       console.log('Listening on localhost:', port);
