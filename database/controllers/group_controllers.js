@@ -6,9 +6,13 @@ var Group = Models.Group;
 var Recipient = Models.Recipient;
 var GroupRecipients = Models.GroupRecipients;
 
+
+//on creating a new group, 2 recipient arrays, 1: new recipients 2: from addres(id)
+//allow add post /newRecipient
+//update resolve to include recipient instances
 //insert a new group
 // input : userId, mediumId, GroupName
-module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients) => {
+module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipients) => {
  return new Promise ((resolve, reject) => {
    Group.create({
      name : inputGroupInfo.name,
@@ -16,12 +20,15 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients) => {
      mediumType : inputGroupInfo.mediumType
    })
    .then(createdGroup => {
+    var newRecipients = [];
     Promise.map(inputRecipients, recipient => {
       return Recipient.create({
         name : recipient.name,
         contactInfo : recipient.contactInfo,
-        mediumType : inputGroupInfo.mediumType
+        mediumType : inputGroupInfo.mediumType,
+        userId : inputGroupInfo.userId
       }).then(createdRec => {
+        newRecipients.push(createdRec[0])
         return GroupRecipients.create({
           groupId : createdGroup[0].id,
           recipientId : createdRec[0].id
@@ -29,7 +36,15 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients) => {
       })
     })
     .then(createdRecipients => {
-      resolve(createdGroup);
+      Promise.map(savedRecipients, recipient => {
+        return GroupRecipients.create({
+          groupId : createdGroup[0].id,
+          recipientId : recipient
+        })
+      })
+      .then(joinedRecipients => {
+        resolve({group : createdGroup, recipients : newRecipients});
+      })
     })
    })
    .catch(error => {
@@ -38,6 +53,41 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients) => {
  })
 }
 
+module.exports.NewRecipient = (inputUserId, newRecipients) => {
+  return new Promise ((resolve, reject) => {
+    Promise.map(newRecipients, recipient => {
+      Recipient.create({
+        name : recipient.name,
+        contactInfo : recipient.contactInfo,
+        mediumType : recipient.mediumType,
+        userId : inputUserId
+      })
+    })
+    .then(createdRecipient => {
+      resolve(createdRecipient);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+module.exports.AddRecipientToGroup = (inputGroupId, inputRecipIds) => {
+  return new Promise ((resolve, reject) => {
+    Promise.map(inputRecipIds, id => {
+      GroupRecipients.create({
+        groupId : inputGroupId,
+        recipientId : id
+      })
+    })
+    .then(joinedRec => {
+      resolve(joinedRec);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
 //view all user groups and their associated recipients
 // input : userId
 // output : groupId, groupName, medium Type
@@ -137,10 +187,10 @@ module.exports.RemoveRecipient = (inputGroupId, recId) => {
  })
 }
 
-module.exports.GetAvailableRecipients = (groupId, type) => {
+module.exports.GetAvailableRecipients = (userId, groupId, type) => {
   return new Promise ((resolve, reject) => {
-    db.query('select name, contactInfo from Recipient where mediumType = ? and id not in (select recipientId from GroupRecipients where groupId = ?)',
-    {replacements : [type, groupId], type : sequelize.QueryTypes.SELECT})
+    db.query('select name, contactInfo from Recipient where mediumType = ? and userId = ? and id not in (select recipientId from GroupRecipients where groupId = ?)',
+    {replacements : [type, userId, groupId], type : sequelize.QueryTypes.SELECT})
     .then(availableUsers => {
       resolve(availableUsers);
     })
