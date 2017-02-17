@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import { RaisedButton } from 'material-ui'
 
@@ -7,7 +8,8 @@ class AddGroupModal extends React.Component {
 		super(props)
 		this.state = {
 			showModal: true,
-			step: 1
+			step: 1,
+			people: []
 		}
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
@@ -22,7 +24,25 @@ class AddGroupModal extends React.Component {
 		this.setState({showModal: false})
 	}
 
+	clickPerson(person) {
+		console.log('click handled')
+		let prev = this.state.people
+		prev.push(person)
+		this.setState({people: prev})
+	}
+
 	stepDecider() {
+		const renderPeople = (person) => (
+			<div>
+				<li onClick = {()=>{this.clickPerson(person)}} 
+				className = "centered colorBox" key={person.name}>
+				{person.name}
+				</li>
+				<RaisedButton type="button" label="Edit >" secondary={true} 
+				onClick = {this.incrementStep}/>
+			</div>
+
+		)
 		switch(this.state.step) {
 			case 1:
 				return (
@@ -60,11 +80,22 @@ class AddGroupModal extends React.Component {
 			case 3:
 				return (
 					<div>
-						<p>Who do you want to add to this group?</p>
-						<RaisedButton type="button" label="Cancel" secondary={true} 
+						who do you want to add to this group?
+						<div className = "scrollable">
+							Added so far:
+							<ul>
+								{this.state.people.map(renderPeople)}
+							</ul>
+						</div>
+						<div className = "scrollable">
+							<ul>
+								{this.props.people.map(renderPeople)}
+							</ul>
+						</div>
+						<RaisedButton type="button" label="Add new contact" 
+						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Submit" 
 						onClick = {this.closeModal}/>
-						<RaisedButton type="button" label="Submit" secondary={true}  
-						/>
 					</div>
 				)
 			default:
@@ -87,4 +118,8 @@ class AddGroupModal extends React.Component {
 		)
 	}
 }
-export default AddGroupModal
+
+function mapStateToProps({ people, groups }) {
+	return ({ people, groups })
+}
+export default connect(mapStateToProps)(AddGroupModal)
