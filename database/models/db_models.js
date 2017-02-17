@@ -65,6 +65,11 @@ var Recipient = db.define('Recipient', {
     type : Sequelize.CHAR,
     allowNull : false,
     unique : false
+  },
+  userId : {
+    type: Sequelize.INTEGER,
+    allowNull : false,
+    unique : false
   }
 })
 
@@ -81,7 +86,7 @@ var Command = db.define('Command', {
   },
   groupId : {
     type : Sequelize.INTEGER,
-    allowNull : false,
+    allowNull : true,
     unique : false    
   },
   messageId : {

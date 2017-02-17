@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cc = require('../../database/controllers/command_controllers');
 
-router.get('/userGroups/:userId', (req, res) => {
+router.get('/userCommands/:userId', (req, res) => {
   cc.GetUserCommands(req.params.userId)
   .then(result => {
     res.status(200).json(commands);
@@ -12,8 +12,8 @@ router.get('/userGroups/:userId', (req, res) => {
   })
 })
 
-router.put('/updateGroup/:commandId/:groupId', (req, res) => {
-  cc.UpdateCommandGroup(req.params.commandId, req.params.groupId)
+router.put('/updateGroup', (req, res) => {
+  cc.UpdateCommandGroup(req.body.commandId, req.body.groupId)
   .then(result => {
     res.status(200).json(result);
   })
@@ -22,8 +22,8 @@ router.put('/updateGroup/:commandId/:groupId', (req, res) => {
   })
 })
 
-router.put('/updateName/:commandId/:name', (req, res) => {
-  cc.UpdateCommandName(req.params.commandId, req.params.name)
+router.put('/updateName', (req, res) => {
+  cc.UpdateCommandName(req.body.commandId, req.body.updateName)
   .then(result => {
     res.status(200).json(result);
   })
@@ -52,7 +52,7 @@ router.post('/newMessage/', (req, res) => {
   })
 })
 
-router.delete('/delete/:commandId', (req, res) => {
+router.delete('/deleteCommand/:commandId', (req, res) => {
   cc.DeleteCommand(req.params.commandId)
   .then(result => {
     res.status(200).json(result);

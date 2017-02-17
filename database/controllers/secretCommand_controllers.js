@@ -155,3 +155,7 @@ module.exports.DeleteSecretCommand = (inputCommandId) => {
    })
  })
 }
+
+module.exports.NewSecretMessage = () => {
+  
+}

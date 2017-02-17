@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sc = require('../../database/controllers/secretCommand_controllers')
 
-router.get('/SecretCommands/:userId', (req, res) => {
+router.get('/userCommands/:userId', (req, res) => {
   sc.GetUserSecretCommands(req.params.userId)
   .then(result => {
     res.status(200).json(result);
@@ -22,7 +22,7 @@ router.get('/availableSecretTriggers/:userId', (req, res) => {
   })
 })
 
-router.post('/SecretCommand', (req, res) => {
+router.post('/newCommand', (req, res) => {
   sc.CreateNewSecretCommand(req.body)
   .then(result => {
     res.status(200).json(result);
@@ -32,7 +32,13 @@ router.post('/SecretCommand', (req, res) => {
   })
 })
 
-router.post('/SecretResponse', (req, res) => {
+router.post('/newMessage', (req, res) => {
+  sc.NewSecretMessage(req.body.commandId, req.body.newMessage)
+  .then()
+  .catch()
+})
+
+router.put('/secretResponse', (req, res) => {
   sc.UpdateSecretResponse(req.body.commandId, req.body.newResponse)
   .then(result => {
     res.status(200).json(result);
@@ -42,8 +48,8 @@ router.post('/SecretResponse', (req, res) => {
   })
 })
 
-router.put('/SecretGroup/:commandId/:groupId', (req, res) => {
-  sc.UpdateSecretCommandGroup(req.params.commandId, req.params.groupId)
+router.put('/updateGroup', (req, res) => {
+  sc.UpdateSecretCommandGroup(req.body.commandId, req.body.groupId)
   .then(result => {
     res.status(200).json(result);
   })
@@ -52,8 +58,8 @@ router.put('/SecretGroup/:commandId/:groupId', (req, res) => {
   })
 })
 
-router.put('/SecretTrigger/:commandId/:triggerId', (req, res) => {
-  sc.UpdateSecretTrigger(req.params.commandId, req.params.triggerId)
+router.put('/updateTrigger', (req, res) => {
+  sc.UpdateSecretTrigger(req.body.commandId, req.body.newTriggerId)
   .then(result => {
     res.status(200).json(result);
   })
@@ -62,7 +68,7 @@ router.put('/SecretTrigger/:commandId/:triggerId', (req, res) => {
   })
 })
 
-router.delete('/secretCommand/:commandId', (req, res) => {
+router.delete('/deleteCommand/:commandId', (req, res) => {
   sc.DeleteSecretCommand(req.params.commandId)
   .then(result => {
     res.status(200).json(result);
