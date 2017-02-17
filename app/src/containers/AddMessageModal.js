@@ -31,7 +31,7 @@ class AddMessageModal extends React.Component {
 
 	stepDecider() {
 		const renderGroups = (group) => (
-				<li onClick = {()=>{this.clickGroup(group.group)}}className = "centered colorBox">{group.group}</li>
+				<li onClick = {()=>{this.clickGroup(group.name)}}className = "centered colorBox">{group.name}</li>
 			)
 		switch(this.state.step) {
 			case 1:

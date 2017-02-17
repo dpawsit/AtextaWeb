@@ -1,5 +1,4 @@
 import React, {Component, PropTypes as T } from 'react'
-import { Jumbotron } from 'react-bootstrap'
 
 class App extends Component {
 	render() {

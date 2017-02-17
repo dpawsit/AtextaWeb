@@ -14,7 +14,17 @@ export default class AuthService{
 
 	_doAuthentication(authResult) {
 		this.setToken(authResult.idToken)
-		this.props.handleLogin(authResult.idToken)
+		this.lock.getUserInfo(authResult.accessToken, function(err, profile) {
+			if(err) {
+				console.log('could not get profile', err)
+			} else {
+				localStorage.setItem('accessToken', authResult.accessToken)
+				localStorage.setItem('profile', JSON.stringify(profile));
+			}
+
+		})
+		// this.props.handleLogin(authResult.idToken)
+
 	}
 
 	login() {
@@ -34,7 +44,11 @@ export default class AuthService{
 	}
 
 	logout() {
-		localStorage.removeItem('id_token')
+		localStorage.removeItem('accessToken')
+	}
+
+	getProfile() {
+		return localStorage.getItem('profile')
 	}
 
 }

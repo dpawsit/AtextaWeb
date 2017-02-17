@@ -5,7 +5,7 @@ const Promise = require('bluebird');
 const https = require('https');
 
 const authenticateUser = (token) => {
-
+  console.log('into authenticater with', token)
   return new Promise ((resolve, reject) => {
   var options = {
   "method": "GET",
@@ -38,22 +38,20 @@ const authenticateUser = (token) => {
 
 router.post('/login', (req, res) => {
 
- var token = req.body.token;
+//  var token = req.body.token;
+//  console.log('got into login post with token', token)
+//  authenticateUser(token)
+//  .then(userInfo => {
 
- authenticateUser(token)
- .then(userInfo => {
-   userController.UserLogin(userInfo)
-   .then(userId => {
-     req.session.token = token;
-     res.status(200).json(userId);
-   })
-   .catch(error => {
-     res.status(500).send(error);
-   })
- })
- .catch(error => {
-   res.status(403).send(error);
- })
+  let profile = JSON.parse(req.body.profile)
+  userController.UserLogin(profile)
+  .then(userId => {
+    req.session.token = userId;
+    res.status(200).json(userId);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
 })
 
 router.post('/logout', (req, res) => {
