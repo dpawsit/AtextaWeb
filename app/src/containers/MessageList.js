@@ -18,7 +18,7 @@ class MessageList extends React.Component {
 			function renderGroups(group) {
 				return(
 					<option
-					value={group.group}>{group.group}</option>
+					value={group.name}>{group.name}</option>
 				)
 			}
 			return(

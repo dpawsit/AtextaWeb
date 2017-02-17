@@ -2,13 +2,13 @@ import React from 'react'
 import { MuiThemeProvider } from 'material-ui/styles';
 import { FlatButton } from 'material-ui'
 
-import Navbar from '../components/Navbar.jsx'
-import MessageList from './MessageList.jsx'
-import GroupList from './GroupList.jsx'
-import AddGroupModal from './addGroupModal.jsx'
-import AddMessageModal from './AddMessageModal.jsx'
+import Navbar from '../components/Navbar'
+import MessageList from './MessageList'
+import GroupList from './GroupList'
+import AddGroupModal from './AddGroupModal'
+import AddMessageModal from './AddMessageModal'
  
-class App extends React.Component {
+class Dashboard extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -57,4 +57,4 @@ class App extends React.Component {
 	}
 }
 
-export default App
+export default Dashboard

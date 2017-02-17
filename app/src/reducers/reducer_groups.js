@@ -1,15 +1,15 @@
 export default function() {
 	return [{
-		group: 'hrla12',
+		name: 'hrla12',
 		people: ['sergey', 'ricky']
 	}, {
-		group: 'dyslexa',
+		name: 'dyslexa',
 		people: ['rakan', 'jesse', 'sean', 'daniel']
 	}, {
-		group: 'wife',
+		name: 'wife',
 		people: ['imaginary']
 	}, {
-		group: 'ricky',
+		name: 'ricky',
 		people: ['rakan, ricky']
 	}]
 }
