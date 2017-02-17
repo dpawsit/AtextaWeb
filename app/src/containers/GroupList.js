@@ -17,8 +17,8 @@ class GroupList extends React.Component {
 			)
 		}
 		return(
-			<tr key={group.group}>
-	      <td contentEditable>{group.group}</td>
+			<tr key={group.name}>
+	      <td contentEditable>{group.name}</td>
 	      <td>
 	      <ul>
 	      	{group.people.map(renderPeople)}

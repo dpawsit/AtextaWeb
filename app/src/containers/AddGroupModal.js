@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col, Clearfix } from 'react-bootstrap'
 import { RaisedButton } from 'material-ui'
 
 class AddGroupModal extends React.Component {
@@ -34,12 +34,20 @@ class AddGroupModal extends React.Component {
 	stepDecider() {
 		const renderPeople = (person) => (
 			<div>
-				<li onClick = {()=>{this.clickPerson(person)}} 
-				className = "centered colorBox" key={person.name}>
-				{person.name}
-				</li>
-				<RaisedButton type="button" label="Edit >" secondary={true} 
-				onClick = {this.incrementStep}/>
+				<Grid>
+					<Row>
+						<Col xs={5} md={5}>
+							<li onClick = {()=>{this.clickPerson(person)}} 
+							className = "centered colorBox" key={person.name}>
+							{person.name}
+							</li>
+						</Col>
+						<Col xs={1} md={1}>
+							<RaisedButton type="button" label="Edit >" secondary={true} 
+							onClick = {this.incrementStep}/>
+						</Col>
+					</Row>
+				</Grid>
 			</div>
 
 		)
@@ -107,7 +115,7 @@ class AddGroupModal extends React.Component {
 
 	render() {
 		return(
-	    <Modal show={this.state.showModal} onHide={this.closeModal}>
+	    <Modal show={this.state.showModal} bsSize="large" onHide={this.closeModal}>
 	    	<Modal.Header closeButton>
 	    		<Modal.Title>Add a group</Modal.Title>
 	    	</Modal.Header>
