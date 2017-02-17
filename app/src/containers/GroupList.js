@@ -1,7 +1,6 @@
 import React from 'react'
 import { FloatingActionButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { connect } from 'react-redux'
 
 class GroupList extends React.Component {
 	constructor(props) {
@@ -31,6 +30,8 @@ class GroupList extends React.Component {
 
 	}
 	render() {
+		let context = this
+		console.log('userLogin is', context.props.userLogin)
 		return (
 			<table className="table table-hover">
 				<thead>
@@ -50,8 +51,4 @@ class GroupList extends React.Component {
 	}
 }
 
-function mapStateToProps({ messages, people, groups }) {
-	return { messages, people, groups };
-}
-
-export default connect(mapStateToProps)(GroupList)
+export default GroupList

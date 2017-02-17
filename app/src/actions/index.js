@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-export const GET_USER_ID = 'GET_USER_ID';
+export const USER_LOGIN = 'USER_LOGIN';
 
-export function getUserId(profile) {
-  console.log('we sure showed ricky')
-  const request = axios.post('/auth/login', {profile})
-
+export function getUserId(profile, token) {
+  //console.log('got this profile in action handler getr user id', profile)
+  let request = axios.post('/auth/login', {profile})
+  console.log('request from action', request);
   return {
-    type: GET_USER_ID,
-    payload: request
+    type: USER_LOGIN,
+    payload: token
   };
 }
