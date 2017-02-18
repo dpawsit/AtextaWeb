@@ -1,15 +1,13 @@
 import React from 'react'
 import { MuiThemeProvider } from 'material-ui/styles';
 import { FlatButton } from 'material-ui'
-
 import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
 import AddGroupModal from './AddGroupModal'
 import AddMessageModal from './AddMessageModal'
-
 import { connect } from 'react-redux'
-import { getUserId } from '../actions/index'
+import { getUserId } from '../actions/atexta_actions'
 
 class Dashboard extends React.Component {
 	constructor(props) {
@@ -19,18 +17,20 @@ class Dashboard extends React.Component {
 			showAddGroupModal: false,
 			showAddMessageModal: false
 		}
-		this.componentWillMount = this.componentWillMount.bind(this)
+		this.componentDidMount = this.componentDidMount.bind(this)
 		this.closeAddGroupModal=this.closeAddGroupModal.bind(this)
 		this.toggleAddGroupModal=this.toggleAddGroupModal.bind(this)
 		this.toggleAddMessageModal = this.toggleAddMessageModal.bind(this)
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
-
 	componentWillMount() {
+		
+	}
+	componentDidMount() {
 		let token = this.props.auth.getAccessToken();
 		this.props.auth.getProfile(token)
 		.then(profile => {
-			getUserId(profile, token)
+			this.props.getUserId(profile)
 		})
 		.catch(err=> {
 			console.log('err getting profile', err)
@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
 	}
 
 	render() {
-		console.log('props and tokesn in dashboard', this.props.token, this.props.userId)
+		console.log('props and tokens in dashboard', this.props.userId)
 		return (
 			<div>
 				<MuiThemeProvider>
@@ -73,8 +73,8 @@ class Dashboard extends React.Component {
 	}
 }
 
-function mapStateToProps(state) {
-	return { token: state.Atexta.token, userId: state.Atexta.userId };
+function mapStateToProps({atexta}) {
+	return {userId: atexta.userId };
 }
 
 export default connect(mapStateToProps, {getUserId})(Dashboard)
