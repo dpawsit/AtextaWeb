@@ -54,19 +54,15 @@ module.exports.CreateNewCommand = (inputCommand) => {
         name : inputCommand.name,
         userId : inputCommand.userId,
         groupId : inputCommand.groupId,
-        messageId : newMessage[0].id
+        messageId : newMessage.dataValues.id,
+        verified : false,
+        status : 1
       }).then(newCommand => {
         db.query('update Messages set commandId = ? where id = ?', 
-        {replacements : [newCommand[0].id, newMessage[0].id], type : sequelize.QueryTypes.UPDATE})
+        {replacements : [newCommand.dataValues.id, newMessage.dataValues.id], type : sequelize.QueryTypes.UPDATE})
         .then(result => {
           resolve(newCommand);
         })
-        .catch(error => {
-          reject(error);
-        })
-      })
-      .catch(error => {
-        reject(error);
       })
     })
     .catch(error => {
@@ -79,15 +75,13 @@ module.exports.UpdateCommandMessage = (inputCommandId, newMessageInfo) => {
   return new Promise ((resolve, reject) => {
     Message.create({
       text : newMessageInfo.text,
-      additionalContent : newMessageInfo.additionalContent
+      additionalContent : newMessageInfo.additionalContent,
+      count : 0
     }).then(newMessage => {
       db.query('update Commands set messageId = ? where id = ?', 
-      {replacements : [newMessage[0].id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
+      {replacements : [newMessage.dataValues.id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
       .then(result => {
         resolve(result);
-      })
-      .catch(error => {
-        reject(error);
       })
     })
     .catch(error => {

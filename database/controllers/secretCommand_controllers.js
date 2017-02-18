@@ -37,26 +37,30 @@ module.exports.CreateNewSecretCommand = (inputInfo) => {
   return new Promise ((resolve, reject) => {
     SecretMessage.create({
       text : inputInfo.text,
-      additionalContent : inputInfo.additionalContent
+      additionalContent : inputInfo.additionalContent,
+      count : 0
      })
      .then(createdMessage => {
         SecretResponse.create({
-          speech : inputInfo.responseSpeech
+          speech : inputInfo.responseSpeech,
+          count : 0
         })
         .then(responseCreated => {
           SecretCommand.create({
             triggerId : inputInfo.triggerId,
             userId : inputInfo.userId,
             groupId : inputInfo.groupId,
-            secretMessageId : createdMessage[0].id,
-            responseId : responseCreated[0].id
+            secretMessageId : createdMessage.dataValues.id,
+            responseId : responseCreated.dataValues.id,
+            verified : false,
+            status : 1
           })
           .then(createdSecretCommand => {
             db.query('update SecretResponses set secretCommandId = ? where id = ?', 
-            {replacements : [createdSecretCommand[0].id, responseCreated[0].id], type: sequelize.QueryTypes.UPDATE})
+            {replacements : [createdSecretCommand.dataValues.id, responseCreated.dataValues.id], type: sequelize.QueryTypes.UPDATE})
             .then(result => {
               db.query('update SecretMessages set secretCommandId = ? where id = ? ',
-              {replacements : [createdSecretCommand[0].id, createdMessage[0].id], type : sequelize.QueryTypes.UPDATE})
+              {replacements : [createdSecretCommand.dataValues.id, createdMessage.dataValues.id], type : sequelize.QueryTypes.UPDATE})
               .then(result => {
                 resolve(createdSecretCommand);
               })
@@ -74,11 +78,12 @@ module.exports.UpdateSecretResponse = (inputCommandId, newResponse) => {
   return new Promise ((resolve, reject) => {
     SecretResponse.create({
       speech : newResposne.speech,
-      secretCommandId : inputCommandId
+      secretCommandId : inputCommandId,
+      count : 0
     })
     .then(createdResponse => {
       db.query('update SecretCommands set responseId = ? , verified = false where id = ?', 
-      {replacements : [createdResponse[0].id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
+      {replacements : [createdResponse.dataValues.id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
       .then(updatedSecretCommand => {
         resolve(updatedSecretCommand);
       })
@@ -133,11 +138,12 @@ module.exports.NewSecretMessage = (inputCommandId, newMessageInfo) => {
     SecretMessage.create({
       text : newMessageInfo.text,
       additionalContent : newMessageInfo.additionalContent,
-      secretCommandId : inputCommandId
+      secretCommandId : inputCommandId,
+      count : 0
     })
     .then(createdMessage => {
       db.query('update SecretCommands set secretMessageId = ? where id = ?', 
-      {replacements : [createdMessage[0].id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
+      {replacements : [createdMessage.dataValues.id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
       .then(results => {
         resolve(results);
       })
