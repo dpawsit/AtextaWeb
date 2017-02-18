@@ -11,11 +11,6 @@ var User = db.define('User', {
     type : Sequelize.STRING,
     allowNull : true,
     unique : false
-  },
-  authString : {
-    type : Sequelize.STRING,
-    allowNull : true,
-    unique : false
   }
 })
 

@@ -1,70 +1,80 @@
 import React from 'react'
+import axios from 'axios'
 import { RaisedButton } from 'material-ui'
 import { connect } from 'react-redux'
+import { getUserCommands } from '../actions/atexta_actions'
+import AddMessageModal from './AddMessageModal'
+
 
 class MessageList extends React.Component {
 	constructor(props) {
 		super(props)
-
-		this.renderMessages = this.renderMessages.bind(this)
+		this.state = {
+			showAddMessageModal: false
+		}	
+		
+		this.renderCommands = this.renderCommands.bind(this)
+		this.componentDidMount = this.componentDidMount.bind(this)
+		this.openAddMessageModal = this.openAddMessageModal.bind(this)
+		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
 
+	componentDidMount() {
+		let userId = this.props.userId
+		this.props.getUserCommands(userId)
+	}
 
-	renderMessages(messages) {
-		let groups = this.props.groups
+	closeAddMessageModal() {
+		this.setState({showAddMessageModal: false})
+	}
 
-		function renderMessage(message) {
+	openAddMessageModal() {
+		this.setState({showAddMessageModal: true})
+	}
 
-			function renderGroups(group) {
-				return(
-					<option
-					value={group.name}>{group.name}</option>
-				)
-			}
+	renderCommands(commands) {
+		function renderCommand(command) {
 			return(
-				<tr key={message.trigger}>
-		      <td contentEditable>{message.trigger}</td>
-		      <td>{message.group.medium}</td>
-		      <td contentEditable>{message.text}</td>
+				<tr key={command.trigger}>
+		      <td contentEditable>{command.messageId}</td>
+		      <td contentEditable>{command.text}</td>
 		      <td>
-			      	{message.group.name}
-		      	<select>
-			      	{groups.map(renderGroups)}
-		      	</select>
+			      	{command.groupId}
 		      </td>
 		 	 	</tr>	
 		 	 	)
 		}
-		return messages.map(renderMessage)
+		return commands.map(renderCommand)
 	}
 	render() {
-		const style = {
-		  marginRight: 20,
-		};
 
 		return (
-			<table className="table table-hover">
-				<thead>
-					<tr>
-						<th>Trigger</th>
-						<th>Medium</th>
-						<th>Text</th>
-						<th>Group</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.renderMessages(this.props.messages)}
-					<tr>
-						<RaisedButton type="button" label="add a new one" secondary={true} />
-					</tr>
-				</tbody>
-			</table>
+			<div>
+				<table className="table table-hover">
+					<thead>
+						<tr>
+							<th>Trigger</th>
+							<th>Text</th>
+							<th>Group</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.renderCommands(this.props.userCommands)}
+						<tr>
+							<RaisedButton type="button" label="add a new one" secondary={true} 
+							onClick={this.openAddMessageModal} />
+						</tr>
+					</tbody>
+				</table>
+				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
+				 show={this.state.showAddMessageModal} /> : <div></div>}
+			</div>
 		)
 	}
 }
 
-function mapStateToProps({ messages, groups }) {
-	return { messages, groups };
+function mapStateToProps({ atexta }) {
+	return { userId: atexta.userId, userCommands: atexta.userCommands };
 }
 
-export default connect(mapStateToProps)(MessageList)
+export default connect(mapStateToProps, {getUserCommands})(MessageList)

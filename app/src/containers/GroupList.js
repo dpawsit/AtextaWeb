@@ -24,12 +24,14 @@ class GroupList extends React.Component {
 	      </ul>
 				</td>
 	      <td>does group table have this?</td>
-	      <td>does group table have this?</td>
 	 	 	</tr>	
 	 	 	)
 
 	}
 	render() {
+		return(
+			<div>at elast it's owrkign</div>
+		)
 		let context = this
 		console.log('userLogin is', context.props.userLogin)
 		return (
@@ -37,9 +39,8 @@ class GroupList extends React.Component {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>People</th>
 						<th>Medium</th>
-						<th>Triggers Associated?</th>
+						<th>People</th>
 					</tr>
 				</thead>
 				<tbody>

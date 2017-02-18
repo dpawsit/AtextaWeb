@@ -11,8 +11,7 @@ module.exports.UserLogin = (userInfo) => {
         email : userInfo.email
       },
       defaults : {
-        name : userInfo.name,
-        authString : JSON.stringify(userInfo)
+        name : userInfo.name
       }
     }).then(user => {
       resolve(user[0].id);

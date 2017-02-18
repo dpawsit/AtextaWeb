@@ -52,10 +52,10 @@ class Dashboard extends React.Component {
 				<MuiThemeProvider>
 					<div>
 						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList}/>
-						{/*{this.state.showMessageList ? <MessageList /> : 
+						{this.state.showMessageList ? <MessageList /> : 
 						this.state.showGroupList ? <GroupList /> :
 						<div></div>
-						}*/}
+						}
 					</div>
 				</MuiThemeProvider>
       </div>
