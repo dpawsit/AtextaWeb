@@ -1,5 +1,39 @@
 var models = require('./models/db_models');
 var db = require('./config');
+var chance = require('chance').Chance(Math.random);
+
+var createUsers = () => {
+  return new Promise ((resolve, reject) => {
+    var users = [];
+    for (var i = 0; i < 25; i++) {
+      users.push({name : chance.name({nationality : 'en'}), email : chance.email()})
+    }
+    resolve(users);
+  })
+} 
+
+var createGroups = () => {
+  return new Promise ((resolve, reject) => {
+    var groups = [];
+    for (var i = 0; i < 25; i++) {
+      for( var j = 0; j< 5; j++) {
+        groups.push({userId : j, name : chance.word(), mediumType : 'T'})
+      }
+    }
+    resolve(groups);
+  })
+}
+
+var createMessage = () => {
+  return new Promise ((resolve, reject) => {
+    var messages = [];
+    for (var i = 0 ; i < 25; i++) {
+      for (var j = 0; j < 10; j++) {
+        messages.push({text : chance.sentence(), count : 0, })
+      }
+    }
+  })
+}
 
 models.User.create({
   email : 'rnesh90@yahoo.com',
