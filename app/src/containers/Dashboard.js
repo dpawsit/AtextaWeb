@@ -4,8 +4,6 @@ import { FlatButton } from 'material-ui'
 import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
-import AddGroupModal from './AddGroupModal'
-import AddMessageModal from './AddMessageModal'
 import { connect } from 'react-redux'
 import { getUserId } from '../actions/atexta_actions'
 
@@ -14,18 +12,14 @@ class Dashboard extends React.Component {
 		super(props)
 
 		this.state = {
-			showAddGroupModal: false,
-			showAddMessageModal: false
+			showMessageList: true,
+			showGroupList: false
 		}
 		this.componentDidMount = this.componentDidMount.bind(this)
-		this.closeAddGroupModal=this.closeAddGroupModal.bind(this)
-		this.toggleAddGroupModal=this.toggleAddGroupModal.bind(this)
-		this.toggleAddMessageModal = this.toggleAddMessageModal.bind(this)
-		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
+		this.renderMessageList = this.renderMessageList.bind(this)
+		this.renderGroupList = this.renderGroupList.bind(this)
 	}
-	componentWillMount() {
-		
-	}
+
 	componentDidMount() {
 		let token = this.props.auth.getAccessToken();
 		this.props.auth.getProfile(token)
@@ -37,20 +31,18 @@ class Dashboard extends React.Component {
 		})
 	}
 
-	closeAddGroupModal() {
-		this.setState({showAddGroupModal: false})
+	renderMessageList() {
+		this.setState({
+			showMessageList: true,
+			showGroupList: false
+		})
 	}
 
-	toggleAddGroupModal() {
-		this.setState({showAddGroupModal: !this.state.showAddGroupModal})
-	}
-
-	closeAddMessageModal() {
-		this.setState({showAddMessageModal: false})
-	}
-
-	toggleAddMessageModal() {
-		this.setState({showAddMessageModal: !this.state.showAddMessageModal})
+	renderGroupList() {
+		this.setState({
+			showGroupList: true,
+			showMessageList: false
+		})
 	}
 
 	render() {
@@ -59,13 +51,11 @@ class Dashboard extends React.Component {
 			<div>
 				<MuiThemeProvider>
 					<div>
-						<Navbar	/>
-						{/*<MessageList />*/}
-						<FlatButton label="show the add message modal" onClick={this.toggleAddMessageModal} />
-						{this.state.showAddMessageModal ? <AddMessageModal /> : <div></div>}
-						{/*<GroupList />*/}
-						<FlatButton label="show the add group modal" onClick={this.toggleAddGroupModal} />
-						{this.state.showAddGroupModal ? <AddGroupModal /> : <div></div>}
+						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList}/>
+						{/*{this.state.showMessageList ? <MessageList /> : 
+						this.state.showGroupList ? <GroupList /> :
+						<div></div>
+						}*/}
 					</div>
 				</MuiThemeProvider>
       </div>
