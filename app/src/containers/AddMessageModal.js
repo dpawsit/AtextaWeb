@@ -7,7 +7,6 @@ class AddMessageModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			showModal: true,
 			step: 1,
 			selectedGroup: ''
 		}
@@ -88,7 +87,7 @@ class AddMessageModal extends React.Component {
 
 	render() {
 		return(
-	    <Modal show={this.state.showModal} onHide={this.closeModal}>
+	    <Modal show={this.props.show} onHide={this.props.close}>
 	    	<Modal.Header closeButton>
 	    		<Modal.Title>Add a message</Modal.Title>
 	    	</Modal.Header>

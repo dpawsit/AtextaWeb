@@ -3,6 +3,7 @@ const router = express.Router();
 const cc = require('../../database/controllers/command_controllers');
 
 router.get('/userCommands/:userId', (req, res) => {
+  console.log('inside userCommands with', req.params.userId)
   cc.GetUserCommands(req.params.userId)
   .then(result => {
     res.status(200).json(commands);

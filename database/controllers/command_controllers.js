@@ -6,13 +6,16 @@ var Command = Models.Command;
 var Message = Models.Message;
 
 module.exports.GetUserCommands = (inputUserId) => {
+  console.log('in get user command controller with', inputUserId)
   return new Promise ((resolve, reject) => {
     db.query('select C.name, C.groupId, C.verified, M.text, M.additionalContent, G.mediumType, G.name from Commands C join Messages M on C.id = M.commandId left outer join Groups G on C.groupId = G.id where C.userId = ? and C.status = 1', 
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(Commands => {
+      console.log('commands we got back are', Commands)
       resolve(Commands)
     })
     .catch(error => {
+      console.log('the error is', error)
       reject(error)
     })
   })
