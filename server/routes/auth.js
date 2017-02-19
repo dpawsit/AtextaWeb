@@ -50,7 +50,7 @@ router.post('/login', (req, res) => {
   //     console.log('decoded token:', decoded)
   //   }
   // })
-
+console.log(JSON.stringify(req))
   let profile = req.body.profile
   userController.UserLogin(profile)
   .then(userId => {
