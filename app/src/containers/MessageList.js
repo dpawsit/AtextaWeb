@@ -19,56 +19,53 @@ class MessageList extends React.Component {
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
 
-	componentDidMount() {
-		let userId = this.props.userId
-		this.props.getUserCommands(userId)
-	}
+componentDidMount() {
+	let userId = this.props.userId
+	this.props.getUserCommands(userId)
+}
 
-	closeAddMessageModal() {
-		this.setState({showAddMessageModal: false})
-	}
+closeAddMessageModal() {
+	this.setState({showAddMessageModal: false})
+}
 
-	openAddMessageModal() {
-		this.setState({showAddMessageModal: true})
-	}
+openAddMessageModal() {
+	this.setState({showAddMessageModal: true})
+}
 
-	renderCommands(commands) {
-		function renderCommand(command) {
-			return(
-				<tr key={command.commandName}>
-		      <td contentEditable>{command.commandName}</td>
-		      <td contentEditable>{command.text}</td>
-		      <td>
-			      	{command.groupName}
-		      </td>
-		 	 	</tr>	
-		 	 	)
-		}
-		return commands.map(renderCommand)
-	}
-	render() {
+renderCommands(command) {
+	return(
+		<tr key={command.commandName}>
+			<td contentEditable>{command.commandName}</td>
+			<td contentEditable>{command.text}</td>
+			<td>
+					{command.groupName}
+			</td>
+		</tr>	
+	)
+}
 
-		return (
-			<div>
-				<table className="table table-hover">
-					<thead>
-						<tr>
-							<th>Trigger</th>
-							<th>Text</th>
-							<th>Group</th>
-						</tr>
-					</thead>
-					<tbody>
-						{this.renderCommands(this.props.userCommands)}
-						<tr>
-							<RaisedButton type="button" label="add a new one" secondary={true} 
-							onClick={this.openAddMessageModal} />
-						</tr>
-					</tbody>
-				</table>
-				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
-				 show={this.state.showAddMessageModal} /> : <div></div>}
-			</div>
+render() {
+	return (
+		<div>
+			<table className="table table-hover">
+				<thead>
+					<tr>
+						<th>Trigger</th>
+						<th>Text</th>
+						<th>Group</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.props.userCommands.map(this.renderCommands)}
+					<tr>
+						<RaisedButton type="button" label="add a new one" secondary={true} 
+						onClick={this.openAddMessageModal} />
+					</tr>
+				</tbody>
+			</table>
+			{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
+				show={this.state.showAddMessageModal} /> : <div></div>}
+		</div>
 		)
 	}
 }
