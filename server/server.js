@@ -24,12 +24,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // app.all('*', util.checkUser);
 app.use(express.static(path.join(__dirname, '../app/public')));
 
+
+
 const router = require('./router.js')(app);
+
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, '../app/public/index.html'))
+})
 
 database.sync()
   .then(res => {
     app.listen(port, function(){
       console.log('Listening on localhost:', port);
+
     })
   })
   .catch(error => {

@@ -22,17 +22,17 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
         mediumType : inputGroupInfo.mediumType,
         userId : inputGroupInfo.userId
       }).then(createdRec => {
-        newRecipients.push(createdRec[0])
+        newRecipients.push(createdRec.dataValues)
         return GroupRecipients.create({
-          groupId : createdGroup[0].id,
-          recipientId : createdRec[0].id
+          groupId : createdGroup.dataValues.id,
+          recipientId : createdRec.dataValues.id
         })
       })
     })
     .then(createdRecipients => {
       Promise.map(savedRecipients, recipient => {
         return GroupRecipients.create({
-          groupId : createdGroup[0].id,
+          groupId : createdGroup.dataValues.id,
           recipientId : recipient
         })
       })
@@ -58,7 +58,7 @@ module.exports.NewRecipient = (inputUserId, newRecipients) => {
       })
     })
     .then(createdRecipient => {
-      resolve(createdRecipient);
+      resolve(createdRecipient.dataValues);
     })
     .catch(error => {
       reject(error);
@@ -75,7 +75,7 @@ module.exports.AddRecipientToGroup = (inputGroupId, inputRecipIds) => {
       })
     })
     .then(joinedRec => {
-      resolve(joinedRec);
+      resolve(joinedRec.dataValues);
     })
     .catch(error => {
       reject(error);
