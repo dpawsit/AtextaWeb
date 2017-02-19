@@ -45,6 +45,7 @@ renderCommands(command) {
 }
 
 render() {
+	console.log('the commands are', this.props.getUserCommands)
 	return (
 		<div>
 			<table className="table table-hover">

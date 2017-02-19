@@ -13,7 +13,7 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, userId: action.payload.data}
     
     case GET_COMMANDS: 
-      // console.log('getting comands in atexta reducer payload:', action.payload)
+      console.log('getting comands in atexta reducer payload:', action.payload)
       return {...state, userCommands: action.payload.data || []}
 
     case GET_GROUPS:
