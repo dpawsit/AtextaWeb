@@ -1,14 +1,14 @@
 import React from 'react'
 import { Route, IndexRedirect } from 'react-router'
 import axios from 'axios'
-
+import items from '../../keys'
 import App from './containers/App'
 import Admin from './components/Admin'
 import Login from './components/Login'
 import Dashboard from './containers/Dashboard'
 import AuthService from './utils/AuthService'
 
-const auth = new AuthService('bgALOaDiY3uU1LX9kT31ISFkAxrQOc8j', 'rakan.auth0.com');
+const auth = new AuthService(items.client, items.domain);
 
 const requireAuth = (nextState, replace) => {
 	//clear store

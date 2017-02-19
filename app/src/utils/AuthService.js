@@ -1,10 +1,10 @@
 import Auth0Lock from 'auth0-lock'
-
+import { browserHistory } from 'react-router'
 export default class AuthService{
 	constructor(clientId, domain) {
 		this.lock = new Auth0Lock(clientId, domain, {
 			auth: {
-				redirectUrl: 'http://localhost:3000/',
+				redirectUrl: 'http://localhost:3000/login',
 				responseType: 'token'
 			}
 		})
@@ -15,15 +15,7 @@ export default class AuthService{
 	_doAuthentication(authResult) {
 		this.setToken(authResult.idToken)
 		this.setAccesstoken(authResult.accessToken)
-		// this.lock.getUserInfo(authResult.accessToken, function(err, profile) {
-		// 	if(err) {
-		// 		console.log('could not get profile', err)
-		// 	} else {
-		// 		localStorage.setItem('accessToken', authResult.accessToken)
-		// 		localStorage.setItem('profile', JSON.stringify(profile));
-		// 	}
-		// })
-		// this.props.handleLogin(authResult.idToken)
+		browserHistory.replace('/dashboard');
 
 	}
 
@@ -37,10 +29,6 @@ export default class AuthService{
 
 	setToken(idToken) {
 		localStorage.setItem('id_token', idToken)
-		//connect redux action
-		//set token in state
-		//then redirect
-		//now can check against the state instead of local storage
 	}
 
 	getToken() {
