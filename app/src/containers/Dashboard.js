@@ -15,12 +15,12 @@ class Dashboard extends React.Component {
 			showMessageList: true,
 			showGroupList: false
 		}
-		this.componentDidMount = this.componentDidMount.bind(this)
+		this.componentWillMount = this.componentWillMount.bind(this)
 		this.renderMessageList = this.renderMessageList.bind(this)
 		this.renderGroupList = this.renderGroupList.bind(this)
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		let token = this.props.auth.getAccessToken();
 		this.props.auth.getProfile(token)
 		.then(profile => {

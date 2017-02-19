@@ -54,7 +54,6 @@ module.exports.CreateNewCommand = (inputCommand) => {
       additionalContent : inputCommand.additionalContent,
       count: 0
     }).then(newMessage => {
-      console.log('new message created', newMessage.dataValues)
       Command.create({
         name : inputCommand.name,
         userId : inputCommand.userId,

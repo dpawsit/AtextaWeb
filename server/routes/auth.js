@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
 //  console.log('got into login post with token', token)
 //  authenticateUser(token)
 //  .then(userInfo => {
- //console.log('we are in login post with profile:', req.body.profile, 'and secret:', keys.tokenSecret)
+//  console.log('we are in login post with profile:', req.body.profile, 'and secret:', keys.tokenSecret)
   // let verfiy = jwt.verify(token, keys.tokenSecret, function(err, decoded) {
   //   if(err) {
   //     console.log('error verifying token', err)
@@ -49,7 +49,7 @@ router.post('/login', (req, res) => {
   //     console.log('decoded token:', decoded)
   //   }
   // })
-console.log(JSON.stringify(req))
+// console.log(JSON.stringify(req))
   let profile = req.body.profile
   userController.UserLogin(profile)
   .then(userId => {
