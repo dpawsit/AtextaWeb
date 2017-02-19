@@ -32,7 +32,7 @@ app.get('*', function (request, response){
   response.sendFile(path.resolve(__dirname, '../app/public/index.html'))
 })
 
-database.sync({force:true})
+database.sync()
   .then(res => {
     app.listen(port, function(){
       console.log('Listening on localhost:', port);
