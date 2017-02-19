@@ -41,7 +41,11 @@ router.post('/login', (req, res) => {
  .then(profile => {
   userController.UserLogin(JSON.parse(profile))
   .then(userId => {
-    res.status(200).json(userId);
+    var token = jwt.sign(userId, app.get('secret'), {
+      expiresInMinutes : 60
+    })
+    console.log(token);
+    res.status(200).json({user : userId, token : token});
   })
 })
   .catch(error => {
