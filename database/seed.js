@@ -15,7 +15,7 @@ var createUsers = () => {
 
 var createRecipients = (inputUserId) => {
     var recipients = [];
-      for (var j = 0; j < 10; j++) {
+      for (var j = 0; j < 10 ; j++) {
         recipients.push({name : chance.name({nationality : 'en'}), 
         contactInfo : chance.phone({formatted : false}), 
         mediumType : 'T', 
@@ -50,12 +50,11 @@ var createTriggers = () => {
   return new Promise ((resolve, reject) => {
     var triggers = [];
     for (var i = 0; i < 10; i++) {
-      triggers.push({name : chance.sentence(), count : 0})
+      triggers.push({name : chance.sentence()})
     }
     resolve(triggers);
   })
 }
-
 
 var createCommand = (inputUserGroups) => {
   return new Promise ((resolve, reject) => {
@@ -68,32 +67,28 @@ var createCommand = (inputUserGroups) => {
   })
 }
 
-var createSecretCommand = (inputUserId, inputUserGroups, inputMessageId, inputResponseId) => {
+var createSecretCommand = (inputUserGroups, inputTriggers) => {
   return new Promise ((resolve, reject) => {
     var secretCommands = [];
-    var gropus = inputUserGroups;
+    for(var i = 0; i < inputUserGroups.length; i++) {
+      var groups = inputUserGroups[i].groups;
+      var triggers = [...inputTriggers];
        for (var j = 0; j < 5; j++) {
          var num = Math.floor(Math.random() * (groups.length));
-         var randomGroup = groups.slice(num, 1)
-         secretCommands.push({triggerId : randomTrigger,
-          userId : inputUserId,
-          groupId : randomGroup,
-          secretMessageId : inputMessageId,
-          responseId : inputResponseId,
-          verified : false,
-          status : 1})
+         var randomGroup = groups.splice(num, 1)
+         var randomTrigger = triggers.splice(num, 1);
+         secretCommands.push({triggerId : randomTrigger[0].id,
+          userId : inputUserGroups[i].userId,
+          groupId : randomGroup[0]})
        }
+    }
      resolve(secretCommands);
   })
 }
 
-var createSecretResponse = (inputCommandId) => {
-  return new Promise ((resolve, reject) => {
-    var secretResponses = [];
-
-  })
+var formatResult = (sequelizeInput) => {
+  return JSON.parse(JSON.stringify(sequelizeInput))
 }
-
 
 createUsers().then(createdUsers => {
   Promise.map(createdUsers, createdUser => {
@@ -102,7 +97,7 @@ createUsers().then(createdUsers => {
       name : createdUser.name
     })
   }).then(seededUsers => {
-    var formattedSeededUsers = JSON.parse(JSON.stringify(seededUsers));
+    var formattedSeededUsers = formatResult(seededUsers);
     Promise.map(formattedSeededUsers, seededUser => {
        return createGroups(seededUser.id).then(createdUserGroups => {
          return Promise.map(createdUserGroups, userGroups => {
@@ -124,7 +119,7 @@ createUsers().then(createdUsers => {
          })
        })
     }).then(seededGroupsAndRecipients => {
-      var formattedGrAndRec = JSON.parse(JSON.stringify(seededGroupsAndRecipients))  
+      var formattedGrAndRec = formatResult(seededGroupsAndRecipients)
       var organizedGrAndRc = [].concat.apply([], formattedGrAndRec.map(user => {
         return [].concat.apply([], user.map(userGroup => {
           return userGroup[1].map(recpient => {
@@ -153,7 +148,7 @@ createUsers().then(createdUsers => {
                 text : message.text,
                 count : 0
               }).then(seededMessage => {
-                var formattedSeededMessage = JSON.parse(JSON.stringify(seededMessage))
+                var formattedSeededMessage = formatResult(seededMessage);
                 return createCommand(userGroups.groups).then(createdCommands => {
                   return models.Command.create({
                     name : createdCommands.name,
@@ -162,6 +157,41 @@ createUsers().then(createdUsers => {
                     messageId : formattedSeededMessage.id,
                     verified : false,
                     status : 1
+                  })
+                })
+              })
+            })
+          })
+        }),
+        createTriggers().then(createdTriggers => {
+          return Promise.map(createdTriggers, trigger => {
+            return models.SecretTriggers.create({
+              name : trigger.name,
+              count : 0
+            })
+          }).then(seededTriggers => {
+            var formattedTriggers = formatResult(seededTriggers);
+            return createSecretCommand(organizedUserGroups, formattedTriggers).then(createdSecretCommands => {
+              return Promise.map(createdSecretCommands, createdSecretCommand => {
+                return models.SecretResponse.create({
+                  speech : chance.sentence({words : 5}),
+                  count : 0
+                }).then(seededResponse => {
+                  var formattedResponse = formatResult(seededResponse);
+                  return models.SecretMessage.create({
+                    text : chance.sentence({words : 6}),
+                    count : 0
+                  }).then(seededSecretMessage => {
+                      var formattedSecretMessage = formatResult(seededSecretMessage);  
+                      return models.SecretCommand.create({
+                        triggerId : createdSecretCommand.triggerId,
+                        userId : createdSecretCommand.userId,
+                        groupId : createdSecretCommand.groupId,
+                        secretMessageId : formattedSecretMessage.id,
+                        responseId : formattedResponse.id,
+                        verified : false,
+                        status : 1
+                    })           
                   })
                 })
               })
