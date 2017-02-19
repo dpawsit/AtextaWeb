@@ -3,10 +3,11 @@ const router = express.Router();
 const cc = require('../../database/controllers/command_controllers');
 
 router.get('/userCommands/:userId', (req, res) => {
-  console.log('inside userCommands with', req.params.userId)
+  // console.log('inside userCommands with', req.params.userId)
   cc.GetUserCommands(req.params.userId)
   .then(result => {
-    res.status(200).json(commands);
+    // console.log('the result of trying to get user commands is', result)
+    res.status(200).json(result);
   })
   .catch(error => {
     res.status(500).send(error);
@@ -34,7 +35,7 @@ router.put('/updateName', (req, res) => {
 })
 
 router.post('/newCommand', (req, res) => {
-  cc.CreateNewCommand(req.body)
+  cc.CreateNewCommand(req.body.newCommand)
   .then(result => {
     res.status(200).json(result);
   })

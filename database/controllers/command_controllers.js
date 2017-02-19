@@ -8,10 +8,9 @@ var Message = Models.Message;
 module.exports.GetUserCommands = (inputUserId) => {
   console.log('in get user command controller with', inputUserId)
   return new Promise ((resolve, reject) => {
-    db.query('select C.name, C.groupId, C.verified, M.text, M.additionalContent, G.mediumType, G.name from Commands C join Messages M on C.id = M.commandId left outer join Groups G on C.groupId = G.id where C.userId = ? and C.status = 1', 
+    db.query('select C.name as commandName, C.groupId, C.verified, M.text, M.additionalContent, G.mediumType, G.name as groupName from Commands C join Messages M on C.messageId = M.id left outer join Groups G on C.groupId = G.id where C.userId = ? and C.status = 1', 
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(Commands => {
-      console.log('commands we got back are', Commands)
       resolve(Commands)
     })
     .catch(error => {
@@ -48,27 +47,41 @@ module.exports.UpdateCommandName = (inputCommandId, NewCommandName) => {
 }
 
 module.exports.CreateNewCommand = (inputCommand) => {
+  console.log('got to create command controller with', inputCommand)
   return new Promise ((resolve, reject) => {
     Message.create({
       text : inputCommand.text,
-      additionalContent : inputCommand.additionalContent
+      additionalContent : inputCommand.additionalContent,
+      count: 0
     }).then(newMessage => {
+      console.log('new message created', newMessage.dataValues)
       Command.create({
         name : inputCommand.name,
         userId : inputCommand.userId,
         groupId : inputCommand.groupId,
         messageId : newMessage.dataValues.id,
-        verified : false,
-        status : 1
+        verified: false,
+        status: 1
       }).then(newCommand => {
+        console.log('new command created it is', newCommand)
         db.query('update Messages set commandId = ? where id = ?', 
         {replacements : [newCommand.dataValues.id, newMessage.dataValues.id], type : sequelize.QueryTypes.UPDATE})
         .then(result => {
           resolve(newCommand);
         })
+        .catch(error => {
+          console.log('errore because:', error)
+          reject(error);
+        })
+      })
+      .catch(error => {
+        console.log('errore because:', error)
+
+        reject(error);
       })
     })
     .catch(error => {
+      console.log('errore because:', error)
       reject(error);
     })
   })

@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken')
 const keys = require('../../keys')
 
 const authenticateUser = (token) => {
-  console.log('into authenticater with', token)
   return new Promise ((resolve, reject) => {
   var options = {
   "method": "GET",
