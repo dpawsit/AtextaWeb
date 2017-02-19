@@ -35,11 +35,11 @@ class MessageList extends React.Component {
 	renderCommands(commands) {
 		function renderCommand(command) {
 			return(
-				<tr key={command.trigger}>
-		      <td contentEditable>{command.messageId}</td>
+				<tr key={command.commandName}>
+		      <td contentEditable>{command.commandName}</td>
 		      <td contentEditable>{command.text}</td>
 		      <td>
-			      	{command.groupId}
+			      	{command.groupName}
 		      </td>
 		 	 	</tr>	
 		 	 	)

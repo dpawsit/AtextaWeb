@@ -85,8 +85,8 @@ module.exports.AddRecipientToGroup = (inputGroupId, inputRecipIds) => {
 
 module.exports.GetUserGroups = (inputUserId) => {
   return new Promise ((resolve, reject) => {
-    var groups = {};
-    db.query('select id, name, medium from Groups where userId = ?', 
+    var groups = [];
+    db.query('select id, name, mediumType from Groups where userId = ?', 
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(userGroups => {
       Promise.map(userGroups, (group, index) => {
@@ -101,7 +101,7 @@ module.exports.GetUserGroups = (inputUserId) => {
               'recipients' : groupRecipients
             };
 
-            groups[index] = thisGroup;
+            groups.push(thisGroup)
           })
       })
       .then(result => {

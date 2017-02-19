@@ -1,49 +1,96 @@
 import React from 'react'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import { RaisedButton } from 'material-ui'
+import { getUserGroups } from '../actions/atexta_actions'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			step: 1,
-			selectedGroup: ''
+			selectedGroup: '',
+			newCommandName: '',
+			newCommandText: ''
 		}
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
-		this.closeModal = this.closeModal.bind(this)
 		this.clickGroup = this.clickGroup.bind(this)
+		this.componentDidMount = this.componentDidMount.bind(this)
+		this.handleNameChange = this.handleNameChange.bind(this)
+		this.handleTextChange = this.handleTextChange.bind(this)
+		this.handleCommandSubmit = this.handleCommandSubmit.bind(this)
+		this.handleNameSubmit = this.handleNameSubmit.bind(this)
+		this.handleTextSubmit = this.handleTextSubmit.bind(this)
+	}
+
+	componentDidMount() {
+		let userId = this.props.userId
+		this.props.getUserGroups(userId)
+	}
+
+	handleNameChange(event) {
+    this.setState({newCommandName: event.target.value});
+	}
+
+	handleNameSubmit(event) {
+		event.preventDefault()
+		//check if it's empty, if so don't let them 
+		this.incrementStep()
+	}
+
+	handleTextChange(event) {
+		this.setState({newCommandText: event.target.value})
+	}
+
+	handleTextSubmit(event) {
+		event.preventDefault()
+		this.incrementStep()
+	}
+
+	handleCommandSubmit() {
+		console.log('this is the command', this.state.selectedGroupId, this.state.newCommandName, this.state.newCommandText)
+		let newCommand = {
+			name: this.state.newCommandName,
+			userId: this.props.userId,
+			groupId: this.state.selectedGroupId,
+			text: this.state.newCommandText,
+			additionalContent: null
+		}
+		axios.post('command/newCommand', {
+			newCommand
+		})
+		this.props.close()
 	}
 
 	incrementStep() {
 		this.setState({step: this.state.step+1})
 	}
 
-	closeModal() {
-		this.setState({showModal: false})
-	}
-
-	clickGroup(group) {
-		this.setState({selectedGroup: group})
+	clickGroup(group, id) {
+		this.setState({selectedGroup: group, selectedGroupId: id})
 	}
 
 	stepDecider() {
-		const renderGroups = (group) => (
-				<li onClick = {()=>{this.clickGroup(group.name)}}className = "centered colorBox">{group.name}</li>
+		const renderGroups = (group, index) => {
+			return(
+				<li key={index} onClick = {()=>{this.clickGroup(group.name, group.groupId)}}className = "centered colorBox">{group.name}</li>
 			)
+		}
 		switch(this.state.step) {
 			case 1:
 				return (
 					<div>
-						<form>
+						<form onSubmit={this.handleNameSubmit}>
 							<label>
 								What do you want to name this trigger?
-								<input type='text' id='groupName' />
+								<input value={this.state.newCommandName} type='text' id='groupName' 
+								onChange={this.handleNameChange} />
             	</label>
             </form>
 						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.closeModal}/>
+						onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
@@ -51,14 +98,15 @@ class AddMessageModal extends React.Component {
 			case 2:
 				return (
 					<div>
-						<form>
+						<form onSubmit={this.handleTextSubmit}>
 							<label>
 								Input the text you want to send
-								<input type='text' id='groupName' />
+								<input value={this.state.newCommandText} type='text' id='groupName' 
+								onChange={this.handleTextChange}  />
             	</label>
             </form>
 						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.closeModal}/>
+						onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
@@ -69,12 +117,12 @@ class AddMessageModal extends React.Component {
 						Select the group you want {this.state.selectedGroup}
 						<div className = "scrollable">
 							<ul>
-								{this.props.groups.map(renderGroups)}
+								{this.props.userGroups.map(renderGroups)}
 							</ul>
 						<RaisedButton type="button" label="Add new group" 
-						onClick = {this.incrementStep}/>
+						/>
 						<RaisedButton type="button" label="Submit" 
-						onClick = {this.closeModal}/>
+						onClick = {this.handleCommandSubmit}/>
 						</div>
 					</div>
 				)
@@ -99,8 +147,8 @@ class AddMessageModal extends React.Component {
 	}
 }
 
-function mapStateToProps({ groups }) {
-	return { groups };
+function mapStateToProps({ atexta }) {
+	return { userId: atexta.userId, userGroups: atexta.userGroups };
 }
 
-export default connect(mapStateToProps)(AddMessageModal)
+export default connect(mapStateToProps, {getUserGroups})(AddMessageModal)
