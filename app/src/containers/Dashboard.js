@@ -21,14 +21,14 @@ class Dashboard extends React.Component {
 	}
 
 	componentWillMount() {
-		let token = this.props.auth.getAccessToken();
-		this.props.auth.getProfile(token)
-		.then(profile => {
-			this.props.getUserId(profile)
-		})
-		.catch(err=> {
-			console.log('err getting profile', err)
-		})
+		//let token = this.props.auth.getAccessToken();
+		//this.props.auth.getProfile(token)
+	//	.then(profile => {
+			this.props.getUserId(this.props.auth.getAccessToken());
+	//	})
+		//.catch(err=> {
+		//	console.log('err getting profile', err)
+	//	})
 	}
 
 	renderMessageList() {
