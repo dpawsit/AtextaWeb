@@ -13,7 +13,8 @@ module.exports.UserLogin = (userInfo) => {
         name : userInfo.name
       }
     }).then(user => {
-      resolve(user[0].id);
+      console.log(user);
+      resolve(user[0].dataValues.id);
     }).catch(error => {
       reject(error);
     })

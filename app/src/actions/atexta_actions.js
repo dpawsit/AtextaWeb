@@ -7,9 +7,8 @@ export const GET_GROUPS = 'GET_GROUPS'
   //console.log('got this profile in action handler getr user id', profile)
   //l
   //console.log('request from action', request);
-export function getUserId (profile) {
-  // console.log('profile from getUseId index.js reducer', profile)
-  let request = axios.post('/auth/login', {profile})
+export function getUserId (token) {
+  let request = axios.post('/auth/login', {token})
   return {
     type: USER_LOGIN,
     payload: request

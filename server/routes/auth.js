@@ -4,7 +4,6 @@ const userController = require('../../database/controllers/user_controller');
 const Promise = require('bluebird');
 const https = require('https');
 const jwt = require('jsonwebtoken')
-const keys = require('../../keys')
 
 const authenticateUser = (token) => {
   return new Promise ((resolve, reject) => {
@@ -38,23 +37,13 @@ const authenticateUser = (token) => {
 }
 
 router.post('/login', (req, res) => {
-//  console.log('got into login post with token', token)
-//  authenticateUser(token)
-//  .then(userInfo => {
-//  console.log('we are in login post with profile:', req.body.profile, 'and secret:', keys.tokenSecret)
-  // let verfiy = jwt.verify(token, keys.tokenSecret, function(err, decoded) {
-  //   if(err) {
-  //     console.log('error verifying token', err)
-  //   } else {
-  //     console.log('decoded token:', decoded)
-  //   }
-  // })
-// console.log(JSON.stringify(req))
-  let profile = req.body.profile
-  userController.UserLogin(profile)
+ authenticateUser(req.body.token)
+ .then(profile => {
+  userController.UserLogin(JSON.parse(profile))
   .then(userId => {
     res.status(200).json(userId);
   })
+})
   .catch(error => {
     res.status(500).send(error);
   })

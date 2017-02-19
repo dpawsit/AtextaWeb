@@ -12,7 +12,6 @@ const config = require ('../keys').secret;
 const app = express()
 app.set('secret', config);
 app.use(helmet())
-app.use(morgan());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // app.all('*', util.checkUser);
