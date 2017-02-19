@@ -34,7 +34,6 @@
     "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
     "material-ui": "^0.17.0",
-    "morgan": "^1.7.0",
     "mysql": "^2.13.0",
     "mysql2": "^1.1.2",
     "nodemon": "^1.11.0",

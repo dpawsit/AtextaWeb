@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export const USER_LOGIN = 'USER_LOGIN';
 export const GET_COMMANDS = 'GET_COMMANDS'
 export const GET_GROUPS = 'GET_GROUPS'

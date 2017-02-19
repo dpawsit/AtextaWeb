@@ -6,16 +6,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxPromise from 'redux-promise';
 import { Router, browserHistory } from 'react-router'
 import { persistStore, autoRehydrate, storages } from 'redux-persist'
-
-
 import routes from './routes'
 import reducers from './reducers';
 
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-
-// const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 function configureStore() {
 	return new Promise((resolve, rejct) => {
