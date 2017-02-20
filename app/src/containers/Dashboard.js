@@ -14,18 +14,22 @@ class Dashboard extends React.Component {
 
 		this.state = {
 			showMessageList: true,
-			showGroupList: false
+			showGroupList: false,
+			finished: false
 		}
 		this.componentWillMount = this.componentWillMount.bind(this)
 		this.renderMessageList = this.renderMessageList.bind(this)
 		this.renderGroupList = this.renderGroupList.bind(this)
 	}
 
+
 	componentWillMount() {
 		var token = this.props.auth.getAccessToken()
-		  axios.post('/auth/login', {token}).then(result => {
+		  axios.post('/auth/login', {token})
+			.then(result => {
 				axios.defaults.headers.common['Authorization'] = result.data.token;
 				this.props.getUserId(result.data.userId);
+				this.setState({finished: true})
 			}).catch(error => {
 				console.log(error);
 			})
@@ -46,20 +50,25 @@ class Dashboard extends React.Component {
 	}
 
 	render() {
-		console.log('props and tokens in dashboard', this.props.userId)
-		return (
+		return this.state.finished ? 
+		(
 			<div>
 				<MuiThemeProvider>
 					<div>
 						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList}/>
-						 {//this.state.showMessageList ? <MessageList /> : 
-						// this.state.showGroupList ? <GroupList /> :
-						<div></div>
-						}
+						 {this.state.showMessageList ? <MessageList /> : 
+							this.state.showGroupList ? <GroupList /> :
+							<div></div>
+						 }
 					</div>
 				</MuiThemeProvider>
       </div>
 		)
+		:
+		(
+			<div>have not gotten id yet</div>
+		)
+
 	}
 }
 
