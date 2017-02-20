@@ -10,7 +10,8 @@ class MessageList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			showAddMessageModal: false
+			showAddMessageModal: false,
+			finished: false
 		}	
 		
 		this.renderCommands = this.renderCommands.bind(this)
@@ -19,54 +20,65 @@ class MessageList extends React.Component {
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
 
-componentDidMount() {
-	let userId = this.props.userId
-	this.props.getUserCommands(userId)
-}
+	componentDidMount() {
+		let userId = this.props.userId
+		this.props.getUserCommands(userId)
+		.then(commands=> {
+			this.setState({finished: true})
+		})
+		.catch(err=> {
+			console.log('error getting commands', err)
+		})
+	}
 
-closeAddMessageModal() {
-	this.setState({showAddMessageModal: false})
-}
+	closeAddMessageModal() {
+		this.setState({showAddMessageModal: false})
+	}
 
-openAddMessageModal() {
-	this.setState({showAddMessageModal: true})
-}
+	openAddMessageModal() {
+		this.setState({showAddMessageModal: true})
+	}
 
-renderCommands(command) {
-	return(
-		<tr key={command.commandName}>
-			<td contentEditable>{command.commandName}</td>
-			<td contentEditable>{command.text}</td>
-			<td>
-					{command.groupName}
-			</td>
-		</tr>	
-	)
-}
+	renderCommands(command) {
+		return(
+			<tr key={command.commandName}>
+				<td contentEditable>{command.commandName}</td>
+				<td contentEditable>{command.text}</td>
+				<td>
+						{command.groupName}
+				</td>
+			</tr>	
+		)
+	}
 
-render() {
-	console.log('the commands are', this.props.getUserCommands)
-	return (
-		<div>
-			<table className="table table-hover">
-				<thead>
-					<tr>
-						<th>Trigger</th>
-						<th>Text</th>
-						<th>Group</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.props.userCommands.map(this.renderCommands)}
-					<tr>
-						<RaisedButton type="button" label="add a new one" secondary={true} 
-						onClick={this.openAddMessageModal} />
-					</tr>
-				</tbody>
-			</table>
-			{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
-				show={this.state.showAddMessageModal} /> : <div></div>}
-		</div>
+	render() {
+		console.log('the user commands we got are', this.props.userCommands)
+		return this.state.finished ?
+		(
+			<div>
+				<table className="table table-hover">
+					<thead>
+						<tr>
+							<th>Trigger</th>
+							<th>Text</th>
+							<th>Group</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.props.userCommands.map(this.renderCommands)}
+						<tr>
+							<RaisedButton type="button" label="add a new one" secondary={true} 
+							onClick={this.openAddMessageModal} />
+						</tr>
+					</tbody>
+				</table>
+				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
+					show={this.state.showAddMessageModal} /> : <div></div>}
+			</div>
+		)
+		:
+		(
+			<div>have not gotten commands yet</div>
 		)
 	}
 }

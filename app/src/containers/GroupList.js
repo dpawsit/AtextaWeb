@@ -1,6 +1,7 @@
 import React from 'react'
 import { FloatingActionButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import { connect } from 'react-redux'
 
 class GroupList extends React.Component {
 	constructor(props) {
@@ -32,8 +33,6 @@ class GroupList extends React.Component {
 		return(
 			<div>at elast it's owrkign</div>
 		)
-		let context = this
-		console.log('userLogin is', context.props.userLogin)
 		return (
 			<table className="table table-hover">
 				<thead>
@@ -44,7 +43,7 @@ class GroupList extends React.Component {
 					</tr>
 				</thead>
 				<tbody>
-					{this.props.groups.map(this.renderGroups)}
+					{this.props.userGroups.map(this.renderGroups)}
 				<RaisedButton type="button" label="add a new one" secondary={true} />
 				</tbody>
 			</table>
@@ -52,4 +51,8 @@ class GroupList extends React.Component {
 	}
 }
 
-export default GroupList
+// function mapStateToProps({ atexta }) {
+// 	return { userId: atexta.userId, userGroups: atexta.userGroups };
+// }
+
+// export default connect(mapStateToProps, {getUserGroups})(GroupList)
