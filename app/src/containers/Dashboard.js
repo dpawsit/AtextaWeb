@@ -22,35 +22,17 @@ class Dashboard extends React.Component {
 		this.renderGroupList = this.renderGroupList.bind(this)
 	}
 
-
 	componentWillMount() {
 		var token = this.props.auth.getAccessToken()
 		  axios.post('/auth/login', {token})
 			.then(result => {
 				axios.defaults.headers.common['Authorization'] = result.data.token;
-				this.props.getUserId(result.data.userId);
+				this.props.getUserId(result.data.userId, result.data.userGroups, result.data.userCommands);
 				this.setState({finished: true})
 			}).catch(error => {
 				console.log(error);
 			})
 	}
-
-	// componentDidMount() {
-	// 	let token = this.props.auth.getAccessToken();
-	// 	this.props.auth.getProfile(token)
-	// 	.then(profile => {
-	// 		this.props.getUserId(profile)
-	// 		.then(id => {
-	// 			this.setState({finished: true})
-	// 		})
-	// 		.catch(err => {
-	// 			console.log('error getting user id in dashbaord', err)
-	// 		})
-	// 	})
-	// 	.catch(err=> {
-	// 		console.log('err getting profile', err)
-	// 	})
-	// }
 
 	renderMessageList() {
 		this.setState({
