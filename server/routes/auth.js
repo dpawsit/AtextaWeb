@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../../database/controllers/user_controller');
+const groupController = require('../../database/controllers/group_controllers');
+const commandControllers = require('../../database/controllers/command_controllers');
 const Promise = require('bluebird');
 const https = require('https');
 const jwt = require('jsonwebtoken');
@@ -42,15 +44,23 @@ router.post('/login', (req, res) => {
  .then(profile => {
   userController.UserLogin(JSON.parse(profile))
   .then(userId => {
+    Promise.all([
+    commandControllers.GetUserCommands(userId),
+    groupController.GetUserGroups(userId)
+    ]).then(userResults => {
     jwt.sign({userId}, config, {
       expiresIn : '1h'
     }, (error, token) => {
         if (error) {
             res.status(403).send(error);
         }
-        console.log('signed token: ', token);
-        res.status(200).json({userId, token});
+        res.status(200).json({userId : userId, 
+            token: token,
+        userCommands : userResults[0],
+        userGroups : userResults[1]
+        });
     });
+    })
   })
 })
   .catch(error => {
@@ -59,7 +69,6 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  req.session.destroy();
   res.status(200).json({logout : true});
 });
 

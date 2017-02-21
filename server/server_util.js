@@ -3,11 +3,11 @@ const config = require('../keys').secret;
 
 module.exports.checkUser = (req, res, next) => {
   let token = req.headers.authorization;
-
   if (req.path === '/auth/login' || 
       req.path === '/' || 
       req.path === '/login') {
     next();
+
   } else {
     if (token) {
       jwt.verify(token, config, (error, decoded) => {
