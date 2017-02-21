@@ -3,7 +3,6 @@ import AddGroupModal from './AddGroupModal'
 import { FloatingActionButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
-import { getUserGroups } from '../actions/atexta_actions'
 
 class GroupList extends React.Component {
 	constructor(props) {
@@ -24,6 +23,7 @@ class GroupList extends React.Component {
 	}
 
 	renderGroups(group) {
+		console.log('this group is', group)
 		let medium = group.mediumType === 'T' ? 'Text' : 
 			group.mediumType === 'S' ? 'Slack' :
 			group.mediumType === 'E' ? 'Email' :
@@ -31,7 +31,7 @@ class GroupList extends React.Component {
 
 		function renderPeople(recipient) {
 			return(
-				<li key={recipient.name}>{recipient.name}</li>
+				<RaisedButton key={recipient.name} label={recipient.name} primary={true} style={{size: 10+'%', margin: 5+'px'}}/>
 			)
 		}
 
@@ -40,15 +40,14 @@ class GroupList extends React.Component {
 	      <td contentEditable>{group.name}</td>
 	      <td>{medium}</td>
 	      <td>
-	      <ul>
-	      	{group.recipients.map(renderPeople)}
-	      </ul>
+	      {group.recipients.map(renderPeople)}
 				</td>
 	 	 	</tr>	
 	 	 	)
 
 	}
 	render() {
+		console.log('groups are', this.props.userGroups)
 		return (
 			<div>
 				<table className="table table-hover">
@@ -72,7 +71,7 @@ class GroupList extends React.Component {
 	}
 }
 function mapStateToProps({ atexta }) {
-	return { userId: atexta.userId, userGroups: atexta.userGroups };
+	return { userGroups: atexta.userGroups };
 }
 
-export default connect(mapStateToProps, {getUserGroups})(GroupList)
+export default connect(mapStateToProps)(GroupList)

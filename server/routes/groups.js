@@ -3,6 +3,7 @@ const router = express.Router();
 const gc = require('../../database/controllers/group_controllers');
 
 router.post('/addGroup', (req, res) => {
+  console.log('inside create group with', req.body.groupInfo, req.body.newRecipients, req.body.savedRecipients)
   gc.CreateNewGroup(req.body.groupInfo, req.body.newRecipients, req.body.savedRecipients)
   .then(result => {
     res.status(200).json(result);
@@ -42,8 +43,9 @@ router.get('/allGroups/:userId', (req, res) => {
   })
 })
 
-router.get('/availableRecipients/:groupId/:type', (req, res) => {
-  gc.GetAvailableRecipients(req.params.groupId, req.params.mediumType)
+router.get('/availableRecipients/:userId/:groupId/:mediumType', (req, res) => {
+  console.log('in availableRecipients route with', req.params.userId, req.params.groupId, req.params.mediumType)
+  gc.GetAvailableRecipients(req.params.userId, req.params.groupId, req.params.mediumType)
   .then(result => {
     res.status(200).json(result);
   })

@@ -8,6 +8,7 @@ var GroupRecipients = Models.GroupRecipients;
 
 module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipients) => {
  return new Promise ((resolve, reject) => {
+   console.log('about to create group with', inputGroupInfo.name, inputGroupInfo.userId, inputGroupInfo.mediumType)
    Group.create({
      name : inputGroupInfo.name,
      userId : inputGroupInfo.userId,
@@ -15,13 +16,16 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
    })
    .then(createdGroup => {
     var newRecipients = [];
-    Promise.map(inputRecipients, recipient => {
+    console.log('about to map with', inputRecipients)
+    Promise.map(inputRecipients, (recipient) => {
+    console.log('about to create new recipient with', recipient.name, recipient.contactInfo )
       return Recipient.create({
         name : recipient.name,
         contactInfo : recipient.contactInfo,
         mediumType : inputGroupInfo.mediumType,
         userId : inputGroupInfo.userId
       }).then(createdRec => {
+        console.log('about to create grouprecipient with', createdRec.dataValues.id, createdGroup.dataValues.id)
         newRecipients.push(createdRec.dataValues)
         return GroupRecipients.create({
           groupId : createdGroup.dataValues.id,
@@ -31,17 +35,20 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
     })
     .then(createdRecipients => {
       Promise.map(savedRecipients, recipient => {
+      console.log('about to create second wave of group recipients with', createdGroup.dataValues.id, recipient)
         return GroupRecipients.create({
           groupId : createdGroup.dataValues.id,
-          recipientId : recipient
+          recipientId : recipient.id
         })
       })
       .then(joinedRecipients => {
+        console.log('successfully created group', joinedRecipients.dataValues, newRecipients)
         resolve({group : createdGroup, recipients : newRecipients});
       })
     })
    })
    .catch(error => {
+     console.log('error adding group tp db', err)
      reject(error);
    })
  })
@@ -93,7 +100,6 @@ module.exports.GetUserGroups = (inputUserId) => {
         return  db.query('select R.* from Recipients R join GroupRecipients GR on R.id = GR.recipientId where GR.groupId = ?',
           {replacements : [group.id], type : sequelize.QueryTypes.SELECT})
           .then(groupRecipients => {
-      
             var thisGroup = {
               'name' : group.name,
               'mediumType' : group.mediumType,
@@ -174,7 +180,7 @@ module.exports.RemoveRecipient = (inputGroupId, recId) => {
 
 module.exports.GetAvailableRecipients = (userId, groupId, type) => {
   return new Promise ((resolve, reject) => {
-    db.query('select name, contactInfo from Recipients where mediumType = ? and userId = ? and id not in (select recipientId from GroupRecipients where groupId = ?)',
+    db.query('select name, contactInfo, id from Recipients where mediumType = ? and userId = ? and id not in (select recipientId from GroupRecipients where groupId = ?)',
     {replacements : [type, userId, groupId], type : sequelize.QueryTypes.SELECT})
     .then(availableUsers => {
       resolve(availableUsers);

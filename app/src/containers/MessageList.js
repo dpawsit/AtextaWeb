@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { RaisedButton } from 'material-ui'
 import { connect } from 'react-redux'
-import { getUserCommands } from '../actions/atexta_actions'
 import AddMessageModal from './AddMessageModal'
 
 
@@ -10,26 +9,25 @@ class MessageList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			showAddMessageModal: false,
-			finished: false
+			showAddMessageModal: false
 		}	
 		
 		this.renderCommands = this.renderCommands.bind(this)
-		this.componentDidMount = this.componentDidMount.bind(this)
+		// this.componentDidMount = this.componentDidMount.bind(this)
 		this.openAddMessageModal = this.openAddMessageModal.bind(this)
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
 
-	componentDidMount() {
-		let userId = this.props.userId
-		this.props.getUserCommands(userId)
-		.then(commands=> {
-			this.setState({finished: true})
-		})
-		.catch(err=> {
-			console.log('error getting commands', err)
-		})
-	}
+	// componentDidMount() {
+	// 	let userId = this.props.userId
+	// 	this.props.getUserCommands(userId)
+	// 	.then(commands=> {
+	// 		this.setState({finished: true})
+	// 	})
+	// 	.catch(err=> {
+	// 		console.log('error getting commands', err)
+	// 	})
+	// }
 
 	closeAddMessageModal() {
 		this.setState({showAddMessageModal: false})
@@ -53,8 +51,7 @@ class MessageList extends React.Component {
 
 	render() {
 		console.log('the user commands we got are', this.props.userCommands)
-		return this.state.finished ?
-		(
+		return(
 			<div>
 				<table className="table table-hover">
 					<thead>
@@ -76,15 +73,11 @@ class MessageList extends React.Component {
 					show={this.state.showAddMessageModal} /> : <div></div>}
 			</div>
 		)
-		:
-		(
-			<div>have not gotten commands yet</div>
-		)
 	}
 }
 
 function mapStateToProps({ atexta }) {
-	return { userId: atexta.userId, userCommands: atexta.userCommands };
+	return { userCommands: atexta.userCommands };
 }
 
-export default connect(mapStateToProps, {getUserCommands})(MessageList)
+export default connect(mapStateToProps)(MessageList)

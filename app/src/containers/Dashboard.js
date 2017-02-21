@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
 import { connect } from 'react-redux'
-import { getUserId } from '../actions/atexta_actions'
+import { getUserInfo } from '../actions/atexta_actions'
 import axios from 'axios';
 
 class Dashboard extends React.Component {
@@ -27,7 +27,7 @@ class Dashboard extends React.Component {
 		  axios.post('/auth/login', {token})
 			.then(result => {
 				axios.defaults.headers.common['Authorization'] = result.data.token;
-				this.props.getUserId(result.data.userId, result.data.userGroups, result.data.userCommands);
+				this.props.getUserInfo(result.data.userId, result.data.userCommands, result.data.userGroups);
 				this.setState({finished: true})
 			}).catch(error => {
 				console.log(error);
@@ -75,4 +75,4 @@ function mapStateToProps({atexta}) {
 	return {userId: atexta.userId };
 }
 
-export default connect(mapStateToProps, {getUserId})(Dashboard)
+export default connect(mapStateToProps, {getUserInfo})(Dashboard)
