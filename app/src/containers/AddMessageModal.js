@@ -2,14 +2,14 @@ import React from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
-import { RaisedButton } from 'material-ui'
+import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
 import { addCommand } from '../actions/atexta_actions'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			step: 1,
+			step: 0,
 			selectedGroup: '',
 			selectedGroupId: null,
 			newCommandName: '',
@@ -23,6 +23,7 @@ class AddMessageModal extends React.Component {
 		this.handleCommandSubmit = this.handleCommandSubmit.bind(this)
 		this.handleNameSubmit = this.handleNameSubmit.bind(this)
 		this.handleTextSubmit = this.handleTextSubmit.bind(this)
+		this.decrementStep = this.decrementStep.bind(this)
 	}
 
 	handleNameChange(event) {
@@ -79,6 +80,13 @@ class AddMessageModal extends React.Component {
 		this.setState({step: this.state.step+1})
 	}
 
+	decrementStep() {
+		const { step } = this.state
+		if(step > 0) {
+			this.setState({step: step-1})
+		}
+	}
+
 	clickGroup(group, id) {
 		this.setState({selectedGroup: group, selectedGroupId: id})
 	}
@@ -90,7 +98,7 @@ class AddMessageModal extends React.Component {
 			)
 		}
 		switch(this.state.step) {
-			case 1:
+			case 0:
 				return (
 					<div>
 						<form onSubmit={this.handleNameSubmit}>
@@ -100,13 +108,12 @@ class AddMessageModal extends React.Component {
 								onChange={this.handleNameChange} />
             	</label>
             </form>
-						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.props.close}/>
+						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
 				)
-			case 2:
+			case 1:
 				return (
 					<div>
 						<form onSubmit={this.handleTextSubmit}>
@@ -116,28 +123,25 @@ class AddMessageModal extends React.Component {
 								onChange={this.handleTextChange}  />
             	</label>
             </form>
-						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.props.close}/>
+						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
 				)
-			case 3:
-			console.log('rendering groups,', this.props.userGroups)
+			case 2:
 				return(
 					<div>
-						Select the group you want {this.state.selectedGroup}
+						Select the group you want:  <span className="centered colorBox">{this.state.selectedGroup}</span>
 						<div className = "scrollable">
 							<ul>
 								{this.props.userGroups.map((group, index) => (
 									renderGroups(group.name, group.groupId, index)
 								))}
 							</ul>
-						<RaisedButton type="button" label="Add new group" 
-						/>
-						<RaisedButton type="button" label="Submit" 
-						onClick = {this.handleCommandSubmit}/>
 						</div>
+						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
+						<RaisedButton type="button" label="Submit" primary={true}
+						onClick = {this.handleCommandSubmit}/>
 					</div>
 				)
 			default:
@@ -155,6 +159,23 @@ class AddMessageModal extends React.Component {
 	    	</Modal.Header>
 	    	<Modal.Body>
 	    		{this.stepDecider()}
+					<Stepper activeStep={this.state.step}>
+						<Step>
+							<StepLabel>
+								Choose the name
+							</StepLabel>
+						</Step>
+						<Step>
+							<StepLabel>
+								Input the text
+							</StepLabel>
+						</Step>
+						<Step>
+							<StepLabel>
+								Select a group (optional)
+							</StepLabel>
+						</Step>
+					</Stepper>
 	   		</Modal.Body>
 	    </Modal>
 		)
