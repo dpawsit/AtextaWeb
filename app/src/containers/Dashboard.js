@@ -6,6 +6,7 @@ import MessageList from './MessageList'
 import GroupList from './GroupList'
 import { connect } from 'react-redux'
 import { getUserId } from '../actions/atexta_actions'
+import axios from 'axios';
 
 class Dashboard extends React.Component {
 	constructor(props) {
@@ -21,14 +22,13 @@ class Dashboard extends React.Component {
 	}
 
 	componentWillMount() {
-		//let token = this.props.auth.getAccessToken();
-		//this.props.auth.getProfile(token)
-	//	.then(profile => {
-			this.props.getUserId(this.props.auth.getAccessToken());
-	//	})
-		//.catch(err=> {
-		//	console.log('err getting profile', err)
-	//	})
+		var token = this.props.auth.getAccessToken()
+		  axios.post('/auth/login', {token}).then(result => {
+				axios.defaults.headers.common['Authorization'] = result.data.token;
+				this.props.getUserId(result.data.userId);
+			}).catch(error => {
+				console.log(error);
+			})
 	}
 
 	renderMessageList() {
@@ -52,8 +52,8 @@ class Dashboard extends React.Component {
 				<MuiThemeProvider>
 					<div>
 						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList}/>
-						{this.state.showMessageList ? <MessageList /> : 
-						this.state.showGroupList ? <GroupList /> :
+						 {//this.state.showMessageList ? <MessageList /> : 
+						// this.state.showGroupList ? <GroupList /> :
 						<div></div>
 						}
 					</div>

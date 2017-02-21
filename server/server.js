@@ -7,16 +7,15 @@ const helmet = require('helmet');
 const util = require('./server_util');
 const port = process.env.PORT || 3000;
 const jwt = require('jsonwebtoken');
-const config = require ('../keys').secret;
 
 const app = express()
-app.set('secret', config);
+
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-// app.all('*', util.checkUser);
 app.use(express.static(path.join(__dirname, '../app/public')));
 
+app.all('*', util.checkUser);
 const router = require('./router.js')(app);
 
 app.get('*', function (request, response){

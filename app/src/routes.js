@@ -11,13 +11,12 @@ import AuthService from './utils/AuthService'
 const auth = new AuthService(items.client, items.domain);
 
 const requireAuth = (nextState, replace) => {
-	//clear store
-	//redirect them to login page
+
 	if(!auth.loggedIn()) {
 		replace({ pathname: '/login'})
 	} 
 }
-//	<IndexRoute component={Login} />
+
 export default (
 	<Route path="/" component={App} auth={auth}>
 		<IndexRedirect to="/dashboard" />
