@@ -96,7 +96,7 @@ module.exports.GetUserGroups = (inputUserId) => {
       
             var thisGroup = {
               'name' : group.name,
-              'mediumType' : group.medium,
+              'mediumType' : group.mediumType,
               'groupId' : group.id,
               'recipients' : groupRecipients
             };
