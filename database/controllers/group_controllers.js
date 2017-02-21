@@ -93,7 +93,6 @@ module.exports.GetUserGroups = (inputUserId) => {
         return  db.query('select R.* from Recipients R join GroupRecipients GR on R.id = GR.recipientId where GR.groupId = ?',
           {replacements : [group.id], type : sequelize.QueryTypes.SELECT})
           .then(groupRecipients => {
-      
             var thisGroup = {
               'name' : group.name,
               'mediumType' : group.mediumType,

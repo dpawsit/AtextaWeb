@@ -1,29 +1,35 @@
 import axios from 'axios';
 export const USER_LOGIN = 'USER_LOGIN';
-export const GET_COMMANDS = 'GET_COMMANDS'
-export const GET_GROUPS = 'GET_GROUPS'
+export const ADD_COMMAND = 'ADD_COMMAND'
+// export const GET_COMMANDS = 'GET_COMMANDS'
+// export const GET_GROUPS = 'GET_GROUPS'
 
-export function getUserId (userId) {
+export function getUserInfo (userId, userCommands, userGroups) {
   return {
     type: USER_LOGIN,
-    payload: userId
+    payload: { userId, userCommands, userGroups}
   };
 }
 
-export function getUserCommands(userId) {
-  // console.log('inside get user commands with id:' + userId)
-  let request = axios.get('/command/userCommands/'+userId)
+export function addCommand (newCommand) {
   return {
-    type: GET_COMMANDS,
-    payload: request
+    type: ADD_COMMAND,
+    payload: newCommand
   }
 }
 
-export function getUserGroups(userId) {
-  console.log('in getUserGroups with', userId)
-  let request = axios.get('groups/allGroups/'+userId)
-  return{
-    type: GET_GROUPS,
-    payload: request
-  }
-}
+// export function getUserCommands(userId) {
+//   let request = axios.get('/command/userCommands/'+userId)
+//   return {
+//     type: GET_COMMANDS,
+//     payload: request
+//   }
+// }
+
+// export function getUserGroups(userId) {
+//   let request = axios.get('groups/allGroups/'+userId)
+//   return{
+//     type: GET_GROUPS,
+//     payload: request
+//   }
+// }

@@ -3,7 +3,6 @@ import AddGroupModal from './AddGroupModal'
 import { FloatingActionButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
-import { getUserGroups } from '../actions/atexta_actions'
 
 class GroupList extends React.Component {
 	constructor(props) {
@@ -24,6 +23,7 @@ class GroupList extends React.Component {
 	}
 
 	renderGroups(group) {
+		console.log('this group is', group)
 		let medium = group.mediumType === 'T' ? 'Text' : 
 			group.mediumType === 'S' ? 'Slack' :
 			group.mediumType === 'E' ? 'Email' :
@@ -72,7 +72,7 @@ class GroupList extends React.Component {
 	}
 }
 function mapStateToProps({ atexta }) {
-	return { userId: atexta.userId, userGroups: atexta.userGroups };
+	return { userGroups: atexta.userGroups };
 }
 
-export default connect(mapStateToProps, {getUserGroups})(GroupList)
+export default connect(mapStateToProps)(GroupList)
