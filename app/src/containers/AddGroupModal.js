@@ -1,4 +1,6 @@
 import React from 'react'
+import axios from 'axios'
+import { addGroup } from '../actions/atexta_actions'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col, Clearfix } from 'react-bootstrap'
 import { RaisedButton } from 'material-ui'
@@ -8,36 +10,62 @@ class AddGroupModal extends React.Component {
 		super(props)
 		this.state = {
 			step: 1,
-			people: [],
+			recipientsToAdd: [],
+			newRecipientsToAdd: [],
 			newGroupMedium: 'Select a medium',
 			newGroupName: '',
-			fetchedValidRecipients: false
+			fetchedValidRecipients: false,
+			validRecipients: []
 		}
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
-		this.clickPerson = this.clickPerson.bind(this)
+		this.addRecipientToGroup = this.addRecipientToGroup.bind(this)
+		this.removeRecipientFromGroup = this.removeRecipientFromGroup.bind(this)
 		this.selectMediumType = this.selectMediumType.bind(this)
 		this.handleNameChange = this.handleNameChange.bind(this)
 		this.handleNameSubmit = this.handleNameSubmit.bind(this)
-
+		this.fetchValidRecipients = this.fetchValidRecipients.bind(this)
+		this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
 	}
 
 	fetchValidRecipients() {
-		axios.get('groups/availableRecipients/')
+		let medium = this.state.newGroupMedium === 'Text' ? 'T' : 
+		this.state.newGroupMedium === 'Slack' ? 'S' : this.state.newGroupMedium === 'Email' ? 'E' : null
+		axios.get('groups/availableRecipients/' + this.props.userId + '/null/' + medium)
+		.then(result=>{
+			console.log('the result of fetchign valid recipients', result)
+			this.setState({validRecipients: result.data, fetchedValidRecipients: true})
+		})
+		.catch(err=>{
+			console.log('error fetching avilable recipients:', err)
+		})
 
 	}
 	incrementStep() {
+		if(this.state.step === 2) {
+			this.fetchValidRecipients()
+		}
 		this.setState({step: this.state.step+1})
 	}
 
-	clickPerson(person) {
-		console.log('click handled')
-		let prev = this.state.people
-		prev.push(person)
-		this.setState({people: prev})
+	addRecipientToGroup(recipient) {
+		let prevToAdd = this.state.recipientsToAdd
+		let prevAvailable = this.state.validRecipients
+		prevAvailable.splice(prevAvailable.indexOf(recipient), 1)
+		prevToAdd.push(recipient)
+		this.setState({recipientsToAdd: prevToAdd, validRecipients: prevAvailable})
+	}
+
+	removeRecipientFromGroup(recipient) {
+		let prevToAdd = this.state.recipientsToAdd
+		let prevAvailable = this.state.validRecipients
+		prevToAdd.splice(prevToAdd.indexOf(recipient), 1)
+		prevAvailable.push(recipient)
+		this.setState({recipientsToAdd: prevToAdd, validRecipients: prevAvailable})
 	}
 
 	selectMediumType(medium) {
+		//add a check
 		this.setState({newGroupMedium: medium})
 	}
 
@@ -51,26 +79,68 @@ class AddGroupModal extends React.Component {
 		this.incrementStep()
 	}
 	
+	handleGroupSubmit() {
+		let medium = this.state.newGroupMedium === 'Text' ? 'T' : 
+		this.state.newGroupMedium === 'Slack' ? 'S' : this.state.newGroupMedium === 'Email' ? 'E' : null
+		axios.post('/groups/addGroup', {
+			groupInfo: {
+				name: this.state.newGroupName,
+				userId: this.props.userId,
+				mediumType: medium
+			},
+			// newRecipients: [{name: 'hello there ricky', contactInfo:'77777777', }],
+			newRecipients: this.state.newRecipientsToAdd,
+			savedRecipients: this.state.recipientsToAdd
+		})
+		.then(result=> {
+			console.log('group added', result)
+			this.props.addGroup({
+				name: result.data.group.name,
+				mediumType: result.data.group.mediumType,
+				gropuId: result.data.group.id,
+				recipients: result.data.recipients.concat(this.state.recipientsToAdd)
+			})
+			this.props.close()
+		})
+		.catch(err=> {
+			console.log('error submitting group:', err)
+		})
+	}
 
 	stepDecider() {
-		const renderPeople = (person) => (
+		const renderAvailableRecipients = (recipient) => (
 			<div>
 				<Grid>
 					<Row>
 						<Col xs={5} md={5}>
-							<li onClick = {()=>{this.clickPerson(person)}} 
-							className = "centered colorBox" key={person.name}>
-							{person.name}
+							<li onClick = {()=>{this.addRecipientToGroup(recipient)}} 
+							className = "centered colorBox" key={recipient.name}>
+							{recipient.name}
 							</li>
 						</Col>
 						<Col xs={1} md={1}>
-							<RaisedButton type="button" label="Edit >" secondary={true} 
-							onClick = {this.incrementStep}/>
+							<RaisedButton type="button" label="Edit >" secondary={true} />
 						</Col>
 					</Row>
 				</Grid>
 			</div>
-
+		)
+		const renderAddedRecipients = (recipient) => (
+			<div>
+				<Grid>
+					<Row>
+						<Col xs={5} md={5}>
+							<li onClick = {()=>{this.removeRecipientFromGroup(recipient)}} 
+							className = "centered colorBox" key={recipient.name}>
+							{recipient.name}
+							</li>
+						</Col>
+						<Col xs={1} md={1}>
+							<RaisedButton type="button" label="Edit >" secondary={true} />
+						</Col>
+					</Row>
+				</Grid>
+			</div>
 		)
 		switch(this.state.step) {
 			case 1:
@@ -107,26 +177,23 @@ class AddGroupModal extends React.Component {
 					</div>
 				)
 			case 3:
-			console.log('the this we got so far is', this.state.newGroupMedium, this.state.newGroupName)
-
 				return this.state.fetchedValidRecipients ? (
 					<div>
 						who do you want to add to this group?
 						<div className = "scrollable">
 							Added so far:
 							<ul>
-								{this.state.people.map(renderPeople)}
+								{this.state.recipientsToAdd.map(renderAddedRecipients)}
 							</ul>
 						</div>
 						<div className = "scrollable">
 							<ul>
-								{this.props.people.map(renderPeople)}
+								{this.state.validRecipients.map(renderAvailableRecipients)}
 							</ul>
 						</div>
-						<RaisedButton type="button" label="Add new contact" 
-						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Add new contact" />
 						<RaisedButton type="button" label="Submit" 
-						onClick = {this.props.close}/>
+						onClick = {this.handleGroupSubmit}/>
 					</div>
 				) 
 				:
@@ -153,6 +220,7 @@ class AddGroupModal extends React.Component {
 }
 
 function mapStateToProps({ atexta }) {
-	return ({ userGroups: atexta.userGroups })
+	return ({ userId: atexta.userId, userGroups: atexta.userGroups })
 }
-export default connect(mapStateToProps)(AddGroupModal)
+
+export default connect(mapStateToProps, {addGroup})(AddGroupModal)

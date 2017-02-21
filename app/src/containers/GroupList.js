@@ -31,7 +31,7 @@ class GroupList extends React.Component {
 
 		function renderPeople(recipient) {
 			return(
-				<li key={recipient.name}>{recipient.name}</li>
+				<RaisedButton key={recipient.name} label={recipient.name} primary={true} style={{size: 10+'%', margin: 5+'px'}}/>
 			)
 		}
 
@@ -40,15 +40,14 @@ class GroupList extends React.Component {
 	      <td contentEditable>{group.name}</td>
 	      <td>{medium}</td>
 	      <td>
-	      <ul>
-	      	{group.recipients.map(renderPeople)}
-	      </ul>
+	      {group.recipients.map(renderPeople)}
 				</td>
 	 	 	</tr>	
 	 	 	)
 
 	}
 	render() {
+		console.log('groups are', this.props.userGroups)
 		return (
 			<div>
 				<table className="table table-hover">
