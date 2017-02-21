@@ -1,11 +1,24 @@
+const jwt = require('jsonwebtoken');
+const config = require('../keys').secret;
+
 module.exports.checkUser = (req, res, next) => {
-  if (req.path === '/auth/login' || req.path === '/') {
+  let token = req.headers.authorization;
+
+  if (req.path === '/auth/login' || 
+      req.path === '/' || 
+      req.path === '/login') {
     next();
   } else {
-    if (!req.sesion.token) {
-      res.status(403).send('Unauthorized');
+    if (token) {
+      jwt.verify(token, config, (error, decoded) => {
+        if (error) {
+          res.status(403).json({message : 'Failed to authenticate token.'});
+        } else {
+          next();
+        }
+      })
     } else {
-      next();
+      res.status(403).json({message : 'No token provided'});
     }
   }
 }
