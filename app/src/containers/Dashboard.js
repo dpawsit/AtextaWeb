@@ -35,6 +35,23 @@ class Dashboard extends React.Component {
 			})
 	}
 
+	// componentDidMount() {
+	// 	let token = this.props.auth.getAccessToken();
+	// 	this.props.auth.getProfile(token)
+	// 	.then(profile => {
+	// 		this.props.getUserId(profile)
+	// 		.then(id => {
+	// 			this.setState({finished: true})
+	// 		})
+	// 		.catch(err => {
+	// 			console.log('error getting user id in dashbaord', err)
+	// 		})
+	// 	})
+	// 	.catch(err=> {
+	// 		console.log('err getting profile', err)
+	// 	})
+	// }
+
 	renderMessageList() {
 		this.setState({
 			showMessageList: true,
