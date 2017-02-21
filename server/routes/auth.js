@@ -47,19 +47,20 @@ router.post('/login', (req, res) => {
     Promise.all([
     commandControllers.GetUserCommands(userId),
     groupController.GetUserGroups(userId)
-    ]).then(userResults => {
-    jwt.sign({userId}, config, {
-      expiresIn : '1h'
-    }, (error, token) => {
-        if (error) {
-            res.status(403).send(error);
-        }
-        res.status(200).json({userId : userId, 
-            token: token,
-        userCommands : userResults[0],
-        userGroups : userResults[1]
+    ])
+    .then(userResults => {
+      jwt.sign({userId}, config, {
+        expiresIn : '1h'
+        }, (error, token) => {
+          if (error) {
+          res.status(403).send(error);
+          }
+          res.status(200).json({  userId : userId, 
+                                  token: token,
+                                  userCommands : userResults[0],
+                                  userGroups : userResults[1]
         });
-    });
+      });
     })
   })
 })
