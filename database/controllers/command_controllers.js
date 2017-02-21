@@ -68,19 +68,9 @@ module.exports.CreateNewCommand = (inputCommand) => {
         .then(result => {
           resolve(newCommand);
         })
-        .catch(error => {
-          console.log('errore because:', error)
-          reject(error);
-        })
-      })
-      .catch(error => {
-        console.log('errore because:', error)
-
-        reject(error);
       })
     })
     .catch(error => {
-      console.log('errore because:', error)
       reject(error);
     })
   })

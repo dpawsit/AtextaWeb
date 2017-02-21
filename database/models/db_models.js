@@ -34,12 +34,12 @@ var Group = db.define('Group', {
 
 var GroupRecipients = db.define('GroupRecipients', {
   groupId : {
-    type : Sequelize.STRING,
+    type : Sequelize.INTEGER,
     allowNull : false,
     unique : false
   },
   recipientId : {
-    type : Sequelize.STRING,
+    type : Sequelize.INTEGER,
     allowNull : false,
     unique : false
   }
