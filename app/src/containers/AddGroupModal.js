@@ -3,13 +3,13 @@ import axios from 'axios'
 import { addGroup } from '../actions/atexta_actions'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col, Clearfix } from 'react-bootstrap'
-import { RaisedButton } from 'material-ui'
+import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
 
 class AddGroupModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			step: 1,
+			step: 0,
 			recipientsToAdd: [],
 			newRecipientsToAdd: [],
 			newGroupMedium: 'Select a medium',
@@ -26,6 +26,7 @@ class AddGroupModal extends React.Component {
 		this.handleNameSubmit = this.handleNameSubmit.bind(this)
 		this.fetchValidRecipients = this.fetchValidRecipients.bind(this)
 		this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
+		this.decrementStep = this.decrementStep.bind(this)
 	}
 
 	fetchValidRecipients() {
@@ -42,11 +43,19 @@ class AddGroupModal extends React.Component {
 
 	}
 	incrementStep() {
-		if(this.state.step === 2) {
+		if(this.state.step === 1) {
 			this.fetchValidRecipients()
 		}
 		this.setState({step: this.state.step+1})
 	}
+
+	decrementStep() {
+		const { step } = this.state
+		if(step > 0) {
+			this.setState({step: step-1})
+		}
+	}
+
 
 	addRecipientToGroup(recipient) {
 		let prevToAdd = this.state.recipientsToAdd
@@ -88,7 +97,6 @@ class AddGroupModal extends React.Component {
 				userId: this.props.userId,
 				mediumType: medium
 			},
-			// newRecipients: [{name: 'hello there ricky', contactInfo:'77777777', }],
 			newRecipients: this.state.newRecipientsToAdd,
 			savedRecipients: this.state.recipientsToAdd
 		})
@@ -143,7 +151,7 @@ class AddGroupModal extends React.Component {
 			</div>
 		)
 		switch(this.state.step) {
-			case 1:
+			case 0:
 				return (
 					<div>
 						What medium is this?
@@ -155,13 +163,12 @@ class AddGroupModal extends React.Component {
 				      </DropdownButton>
 				    </ButtonToolbar>
 				    <br/>
-						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.props.close}/>
+						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
 				)
-			case 2:
+			case 1:
 				return (
 					<div>
 						<form onSubmit={this.handleNameSubmit}>
@@ -170,13 +177,12 @@ class AddGroupModal extends React.Component {
 								<input value={this.state.newGroupName} onChange={this.handleNameChange} type='text' id='groupName' />
             	</label>
             </form>
-						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.props.close}/>
+						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
 				)
-			case 3:
+			case 2:
 				return this.state.fetchedValidRecipients ? (
 					<div>
 						who do you want to add to this group?
@@ -191,8 +197,8 @@ class AddGroupModal extends React.Component {
 								{this.state.validRecipients.map(renderAvailableRecipients)}
 							</ul>
 						</div>
-						<RaisedButton type="button" label="Add new contact" />
-						<RaisedButton type="button" label="Submit" 
+						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
+						<RaisedButton type="button" label="Submit" primary={true}
 						onClick = {this.handleGroupSubmit}/>
 					</div>
 				) 
@@ -213,6 +219,23 @@ class AddGroupModal extends React.Component {
 	    	</Modal.Header>
 	    	<Modal.Body>
 	    		{this.stepDecider()}
+					<Stepper activeStep={this.state.step}>
+						<Step>
+							<StepLabel>
+								Choose the medium
+							</StepLabel>
+						</Step>
+						<Step>
+							<StepLabel>
+								Name the group
+							</StepLabel>
+						</Step>
+						<Step>
+							<StepLabel>
+								Select people from your address book
+							</StepLabel>
+						</Step>
+					</Stepper>
 	   		</Modal.Body>
 	    </Modal>
 		)

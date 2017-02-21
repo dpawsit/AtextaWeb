@@ -1,18 +1,27 @@
 .scrollable {
 	overflow: auto;
 	margin: auto;
-	border: 2px solid blue;
-	size: 70%;
+	border: 5px solid black;
+	height: 350px;
+	/*background-color:	#270943;*/
+
 }
 
 .centered {
 	text-align: center;
+	margin: auto;
+	/*color: #fb5f26;*/
+	color: aliceblue
 }
 
 .colorBox {
-	background-color: grey;
+	/*background-color:	#008080;*/
+	background-color: steelblue;
 	border: 1px solid black;
-	margin: 5px;
+	margin: auto;
+	margin-top: 5px;
+	width: 50%;
+	text-align: center;
 }
 
 ul {
