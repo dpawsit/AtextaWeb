@@ -7,21 +7,27 @@ class AddGroupModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			showModal: true,
 			step: 1,
-			people: []
+			people: [],
+			newGroupMedium: 'Select a medium',
+			newGroupName: '',
+			fetchedValidRecipients: false
 		}
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
-		this.closeModal = this.closeModal.bind(this)
+		this.clickPerson = this.clickPerson.bind(this)
+		this.selectMediumType = this.selectMediumType.bind(this)
+		this.handleNameChange = this.handleNameChange.bind(this)
+		this.handleNameSubmit = this.handleNameSubmit.bind(this)
+
 	}
 
+	fetchValidRecipients() {
+		axios.get('groups/availableRecipients/')
+
+	}
 	incrementStep() {
 		this.setState({step: this.state.step+1})
-	}
-
-	closeModal() {
-		this.setState({showModal: false})
 	}
 
 	clickPerson(person) {
@@ -30,6 +36,21 @@ class AddGroupModal extends React.Component {
 		prev.push(person)
 		this.setState({people: prev})
 	}
+
+	selectMediumType(medium) {
+		this.setState({newGroupMedium: medium})
+	}
+
+	handleNameChange(event) {
+    this.setState({newGroupName: event.target.value});
+	}
+
+	handleNameSubmit(event) {
+		event.preventDefault()
+		//check if it's empty, if so don't let them 
+		this.incrementStep()
+	}
+	
 
 	stepDecider() {
 		const renderPeople = (person) => (
@@ -57,15 +78,15 @@ class AddGroupModal extends React.Component {
 					<div>
 						What medium is this?
 						<ButtonToolbar>
-				      <DropdownButton title="Select Medium" id="dropdown-size-medium">
-				        <MenuItem eventKey="1">Text(Twilio)</MenuItem>
-				        <MenuItem eventKey="2">Slack</MenuItem>
-				        <MenuItem eventKey="3">Email</MenuItem>
+				      <DropdownButton title={this.state.newGroupMedium} id="dropdown-size-medium">
+				        <MenuItem eventKey="1" onSelect={()=> this.selectMediumType('Text')}>Text(Twilio)</MenuItem>
+				        <MenuItem eventKey="2" onSelect={()=> this.selectMediumType('Slack')}>Slack</MenuItem>
+				        <MenuItem eventKey="3" onSelect={()=> this.selectMediumType('Email')}>Email</MenuItem>
 				      </DropdownButton>
 				    </ButtonToolbar>
 				    <br/>
 						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.closeModal}/>
+						onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
@@ -73,20 +94,22 @@ class AddGroupModal extends React.Component {
 			case 2:
 				return (
 					<div>
-						<form>
+						<form onSubmit={this.handleNameSubmit}>
 							<label>
 								What do you want to name this group?
-								<input type='text' id='groupName' />
+								<input value={this.state.newGroupName} onChange={this.handleNameChange} type='text' id='groupName' />
             	</label>
             </form>
 						<RaisedButton type="button" label="Cancel" secondary={true} 
-						onClick = {this.closeModal}/>
+						onClick = {this.props.close}/>
 						<RaisedButton type="button" label="Next" secondary={true} 
 						onClick = {this.incrementStep}/>
 					</div>
 				)
 			case 3:
-				return (
+			console.log('the this we got so far is', this.state.newGroupMedium, this.state.newGroupName)
+
+				return this.state.fetchedValidRecipients ? (
 					<div>
 						who do you want to add to this group?
 						<div className = "scrollable">
@@ -103,9 +126,11 @@ class AddGroupModal extends React.Component {
 						<RaisedButton type="button" label="Add new contact" 
 						onClick = {this.incrementStep}/>
 						<RaisedButton type="button" label="Submit" 
-						onClick = {this.closeModal}/>
+						onClick = {this.props.close}/>
 					</div>
-				)
+				) 
+				:
+				(<div>fetching your valid recipients....</div>)
 			default:
 				return (
 					<div></div>
@@ -115,7 +140,7 @@ class AddGroupModal extends React.Component {
 
 	render() {
 		return(
-	    <Modal show={this.state.showModal} bsSize="large" onHide={this.closeModal}>
+	    <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>
 	    	<Modal.Header closeButton>
 	    		<Modal.Title>Add a group</Modal.Title>
 	    	</Modal.Header>
@@ -127,7 +152,7 @@ class AddGroupModal extends React.Component {
 	}
 }
 
-function mapStateToProps({ people, groups }) {
-	return ({ people, groups })
+function mapStateToProps({ atexta }) {
+	return ({ userGroups: atexta.userGroups })
 }
 export default connect(mapStateToProps)(AddGroupModal)
