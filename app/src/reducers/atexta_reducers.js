@@ -10,7 +10,7 @@ export default function (state = INITIAL_STATE, action) {
 
     case USER_LOGIN:
       console.log('in user login atexta reducer payload:', action.payload)
-      return {...state, userId: action.payload.data}
+      return {...state, userId: action.payload}
     
     case GET_COMMANDS: 
       console.log('getting comands in atexta reducer payload:', action.payload)
