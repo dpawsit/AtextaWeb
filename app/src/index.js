@@ -12,7 +12,7 @@ import reducers from './reducers';
 injectTapEventPlugin();
 
 function configureStore() {
-	return new Promise((resolve, rejct) => {
+	return new Promise((resolve, reject) => {
 		try {
 			const store = createStore(reducers, undefined, compose(
 					autoRehydrate(),applyMiddleware(ReduxPromise)))

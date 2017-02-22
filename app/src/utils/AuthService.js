@@ -5,7 +5,7 @@ export default class AuthService{
 	constructor(clientId, domain) {
 		this.lock = new Auth0Lock(clientId, domain, {
 			auth: {
-				redirectUrl: 'http://localhost:3000/login',
+				redirectUrl: 'http://localhost:3000/',
 				responseType: 'token'
 			}
 		})
@@ -14,11 +14,8 @@ export default class AuthService{
 	}
 
 	_doAuthentication(authResult) {
-		console.log('auuth succses', authResult)
 		this.setToken(authResult.idToken)
 		this.setAccesstoken(authResult.accessToken)
-		this.log(authResult.idToken)
-
 		browserHistory.replace('/dashboard');
 
 	}
@@ -48,7 +45,9 @@ export default class AuthService{
 	}
 
 	logout() {
-		localStorage.removeItem('idToken')
+		localStorage.removeItem('idToken');
+		localStorage.removeItem('accessToken');
+		browserHistory.replace('/login');
 	}
 
 	getProfile(token) {
