@@ -51,7 +51,7 @@ class MyNavbar extends Component {
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={1} href="#">My profile</NavItem>
-            <NavItem eventKey={2} href="#">Log out</NavItem>
+            <NavItem eventKey={2} onClick={this.props.logout} href="#">Log out</NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

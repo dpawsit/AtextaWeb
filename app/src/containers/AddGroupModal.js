@@ -105,9 +105,12 @@ class AddGroupModal extends React.Component {
 			this.props.addGroup({
 				name: result.data.group.name,
 				mediumType: result.data.group.mediumType,
-				gropuId: result.data.group.id,
+				groupId: result.data.group.id,
 				recipients: result.data.recipients.concat(this.state.recipientsToAdd)
 			})
+			if(this.props.fromAddMessageModal) {
+				this.props.clickGroup(result.data.group.name, result.data.group.id)
+			}
 			this.props.close()
 		})
 		.catch(err=> {
