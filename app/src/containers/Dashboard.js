@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
 			<div>
 				<MuiThemeProvider>
 					<div>
-						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList}/>
+						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} logout={this.props.auth.logout}/>
 						 {this.state.showMessageList ? <MessageList /> : 
 							this.state.showGroupList ? <GroupList /> :
 							<div></div>

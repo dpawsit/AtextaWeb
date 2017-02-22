@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import AddGroupModal from './AddGroupModal'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
@@ -13,7 +14,8 @@ class AddMessageModal extends React.Component {
 			selectedGroup: '',
 			selectedGroupId: null,
 			newCommandName: '',
-			newCommandText: ''
+			newCommandText: '',
+			addingNewGroup: false
 		}
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
@@ -24,6 +26,8 @@ class AddMessageModal extends React.Component {
 		this.handleNameSubmit = this.handleNameSubmit.bind(this)
 		this.handleTextSubmit = this.handleTextSubmit.bind(this)
 		this.decrementStep = this.decrementStep.bind(this)
+		this.handleNewGroup = this.handleNewGroup.bind(this)
+		this.handleNewGroupClose = this.handleNewGroupClose.bind(this)
 	}
 
 	handleNameChange(event) {
@@ -44,6 +48,14 @@ class AddMessageModal extends React.Component {
 	handleTextSubmit(event) {
 		event.preventDefault()
 		this.incrementStep()
+	}
+
+	handleNewGroup() {
+		this.setState({addingNewGroup: true})
+	}
+
+	handleNewGroupClose() {
+		this.setState({addingNewGroup: false})
 	}
 
 	handleCommandSubmit() {
@@ -142,6 +154,8 @@ class AddMessageModal extends React.Component {
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
 						<RaisedButton type="button" label="Submit" primary={true}
 						onClick = {this.handleCommandSubmit}/>
+						<RaisedButton type="button" label="Create a new group" secondary={true}
+						onClick = {this.handleNewGroup}/>
 					</div>
 				)
 			default:
@@ -152,7 +166,13 @@ class AddMessageModal extends React.Component {
 	}
 
 	render() {
-		return(
+		return this.state.addingNewGroup ? 
+		(
+			<AddGroupModal show={this.state.addingNewGroup} close={this.handleNewGroupClose}
+			 fromAddMessageModal={true} clickGroup={this.clickGroup}/>
+		)
+		:
+		(
 	    <Modal show={this.props.show} onHide={this.props.close}>
 	    	<Modal.Header closeButton>
 	    		<Modal.Title>Add a message</Modal.Title>

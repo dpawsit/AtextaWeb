@@ -14,8 +14,11 @@ export default class AuthService{
 	}
 
 	_doAuthentication(authResult) {
+		console.log('auuth succses', authResult)
 		this.setToken(authResult.idToken)
 		this.setAccesstoken(authResult.accessToken)
+		this.log(authResult.idToken)
+
 		browserHistory.replace('/dashboard');
 
 	}
@@ -29,11 +32,11 @@ export default class AuthService{
 	}
 
 	setToken(idToken) {
-		localStorage.setItem('id_token', idToken)
+		localStorage.setItem('idToken', idToken)
 	}
 
 	getToken() {
-		return localStorage.getItem('id_token')
+		return localStorage.getItem('idToken')
 	}
 
 	setAccesstoken(accessToken) {
@@ -45,7 +48,7 @@ export default class AuthService{
 	}
 
 	logout() {
-		localStorage.removeItem('id_token')
+		localStorage.removeItem('idToken')
 	}
 
 	getProfile(token) {
