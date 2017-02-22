@@ -5,8 +5,10 @@ import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
 import { connect } from 'react-redux'
-import { getUserInfo } from '../actions/atexta_actions'
+import { getUserInfo, userLogout } from '../actions/atexta_actions'
+import Loading from 'react-loading';
 import axios from 'axios';
+import { Col } from 'react-bootstrap';
 
 class Dashboard extends React.Component {
 	constructor(props) {
@@ -20,6 +22,7 @@ class Dashboard extends React.Component {
 		this.componentWillMount = this.componentWillMount.bind(this)
 		this.renderMessageList = this.renderMessageList.bind(this)
 		this.renderGroupList = this.renderGroupList.bind(this)
+		this.handleLogout = this.handleLogout.bind(this);
 	}
 
 	componentWillMount() {
@@ -48,13 +51,19 @@ class Dashboard extends React.Component {
 		})
 	}
 
+	handleLogout(){
+		this.props.userLogout();
+		this.props.auth.logout();
+	}
+
 	render() {
+		const loadingCol = {maxWidth: 500, margin: '0 auto 10px'};
 		return this.state.finished ? 
 		(
 			<div>
 				<MuiThemeProvider>
 					<div>
-						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} logout={this.props.auth.logout}/>
+						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} logout={this.handleLogout}/>
 						 {this.state.showMessageList ? <MessageList /> : 
 							this.state.showGroupList ? <GroupList /> :
 							<div></div>
@@ -65,7 +74,9 @@ class Dashboard extends React.Component {
 		)
 		:
 		(
-			<div>have not gotten id yet</div>
+      <Col style={loadingCol}>
+      <Loading type="cylon" color="#001f3f" width={500} heigth={500} delay={0}/> 
+			</Col> 
 		)
 
 	}
@@ -75,4 +86,4 @@ function mapStateToProps({atexta}) {
 	return {userId: atexta.userId };
 }
 
-export default connect(mapStateToProps, {getUserInfo})(Dashboard)
+export default connect(mapStateToProps, {getUserInfo, userLogout})(Dashboard)

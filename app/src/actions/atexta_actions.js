@@ -1,7 +1,8 @@
 import axios from 'axios';
 export const USER_LOGIN = 'USER_LOGIN';
 export const ADD_COMMAND = 'ADD_COMMAND'
-export const ADD_GROUP = 'ADD_GROUP'
+export const ADD_GROUP = 'ADD_GROUP';
+export const USER_LOGOUT = 'USER_LOGOUT';
 // export const GET_COMMANDS = 'GET_COMMANDS'
 // export const GET_GROUPS = 'GET_GROUPS'
 
@@ -23,6 +24,13 @@ export function addGroup (newGroup) {
   return {
     type: ADD_GROUP,
     payload: newGroup
+  }
+}
+
+export function userLogout () {
+  return {
+    type : USER_LOGOUT,
+    payload : null
   }
 }
 
