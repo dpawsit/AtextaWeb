@@ -3,10 +3,8 @@ const router = express.Router();
 const cc = require('../../database/controllers/command_controllers');
 
 router.get('/userCommands/:userId', (req, res) => {
-  // console.log('inside userCommands with', req.params.userId)
   cc.GetUserCommands(req.params.userId)
   .then(result => {
-    // console.log('the result of trying to get user commands is', result)
     res.status(200).json(result);
   })
   .catch(error => {
@@ -17,7 +15,6 @@ router.get('/userCommands/:userId', (req, res) => {
 router.put('/updateGroup', (req, res) => {
   cc.UpdateCommandGroup(req.body.commandId, req.body.groupId)
   .then(result => {
-    console.log(result)
     res.status(200).json('success');
   })
   .catch(error => {
