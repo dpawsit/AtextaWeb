@@ -46,7 +46,6 @@ router.post('/newCommand', (req, res) => {
 })
 
 router.post('/newMessage', (req, res) => {
-  console.log(req.body.commandId, req.body)
   cc.UpdateCommandMessage(req.body.commandId, req.body.newMessage)
   .then(result => {
     res.status(200).json('success');

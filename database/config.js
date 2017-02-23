@@ -13,3 +13,8 @@ var db = new Sequelize('atexta', cred.username, cred.password, {
 });
 
 module.exports = db;
+
+
+// var Sequelize = require('sequelize');
+// var db = new Sequelize('mysql://admin:IRVRJIXSFGEBUQOI@aws-us-east-1-portal.25.dblayer.com:17284/compose');
+// module.exports = db;
