@@ -11,3 +11,6 @@ global:
   profile: eb-cli
   repository: null
   sc: git
+option_settings:
+  aws:elasticbeanstalk:container:nodejs:
+    NodeCommand: "npm start"
