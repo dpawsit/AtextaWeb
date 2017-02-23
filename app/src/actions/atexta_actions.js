@@ -3,6 +3,7 @@ export const USER_LOGIN = 'USER_LOGIN';
 export const ADD_COMMAND = 'ADD_COMMAND'
 export const ADD_GROUP = 'ADD_GROUP';
 export const USER_LOGOUT = 'USER_LOGOUT';
+export const EDIT_COMMAND = 'EDIT_COMMAND'
 // export const GET_COMMANDS = 'GET_COMMANDS'
 // export const GET_GROUPS = 'GET_GROUPS'
 
@@ -17,6 +18,13 @@ export function addCommand (newCommand) {
   return {
     type: ADD_COMMAND,
     payload: newCommand
+  }
+}
+
+export function editCommand (editCommand, id) {
+  return {
+    type: EDIT_COMMAND,
+    payload: { editCommand, id }
   }
 }
 

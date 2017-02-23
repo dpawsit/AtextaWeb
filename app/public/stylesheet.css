@@ -28,3 +28,30 @@ ul {
     padding: 0;
     list-style-type: none;
 }
+
+
+tr:nth-child(even) {
+	background-color: #008080;
+	color: white;
+}
+
+tr:nth-child(odd){
+	background-color: white;
+	color: black;
+}
+
+tr:hover{
+	background-color: #270943;
+	color: white;	
+}
+
+#columnLabel {
+	background-color: #270943;
+	color: white;
+}
+/*
+why doesn't this work?
+.columnLabel {
+	background-color: #270943;
+	color: white;
+}*/

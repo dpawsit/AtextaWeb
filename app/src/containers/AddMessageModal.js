@@ -4,17 +4,17 @@ import AddGroupModal from './AddGroupModal'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
-import { addCommand } from '../actions/atexta_actions'
+import { addCommand, editCommand } from '../actions/atexta_actions'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			step: 0,
-			selectedGroup: '',
-			selectedGroupId: null,
-			newCommandName: '',
-			newCommandText: '',
+			selectedGroup: this.props.initialData.groupName,
+			selectedGroupId: this.props.initialData.groupId,
+			newCommandName: this.props.initialData.commandName,
+			newCommandText: this.props.initialData.text,
 			addingNewGroup: false
 		}
 		this.stepDecider = this.stepDecider.bind(this)
@@ -60,32 +60,88 @@ class AddMessageModal extends React.Component {
 
 	handleCommandSubmit() {
 		console.log('this is the command', this.state.selectedGroupId, this.state.newCommandName, this.state.newCommandText)
-		let newCommand = {
-			name: this.state.newCommandName,
-			userId: this.props.userId,
-			groupId: this.state.selectedGroupId,
-			text: this.state.newCommandText,
-			additionalContent: null
-		}
+		if(this.props.initialData.id) {
+			//this is an edit request
+			const editedCommand = {
+				commandName: this.state.newCommandName,
+				userId: this.props.userId,
+				groupName: this.state.selectedGroup,
+				groupId: this.state.selectedGroupId,
+				text: this.state.newCommandText,
+				additionalContent: null
+			}
 
-		let commandToAppend = {
-			commandName: this.state.newCommandName,
-			userId: this.props.userId,
-			groupName: this.state.selectedGroup,
-			text: this.state.newCommandText,
-			additionalContent: null
-		}
+			this.props.editCommand(editedCommand, this.props.initialData.id)
 
-		axios.post('command/newCommand', {
-			newCommand
-		})
-		.then(result=>{
-			this.props.addCommand(commandToAppend)
-		})
-		.catch(err=>{
-			console.log('error submitting command', err)
-		})
-		this.props.close()
+			if(this.state.newCommandName !== this.props.initialData.commandName) {
+				//only update what has changed
+				axios.put('command/updateName', {
+					commandId: this.props.initialData.id,
+					updateName: this.state.newCommandName
+				})
+				.then(result=> {
+				})
+				.catch(err=> {
+					console.log('error updating name:', err)
+				})
+			}
+			if(this.state.selectedGroupId !== this.props.initialData.groupId) {
+				axios.put('command/updateGroup', {
+					commandId: this.props.initialData.id,
+					groupId: this.state.selectedGroupId
+				})
+				.then(result=>{
+					
+				})
+				.catch(err=>{
+
+				})
+			}
+			if(this.state.newCommandText !== this.props.initialData.text) {
+				axios.post('command/newMessage/', {
+					commandId: this.props.initialData.id,
+					newMessage: {
+						text: this.state.newCommandText,
+						additionalContent: null
+					}
+				})
+				.then(result=> {
+
+				})
+				.catch(err=>{
+
+				})
+			}
+			this.props.close()
+		} else {
+			//this is a new command post request
+			let newCommand = {
+				name: this.state.newCommandName,
+				userId: this.props.userId,
+				groupId: this.state.selectedGroupId,
+				text: this.state.newCommandText,
+				additionalContent: null
+			}
+
+			let commandToAppend = {
+				commandName: this.state.newCommandName,
+				userId: this.props.userId,
+				groupName: this.state.selectedGroup,
+				text: this.state.newCommandText,
+				additionalContent: null
+			}
+
+			axios.post('command/newCommand', {
+				newCommand
+			})
+			.then(result=>{
+				this.props.addCommand(commandToAppend)
+			})
+			.catch(err=>{
+				console.log('error submitting command', err)
+			})
+			this.props.close()
+		}
 	}
 
 	incrementStep() {
@@ -202,8 +258,17 @@ class AddMessageModal extends React.Component {
 	}
 }
 
+AddMessageModal.defaultProps = {
+	initialData: {
+		commandName: '',
+		groupId: null,
+		groupname: '',
+		text: ''
+	}
+}
+
 function mapStateToProps({ atexta }) {
 	return { userId: atexta.userId, userGroups: atexta.userGroups };
 }
 
-export default connect(mapStateToProps, {addCommand})(AddMessageModal)
+export default connect(mapStateToProps, {addCommand, editCommand})(AddMessageModal)

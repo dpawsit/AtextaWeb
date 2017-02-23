@@ -9,39 +9,33 @@ class MessageList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			showAddMessageModal: false
+			showAddMessageModal: false,
+			commandToEdit: undefined
 		}	
 		
 		this.renderCommands = this.renderCommands.bind(this)
-		// this.componentDidMount = this.componentDidMount.bind(this)
+		this.editMessage = this.editMessage.bind(this)
 		this.openAddMessageModal = this.openAddMessageModal.bind(this)
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
 	}
 
-	// componentDidMount() {
-	// 	let userId = this.props.userId
-	// 	this.props.getUserCommands(userId)
-	// 	.then(commands=> {
-	// 		this.setState({finished: true})
-	// 	})
-	// 	.catch(err=> {
-	// 		console.log('error getting commands', err)
-	// 	})
-	// }
-
 	closeAddMessageModal() {
-		this.setState({showAddMessageModal: false})
+		this.setState({commandToEdit: undefined, showAddMessageModal: false})
 	}
 
 	openAddMessageModal() {
-		this.setState({showAddMessageModal: true})
+		this.setState({commandToEdit: undefined, showAddMessageModal: true})
 	}
 
-	renderCommands(command) {
+	editMessage(command) {
+		this.setState({commandToEdit: command, showAddMessageModal: true})	
+	}
+
+	renderCommands(command, i) {
 		return(
-			<tr key={command.commandName}>
-				<td contentEditable>{command.commandName}</td>
-				<td contentEditable>{command.text}</td>
+			<tr key={i} onClick={()=>{this.editMessage(command)}}>
+				<td>{command.commandName}</td>
+				<td>{command.text}</td>
 				<td>
 						{command.groupName}
 				</td>
@@ -50,12 +44,11 @@ class MessageList extends React.Component {
 	}
 
 	render() {
-		console.log('the user commands we got are', this.props.userCommands)
 		return(
 			<div>
-				<table className="table table-hover">
+				<table className="table">
 					<thead>
-						<tr>
+						<tr id="columnLabel">
 							<th>Trigger</th>
 							<th>Text</th>
 							<th>Group</th>
@@ -63,14 +56,12 @@ class MessageList extends React.Component {
 					</thead>
 					<tbody>
 						{this.props.userCommands.map(this.renderCommands)}
-						<tr>
-							<RaisedButton type="button" label="add a new one" secondary={true} 
-							onClick={this.openAddMessageModal} />
-						</tr>
 					</tbody>
 				</table>
+				<RaisedButton type="button" label="add a new one" secondary={true} 
+				onClick={this.openAddMessageModal} />
 				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
-					show={this.state.showAddMessageModal} /> : <div></div>}
+					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> : <div></div>}
 			</div>
 		)
 	}
