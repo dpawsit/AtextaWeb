@@ -57,7 +57,8 @@ router.get('/availableRecipients/:userId/:groupId/:mediumType', (req, res) => {
 router.put('/groupName', (req, res) => {
   gc.UpdateGroupName(req.body.groupId, req.body.groupName)
   .then(result => {
-    res.status(200).json(result);
+    console.log(result)
+    res.status(200).json('result');
   })
   .catch(error => {
     res.status(500).send(error);
