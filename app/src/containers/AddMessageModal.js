@@ -11,10 +11,10 @@ class AddMessageModal extends React.Component {
 		super(props)
 		this.state = {
 			step: 0,
-			selectedGroup: '',
-			selectedGroupId: null,
-			newCommandName: '',
-			newCommandText: '',
+			selectedGroup: this.props.initialData.groupName,
+			selectedGroupId: this.props.initialData.groupId,
+			newCommandName: this.props.initialData.commandName,
+			newCommandText: this.props.initialData.text,
 			addingNewGroup: false
 		}
 		this.stepDecider = this.stepDecider.bind(this)
@@ -166,6 +166,7 @@ class AddMessageModal extends React.Component {
 	}
 
 	render() {
+		console.log('this is the group:', this.props.initialData)
 		return this.state.addingNewGroup ? 
 		(
 			<AddGroupModal show={this.state.addingNewGroup} close={this.handleNewGroupClose}
@@ -199,6 +200,15 @@ class AddMessageModal extends React.Component {
 	   		</Modal.Body>
 	    </Modal>
 		)
+	}
+}
+
+AddMessageModal.defaultProps = {
+	initialData: {
+		commandName: '',
+		groupId: null,
+		groupname: '',
+		text: ''
 	}
 }
 

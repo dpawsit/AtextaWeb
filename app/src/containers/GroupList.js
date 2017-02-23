@@ -23,7 +23,6 @@ class GroupList extends React.Component {
 	}
 
 	renderGroups(group) {
-		console.log('this group is', group)
 		let medium = group.mediumType === 'T' ? 'Text' : 
 			group.mediumType === 'S' ? 'Slack' :
 			group.mediumType === 'E' ? 'Email' :
@@ -36,8 +35,8 @@ class GroupList extends React.Component {
 		}
 
 		return(
-			<tr key={group.name}>
-	      <td contentEditable>{group.name}</td>
+			<tr key={group.groupId}>
+	      <td>{group.name}</td>
 	      <td>{medium}</td>
 	      <td>
 	      {group.recipients.map(renderPeople)}
@@ -47,12 +46,11 @@ class GroupList extends React.Component {
 
 	}
 	render() {
-		console.log('groups are', this.props.userGroups)
 		return (
 			<div>
-				<table className="table table-hover">
+				<table className="table">
 					<thead>
-						<tr>
+						<tr id="columnLabel">
 							<th>Name</th>
 							<th>Medium</th>
 							<th>People</th>
@@ -60,10 +58,10 @@ class GroupList extends React.Component {
 					</thead>
 					<tbody>
 						{this.props.userGroups.map(this.renderGroups)}
-					<RaisedButton type="button" label="add a new one" secondary={true} 
-					onClick={this.openAddGroupModal}/>
 					</tbody>
 				</table>
+				<RaisedButton type="button" label="add a new one" secondary={true} 
+				onClick={this.openAddGroupModal}/>
 				{this.state.showAddGroupModal ? 
 				<AddGroupModal close={this.closeAddGroupModal} show={this.state.showAddGroupModal}/> : <div></div>}
 			</div>
