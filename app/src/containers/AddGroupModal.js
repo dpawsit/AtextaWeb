@@ -119,13 +119,13 @@ class AddGroupModal extends React.Component {
 	}
 
 	stepDecider() {
-		const renderAvailableRecipients = (recipient) => (
-			<div>
+		const renderAvailableRecipients = (recipient, i) => (
+			<div key={i}>
 				<Grid>
 					<Row>
 						<Col xs={5} md={5}>
 							<li onClick = {()=>{this.addRecipientToGroup(recipient)}} 
-							className = "centered colorBox" key={recipient.name}>
+							className = "centered colorBox">
 							{recipient.name}
 							</li>
 						</Col>
@@ -136,13 +136,13 @@ class AddGroupModal extends React.Component {
 				</Grid>
 			</div>
 		)
-		const renderAddedRecipients = (recipient) => (
-			<div>
+		const renderAddedRecipients = (recipient, i) => (
+			<div key={i}>
 				<Grid>
 					<Row>
 						<Col xs={5} md={5}>
 							<li onClick = {()=>{this.removeRecipientFromGroup(recipient)}} 
-							className = "centered colorBox" key={recipient.name}>
+							className = "centered colorBox">
 							{recipient.name}
 							</li>
 						</Col>
