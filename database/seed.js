@@ -1,3 +1,4 @@
+"use strict"
 var models = require('./models/db_models');
 var db = require('./config');
 var chance = require('chance').Chance(Math.random);
