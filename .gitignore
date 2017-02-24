@@ -31,6 +31,8 @@ node_modules
 jspm_packages
 keys.js
 app/public/build
+config.env
+database/seed.js
 
 # Optional npm cache directory
 .npm

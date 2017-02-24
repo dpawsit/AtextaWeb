@@ -1,11 +1,11 @@
+"use strict"
 const express = require('express')
 const path = require('path')
-const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const database = require('../database/config.js')
 const helmet = require('helmet');
 const util = require('./server_util');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 const jwt = require('jsonwebtoken');
 
 const app = express()
@@ -32,4 +32,3 @@ database.sync()
   .catch(error => {
     console.log('Database did not sync: ', error);
   })
-
