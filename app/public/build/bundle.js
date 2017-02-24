@@ -52034,7 +52034,7 @@
 
 			this.lock = new _auth0Lock2.default(clientId, domain, {
 				auth: {
-					redirectUrl: 'http://localhost:3000/',
+					redirectUrl: 'ec2-52-32-158-134.us-west-2.compute.amazonaws.com',
 					responseType: 'token'
 				}
 			});
