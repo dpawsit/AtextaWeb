@@ -1,6 +1,5 @@
 const express = require('express')
 const path = require('path')
-const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const database = require('../database/config.js')
 const helmet = require('helmet');
