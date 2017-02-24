@@ -30,7 +30,10 @@ build/Release
 node_modules
 jspm_packages
 keys.js
-app/public/build
+config.env
+app/src
+webpack.config.js
+README.md
 
 # Optional npm cache directory
 .npm
