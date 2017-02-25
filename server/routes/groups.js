@@ -14,7 +14,7 @@ router.post('/addGroup', (req, res) => {
 })
 
 router.post('/newRecipient', (req, res) => {
-  gc.NewRecipient(req.headers.userId, req.headers.recipients)
+  gc.NewRecipient(req.body.userId, req.body.recipients)
   .then(result => {
     res.status(200).json(result);
   })
