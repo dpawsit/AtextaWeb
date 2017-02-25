@@ -1,3 +1,4 @@
+"use strict"
 const express = require('express');
 const router = express.Router();
 const cc = require('../../database/controllers/command_controllers');

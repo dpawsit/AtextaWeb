@@ -1,3 +1,4 @@
+"use strict"
 const User = require ('./db_models').User;
 const Command = require ('./db_models').Command;
 const SecretCommand = require ('./db_models').SecretCommand;
