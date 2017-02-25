@@ -65,9 +65,9 @@ module.exports.NewRecipient = (inputUserId, newRecipients) => {
         userId: inputUserId
       })
     })
-    .then(createdRecipient => {
+    .then(createdRecipients => {
       console.log('jesse 2 = ', createdRecipient)
-      resolve(createdRecipient.dataValues)
+      resolve(createdRecipients)
     })
     .catch(error => {
       reject(error)
