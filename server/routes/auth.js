@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../../database/controllers/user_controller');
 const groupController = require('../../database/controllers/group_controllers');
+const secretController = require('../../database/controllers/secretCommand_controllers');
 const commandControllers = require('../../database/controllers/command_controllers');
 const Promise = require('bluebird');
 const https = require('https');
@@ -46,7 +47,8 @@ router.post('/login', (req, res) => {
   .then(userId => {
     Promise.all([
     commandControllers.GetUserCommands(userId),
-    groupController.GetUserGroups(userId)
+    groupController.GetUserGroups(userId),
+    secretController.GetUserSecretCommands(userId)
     ])
     .then(userResults => {
       jwt.sign({userId}, config, {
@@ -58,7 +60,8 @@ router.post('/login', (req, res) => {
           res.status(200).json({  userId : userId, 
                                   token: token,
                                   userCommands : userResults[0],
-                                  userGroups : userResults[1]
+                                  userGroups : userResults[1],
+                                  userSecrets : userResults[2]
         });
       });
     })
