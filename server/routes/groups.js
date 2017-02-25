@@ -1,3 +1,4 @@
+"use strict"
 const express = require('express');
 const router = express.Router();
 const gc = require('../../database/controllers/group_controllers');
@@ -96,7 +97,7 @@ router.delete('/groupRecipient/:groupId/:recipientId', (req, res) => {
 })
 
 router.delete('/deleteGroup/:groupId', (req, res) => {
-  gc.DeleteGroup(req.parms.groupId)
+  gc.DeleteGroup(req.params.groupId)
   .then(result => {
     res.status(200).json(result);
   })
