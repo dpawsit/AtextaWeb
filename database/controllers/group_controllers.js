@@ -67,7 +67,6 @@ module.exports.NewRecipient = (inputUserId, newRecipients) => {
       })
     })
     .then(createdRecipients => {
-      console.log('jesse 2 = ', createdRecipient)
       resolve(createdRecipients)
     })
     .catch(error => {
