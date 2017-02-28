@@ -185,7 +185,7 @@ module.exports.GetAvailableRecipients = (userId, groupId, type) => {
   return new Promise((resolve, reject) => {
     let queryString = (groupId === 0 ? '' : 'and mediumType = ? and id not in (select recipientId from GroupRecipients where groupId = ?)')
     let rep = (groupId === 0 ? [userId] : [userId, type, groupId])
-    db.query(`select name, contactInfo, id from Recipients where userId = ? ${queryString}`,
+    db.query(`select name, contactInfo, id, mediumType from Recipients where userId = ? ${queryString}`,
     {replacements: rep, type: sequelize.QueryTypes.SELECT})
     .then(availableUsers => {
       console.log(availableUsers)

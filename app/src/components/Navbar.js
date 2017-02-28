@@ -49,9 +49,12 @@ class MyNavbar extends Component {
               <MenuItem eventKey={3.3}>Something else here</MenuItem>
             </NavDropdown>
           </Nav>
+          <Nav>
+            <NavItem eventKey={4} onClick={this.props.renderAddressBook} href="#">Address Book</NavItem>
+          </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">My profile</NavItem>
-            <NavItem eventKey={2} onClick={this.props.logout} href="#">Log out</NavItem>
+            <NavItem eventKey={5} href="#">My profile</NavItem>
+            <NavItem eventKey={6} onClick={this.props.logout} href="#">Log out</NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

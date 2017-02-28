@@ -43,8 +43,8 @@ class GroupList extends React.Component {
 				</td>
 	 	 	</tr>	
 	 	 	)
-
 	}
+	
 	render() {
 		return (
 			<div>

@@ -7,10 +7,10 @@ export const EDIT_COMMAND = 'EDIT_COMMAND'
 // export const GET_COMMANDS = 'GET_COMMANDS'
 // export const GET_GROUPS = 'GET_GROUPS'
 
-export function getUserInfo (userId, userCommands, userGroups) {
+export function getUserInfo (userId, userCommands, userGroups, userRecipients) {
   return {
     type: USER_LOGIN,
-    payload: { userId, userCommands, userGroups}
+    payload: { userId, userCommands, userGroups, userRecipients}
   };
 }
 
