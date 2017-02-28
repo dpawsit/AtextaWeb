@@ -5,7 +5,7 @@ export default class AuthService{
 	constructor(clientId, domain) {
 		this.lock = new Auth0Lock(clientId, domain, {
 			auth: {
-				redirectUrl: 'http://ec2-52-32-158-134.us-west-2.compute.amazonaws.com/',
+				redirectUrl: 'myatexta.com',
 				responseType: 'token'
 			}
 		})
