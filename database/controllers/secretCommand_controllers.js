@@ -10,7 +10,7 @@ var SecretResponse = Models.SecretResponse;
 
 module.exports.GetUserSecretCommands = (inputUserId) => {
   return new Promise ((resolve, reject) => {
-    db.query('select S.triggerId, S.groupId, S.secretMessageId, S.responseId, S.verified, ST.name, SR.speech, SM.text, SM.additionalContent from SecretCommands S join SecretResponses SR on S.responseId = SR.id join SecretTriggers ST on S.triggerId = ST.id join SecretMessages SM on S.secretMessageId = SM.id where S.userId = ? and S.status = 1', 
+    db.query('select S.triggerId, S.groupId, S.secretMessageId, S.responseId, S.verified, ST.name, SR.speech, SM.text, SM.additionalContent, G.mediumType, G.name as GroupName from SecretCommands S join SecretResponses SR on S.responseId = SR.id join SecretTriggers ST on S.triggerId = ST.id join SecretMessages SM on S.secretMessageId = SM.id left outer join Groups G on G.id = S.groupId where S.userId = ? and S.status = 1', 
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(SecretCommands => {
       resolve(SecretCommands)
