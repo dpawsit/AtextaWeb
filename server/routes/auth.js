@@ -1,3 +1,4 @@
+"use strict"
 const express = require('express');
 const router = express.Router();
 const userController = require('../../database/controllers/user_controller');
@@ -48,7 +49,8 @@ router.post('/login', (req, res) => {
     Promise.all([
     commandControllers.GetUserCommands(userId),
     groupController.GetUserGroups(userId),
-    secretController.GetUserSecretCommands(userId)
+    secretController.GetUserSecretCommands(userId),
+    groupController.GetAvailableRecipients(userId, 0, '*')
     ])
     .then(userResults => {
       jwt.sign({userId}, config, {
@@ -61,7 +63,8 @@ router.post('/login', (req, res) => {
                                   token: token,
                                   userCommands : userResults[0],
                                   userGroups : userResults[1],
-                                  userSecrets : userResults[2]
+                                  userSecrets : userResults[2],
+                                  userRecipients: userResults[3]
         });
       });
     })

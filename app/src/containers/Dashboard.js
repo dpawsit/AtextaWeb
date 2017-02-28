@@ -4,6 +4,7 @@ import { FlatButton } from 'material-ui'
 import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
+import AddressBook from './AddressBook'
 import { connect } from 'react-redux'
 import { getUserInfo, userLogout } from '../actions/atexta_actions'
 import Loading from 'react-loading';
@@ -23,6 +24,7 @@ class Dashboard extends React.Component {
 		this.renderMessageList = this.renderMessageList.bind(this)
 		this.renderGroupList = this.renderGroupList.bind(this)
 		this.handleLogout = this.handleLogout.bind(this);
+		this.renderAddressBook = this.renderAddressBook.bind(this)
 	}
 
 	componentWillMount() {
@@ -30,8 +32,9 @@ class Dashboard extends React.Component {
 		  axios.post('/auth/login', {token})
 			.then(result => {
 				axios.defaults.headers.common['Authorization'] = result.data.token;
-				this.props.getUserInfo(result.data.userId, result.data.userCommands, result.data.userGroups);
+				this.props.getUserInfo(result.data.userId, result.data.userCommands, result.data.userGroups, result.data.userRecipients);
 				this.setState({finished: true})
+				console.log('results:', result.data)
 			}).catch(error => {
 				console.log(error);
 			})
@@ -40,14 +43,24 @@ class Dashboard extends React.Component {
 	renderMessageList() {
 		this.setState({
 			showMessageList: true,
-			showGroupList: false
+			showGroupList: false,
+			showAddressBook: false
 		})
 	}
 
 	renderGroupList() {
 		this.setState({
 			showGroupList: true,
-			showMessageList: false
+			showMessageList: false,
+			showAddressBook: false
+		})
+	}
+
+	renderAddressBook() {
+		this.setState({
+			showAddressBook: true,
+			showMessageList: false,
+			showGroupList: false
 		})
 	}
 
@@ -63,9 +76,11 @@ class Dashboard extends React.Component {
 			<div>
 				<MuiThemeProvider>
 					<div>
-						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} logout={this.handleLogout}/>
+						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} 
+						renderAddressBook={this.renderAddressBook} logout={this.handleLogout}/>
 						 {this.state.showMessageList ? <MessageList /> : 
 							this.state.showGroupList ? <GroupList /> :
+							this.state.showAddressBook ? <AddressBook /> :
 							<div></div>
 						 }
 					</div>

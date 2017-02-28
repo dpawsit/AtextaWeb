@@ -30,6 +30,7 @@ class AddGroupModal extends React.Component {
 	}
 
 	fetchValidRecipients() {
+		//refactor to a filter since recipients are on app state now
 		let medium = this.state.newGroupMedium === 'Text' ? 'T' : 
 		this.state.newGroupMedium === 'Slack' ? 'S' : this.state.newGroupMedium === 'Email' ? 'E' : null
 		axios.get('groups/availableRecipients/' + this.props.userId + '/null/' + medium)

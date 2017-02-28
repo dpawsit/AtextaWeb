@@ -10,7 +10,7 @@ export default function (state = INITIAL_STATE, action) {
   switch(action.type) {
 
     case USER_LOGIN:
-      return {...state, userId: action.payload.userId, userCommands: action.payload.userCommands, userGroups: action.payload.userGroups}
+      return {...state, userId: action.payload.userId, userCommands: action.payload.userCommands, userGroups: action.payload.userGroups, userRecipients: action.payload.userRecipients}
     
     case ADD_COMMAND:
       return{...state, userCommands: state.userCommands.concat(action.payload)}
