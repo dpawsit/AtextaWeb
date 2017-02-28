@@ -5,8 +5,7 @@ export default class AuthService{
 	constructor(clientId, domain) {
 		this.lock = new Auth0Lock(clientId, domain, {
 			auth: {
-				redirectUrl: 'http://www.myatexta.com/',
-				responseType: 'token'
+				redirectUrl: 'http://www.myatexta.com/'
 			}
 		})
 		this.lock.on('authenticated', this._doAuthentication.bind(this))

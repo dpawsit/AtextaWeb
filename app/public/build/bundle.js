@@ -52034,8 +52034,7 @@
 
 			this.lock = new _auth0Lock2.default(clientId, domain, {
 				auth: {
-					redirectUrl: 'http://www.myatexta.com/',
-					responseType: 'token'
+					redirectUrl: 'http://www.myatexta.com/'
 				}
 			});
 			this.lock.on('authenticated', this._doAuthentication.bind(this));
