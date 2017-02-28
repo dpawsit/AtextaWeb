@@ -1,4 +1,4 @@
-import { USER_LOGIN, ADD_COMMAND, ADD_GROUP, USER_LOGOUT, EDIT_COMMAND} from '../actions/atexta_actions';
+import { USER_LOGIN, ADD_COMMAND, ADD_GROUP, USER_LOGOUT, EDIT_COMMAND, ADD_CONTACT} from '../actions/atexta_actions';
 
 const INITIAL_STATE = {
   userId : '',
@@ -25,13 +25,11 @@ export default function (state = INITIAL_STATE, action) {
     case ADD_GROUP:
       return{...state, userGroups: state.userGroups.concat(action.payload)}
 
-    // case GET_COMMANDS: 
-    //   return {...state, userCommands: action.payload.data || []}
-
-    // case GET_GROUPS:
-    //   return{...state, userGroups: action.payload.data || []}
     case USER_LOGOUT:
       return INITIAL_STATE
+
+    case ADD_CONTACT:
+      return {...state, userRecipients: state.userRecipients.concat(action.payload)}
 
     default: return state;
   }

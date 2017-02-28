@@ -57,7 +57,6 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
 
 module.exports.NewRecipient = (inputUserId, newRecipients) => {
   return new Promise((resolve, reject) => {
-    console.log('jesse 1', inputUserId, newRecipients)
     Promise.map(newRecipients, recipient => {
       return Recipient.create({
         name: recipient.name,

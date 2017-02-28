@@ -45,7 +45,6 @@ router.get('/allGroups/:userId', (req, res) => {
 })
 
 router.get('/availableRecipients/:userId/:groupId/:mediumType', (req, res) => {
-  console.log('in availableRecipients route with', req.params.userId, req.params.groupId, req.params.mediumType)
   gc.GetAvailableRecipients(req.params.userId, req.params.groupId, req.params.mediumType)
   .then(result => {
     res.status(200).json(result);
@@ -58,7 +57,6 @@ router.get('/availableRecipients/:userId/:groupId/:mediumType', (req, res) => {
 router.put('/groupName', (req, res) => {
   gc.UpdateGroupName(req.body.groupId, req.body.groupName)
   .then(result => {
-    console.log(result)
     res.status(200).json('result');
   })
   .catch(error => {

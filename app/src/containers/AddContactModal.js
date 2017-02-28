@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-// import { addContact } from '../actions/atexta_actions'
+import { addContact } from '../actions/atexta_actions'
 import { connect } from 'react-redux'
 import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col } from 'react-bootstrap'
 import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
@@ -25,8 +25,32 @@ class AddContactModal extends React.Component {
     this.handleContactSubmit = this.handleContactSubmit.bind(this)
   }
 
-  handleContactSubmit () {
-    axios.post('')
+  handleContactSubmit (event) {
+		event.preventDefault()
+		let mediumType = this.state.newContactMedium === 'Text' ? 'T' : 
+		this.state.newContactMedium === 'Slack' ? 'S' : this.state.newContactMedium === 'Email' ? 'E' : null
+		let newContact = {
+			name: this.state.newContactName,
+			contactInfo: this.state.newContactInfo, 
+			mediumType
+		}
+    axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
+		.then(res=>{
+			console.log('recipient', res)
+			this.props.close()
+			res.data.forEach(createdRecipient=>{
+				this.props.addContact({
+					id: createdRecipient.id,
+					contactInfo: createdRecipient.contactInfo,
+					mediumType: createdRecipient.mediumType,
+					name: createdRecipient.name
+				})
+			})
+		})
+		.catch(err=>{
+			console.log('error is', err)
+			this.props.close()
+		})
   }
 
   selectMediumType(medium) {
@@ -101,7 +125,7 @@ class AddContactModal extends React.Component {
       case 2: 
         return (
           <div>
-            <form onSubmit={this.handleInfoSubmit}>
+            <form onSubmit={this.handleContactSubmit}>
 							<label>
 								Input the contact info
 								<input value={this.state.newContactInfo}
@@ -152,8 +176,8 @@ class AddContactModal extends React.Component {
 }
 
 function mapStateToProps({ atexta }) {
-	return ({ userRecipients: atexta.userRecipients })
+	return ({ userId: atexta.userId, userRecipients: atexta.userRecipients })
 }
 
-export default connect(mapStateToProps)(AddContactModal)
+export default connect(mapStateToProps, {addContact})(AddContactModal)
 

@@ -34,7 +34,6 @@ class Dashboard extends React.Component {
 				axios.defaults.headers.common['Authorization'] = result.data.token;
 				this.props.getUserInfo(result.data.userId, result.data.userCommands, result.data.userGroups, result.data.userRecipients);
 				this.setState({finished: true})
-				console.log('results:', result.data)
 			}).catch(error => {
 				console.log(error);
 			})
