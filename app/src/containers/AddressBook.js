@@ -1,6 +1,6 @@
 import React from 'react'
 import AddContactModal from './AddContactModal'
-import { FloatingActionButton, RaisedButton } from 'material-ui'
+import { FlatButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
 
@@ -8,11 +8,16 @@ class AddressBook extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state={
-			showAddContactModal: false
+			showAddContactModal: false,
+			showType: "all"
 		}
-		// this.renderGroups = this.renderGroups.bind(this)
 		this.closeAddContactModal = this.closeAddContactModal.bind(this)
 		this.openAddContactModal = this.openAddContactModal.bind(this)
+		this.showAllContacts = this.showAllContacts.bind(this)
+		this.showTextContacts = this.showTextContacts.bind(this)
+		this.showEmailContacts = this.showEmailContacts.bind(this)
+		this.showSlackContacts = this.showSlackContacts.bind(this)
+		this.renderRecipients = this.renderRecipients.bind(this)
 	}
 
 	closeAddContactModal () {
@@ -20,6 +25,22 @@ class AddressBook extends React.Component {
 	}
 	openAddContactModal() {
 		this.setState({showAddContactModal: true})
+	}
+
+	showAllContacts() {
+		this.setState({showType: "all"})
+	}
+
+	showTextContacts() {
+		this.setState({showType: "text"})
+	}
+
+	showEmailContacts() {
+		this.setState({showType: "email"})
+	}
+
+	showSlackContacts() {
+		this.setState({showType: "slack"})
 	}
 
 	renderRecipients(recipient) {
@@ -40,8 +61,18 @@ class AddressBook extends React.Component {
 	}
 
 	render() {
+		let recipientsToRender = 
+		this.state.showType === "text" ? this.props.userRecipients.filter(rec=>rec.mediumType==="T") :
+		this.state.showType === "email" ? this.props.userRecipients.filter(rec=>rec.mediumType==="E") :
+		this.state.showType === "slack" ? this.props.userRecipients.filter(rec=>rec.mediumType==="S") :
+		this.props.userRecipients
 		return (
-			<div>
+			<div>"
+				<FlatButton type="button" label="All" onClick={this.showAllContacts} />
+				<FlatButton type="button" label="Texts" onClick={this.showTextContacts} />
+				<FlatButton type="button" label="Emails" onClick={this.showEmailContacts} />
+				<FlatButton type="button" label="Slack" onClick={this.showSlackContacts} />
+
 				<table className="table">
 					<thead>
 						<tr id="columnLabel">
@@ -51,7 +82,7 @@ class AddressBook extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.userRecipients.map(this.renderRecipients)}
+						{recipientsToRender.map(this.renderRecipients)}
 					</tbody>
 				</table>
 				<RaisedButton type="button" label="add a new one" secondary={true} 
