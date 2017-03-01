@@ -78,7 +78,8 @@ ul {
 }
 
 
-/*tr:nth-child(even) {
+/*
+tr:nth-child(even) {
 	background-color: #008080;
 	color: white;
 }
@@ -87,6 +88,7 @@ tr:nth-child(odd){
 	background-color: white;
 	color: black;
 }*/
+
 
 .addressBookItems:hover{
 	background-color: #270943;

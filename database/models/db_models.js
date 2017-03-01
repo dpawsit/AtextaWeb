@@ -249,6 +249,19 @@ var TriggeredSecrets = db.define('TriggeredSecrets', {
   }
 })
 
+var AdminQueries = db.define('AdminQueries', {
+  queryName : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  }, 
+  queryString : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  }
+})
+
 module.exports = {
   User : User,
   Group : Group, 
@@ -261,5 +274,6 @@ module.exports = {
   SecretResponse : SecretResponse,
   SecretMessage : SecretMessage,
   TriggeredCommands : TriggeredCommands,
-  TriggeredSecrets : TriggeredSecrets
+  TriggeredSecrets : TriggeredSecrets,
+  AdminQueries : AdminQueries
 }
