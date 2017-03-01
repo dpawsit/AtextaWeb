@@ -77,11 +77,13 @@ class Dashboard extends React.Component {
 					<div>
 						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} 
 						renderAddressBook={this.renderAddressBook} logout={this.handleLogout}/>
-						 {this.state.showMessageList ? <MessageList /> : 
-							this.state.showGroupList ? <GroupList /> :
-							this.state.showAddressBook ? <AddressBook /> :
-							<div></div>
-						 }
+						<div className = "mainContainer">
+							{this.state.showMessageList ? <MessageList /> : 
+								this.state.showGroupList ? <GroupList /> :
+								this.state.showAddressBook ? <AddressBook /> :
+								<div></div>
+							}
+						</div>
 					</div>
 				</MuiThemeProvider>
       </div>

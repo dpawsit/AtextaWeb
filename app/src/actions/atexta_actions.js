@@ -5,10 +5,9 @@ export const ADD_GROUP = 'ADD_GROUP';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const EDIT_COMMAND = 'EDIT_COMMAND'
 export const ADD_CONTACT = 'ADD_CONTACT'
-// export const GET_COMMANDS = 'GET_COMMANDS'
-// export const GET_GROUPS = 'GET_GROUPS'
 
 export function getUserInfo (userId, userCommands, userGroups, userRecipients) {
+  console.log('you commands', userCommands)
   return {
     type: USER_LOGIN,
     payload: { userId, userCommands, userGroups, userRecipients}
@@ -49,19 +48,3 @@ export function addContact(newContact) {
     payload: newContact
   }
 }
-
-// export function getUserCommands(userId) {
-//   let request = axios.get('/command/userCommands/'+userId)
-//   return {
-//     type: GET_COMMANDS,
-//     payload: request
-//   }
-// }
-
-// export function getUserGroups(userId) {
-//   let request = axios.get('groups/allGroups/'+userId)
-//   return{
-//     type: GET_GROUPS,
-//     payload: request
-//   }
-// }
