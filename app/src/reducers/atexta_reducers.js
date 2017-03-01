@@ -1,4 +1,4 @@
-import { USER_LOGIN, ADD_COMMAND, ADD_GROUP, USER_LOGOUT, EDIT_COMMAND, ADD_CONTACT} from '../actions/atexta_actions';
+import { USER_LOGIN, ADD_COMMAND, ADD_GROUP, USER_LOGOUT, EDIT_COMMAND, ADD_CONTACT, DELETE_COMMAND} from '../actions/atexta_actions';
 
 const INITIAL_STATE = {
   userId : '',
@@ -16,7 +16,7 @@ export default function (state = INITIAL_STATE, action) {
       return{...state, userCommands: state.userCommands.concat(action.payload)}
     
     case EDIT_COMMAND:
-      const commands = state.userCommands
+      const commands = state.userCommands.slice()
       const index = commands.findIndex(command => command.id === action.payload.id)
       commands[index] = action.payload.editCommand
 
@@ -30,6 +30,11 @@ export default function (state = INITIAL_STATE, action) {
 
     case ADD_CONTACT:
       return {...state, userRecipients: state.userRecipients.concat(action.payload)}
+    
+    case DELETE_COMMAND:
+      const prevIndex = state.userCommands.findIndex(command => command.id === action.payload.id)
+      const prevCommands = state.userCommands.slice(0, prevIndex).concat(state.userCommands.slice(prevIndex+1))
+      return{...state, userCommands: prevCommands}
 
     default: return state;
   }

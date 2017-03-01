@@ -2,9 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import AddGroupModal from './AddGroupModal'
 import { connect } from 'react-redux'
-import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
-import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
+import { Modal, ButtonToolbar, DropdownButton, MenuItem, Well } from 'react-bootstrap'
+import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper, List, ListItem } from 'material-ui'
 import { addCommand, editCommand } from '../actions/atexta_actions'
+import TextIcon from 'material-ui/svg-icons/communication/chat'
+import EmailIcon from 'material-ui/svg-icons/communication/email'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
@@ -163,9 +165,10 @@ class AddMessageModal extends React.Component {
 	}
 
 	stepDecider() {
-		const renderGroups = (groupName, groupId, index) => {
+		const renderGroups = (groupName, groupId, mediumType, index) => {
 			return(
-				<li key={index} onClick = {()=>{this.clickGroup(groupName, groupId)}} className = "centered colorBox">{groupName}</li>
+				<ListItem key={index} onClick={()=>{this.clickGroup(groupName, groupId)}} primaryText={groupName} className="centered"
+				leftIcon={mediumType==='T' ? <TextIcon /> : mediumType==='E' ? <EmailIcon /> : <strong>Slack</strong>} />
 			)
 		}
 		switch(this.state.step) {
@@ -198,15 +201,17 @@ class AddMessageModal extends React.Component {
 			case 2:
 				return(
 					<div>
-						Select the group you want:  <span className="centered colorBox">{this.state.selectedGroup}</span>
+						Select the group you want:  <strong><em>{this.state.selectedGroup}</em></strong>
 						<div className = "scrollable">
-							<ul>
-								{this.props.userGroups.map((group, index) => (
-									renderGroups(group.name, group.groupId, index)
-								))}
-							</ul>
+							<Well bsSize="large">
+								<List>
+									{this.props.userGroups.map((group, index) => (
+										renderGroups(group.name, group.groupId, group.mediumType, index)
+									))}
+								</List>
+							</Well>
 						</div>
-						<RaisedButton type="button" label="Create a new group" secondary={true}
+						<RaisedButton type="button" label="Create a new group" backgroundColor="darkgrey" labelStyle={{color: 'white'}}
 						onClick = {this.handleNewGroup}/>
 					</div>
 				)
@@ -254,7 +259,7 @@ class AddMessageModal extends React.Component {
 					<FlatButton type="button" label={this.state.step === 0 ? "Cancel" : "Back" } 
 					onClick={this.state.step === 0 ? this.props.close : this.decrementStep}/>
 					<RaisedButton type="button" label={this.state.step=== 2 ? "Submit" : "Next"}
-					secondary={true} 
+					backgroundColor="#270943" labelStyle={{ color: 'white' }}
 					onClick = {this.state.step === 2 ? this.handleCommandSubmit : this.incrementStep}/>
 				</Modal.Footer>
 	    </Modal>

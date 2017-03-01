@@ -9,7 +9,6 @@
 	margin-left: 15px;
 }
 
-
 .nav {
 	background-color: #270943;
 }
@@ -20,6 +19,7 @@
 
 .footerButton {
 	margin-left: 50px;
+	color: white;
 }
 
 .navItems{
@@ -38,15 +38,15 @@
 
 .scrollGrid {
 	overflow: auto;
-	height:550px;
-	margin-left: 30px;
-	margin-right: 0px;
+	height: 550px;
+	width: 93%;
+	border: 1px solid darkgrey;
+	padding: 5px;
+	margin: 5px;
 }
 
 .scrollable {
 	overflow: auto;
-	margin: auto;
-	border: 5px solid black;
 	height: 350px;
 	/*background-color:	#270943;*/
 }
@@ -60,24 +60,11 @@ input {
 
 .centered {
 	text-align: center;
-	margin: auto;
-	/*color: #fb5f26;*/
-	color: aliceblue
 }
 
 .checkmarks {
 	height: 25px;
 	width: 25px;
-}
-
-.colorBox {
-	/*background-color:	#008080;*/
-	background-color: steelblue;
-	border: 1px solid black;
-	margin: auto;
-	margin-top: 5px;
-	width: 50%;
-	text-align: center;
 }
 
 ul {

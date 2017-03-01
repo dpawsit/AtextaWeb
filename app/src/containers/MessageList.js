@@ -4,6 +4,8 @@ import { RaisedButton } from 'material-ui'
 // import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui'
 import { connect } from 'react-redux'
 import AddMessageModal from './AddMessageModal'
+import MessageItem from './MessageItem'
+import ConfirmDeletionModal from './ConfirmDeletionModal'
 import { Thumbnail, Grid, Row, Col } from 'react-bootstrap'
 
 
@@ -12,13 +14,17 @@ class MessageList extends React.Component {
 		super(props)
 		this.state = {
 			showAddMessageModal: false,
-			commandToEdit: undefined
+			showDeletionModal: false,
+			commandToEdit: undefined,
+			commandToDelete: undefined
 		}	
 		
 		this.renderCommands = this.renderCommands.bind(this)
 		this.editMessage = this.editMessage.bind(this)
 		this.openAddMessageModal = this.openAddMessageModal.bind(this)
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
+		this.deleteMessage = this.deleteMessage.bind(this)
+		this.closeDeletionModal = this.closeDeletionModal.bind(this)
 	}
 
 	closeAddMessageModal() {
@@ -33,14 +39,17 @@ class MessageList extends React.Component {
 		this.setState({commandToEdit: command, showAddMessageModal: true})	
 	}
 
+	deleteMessage(command) {
+		this.setState({showDeletionModal: true, commandToDelete: command})
+	}
+
+	closeDeletionModal() {
+		this.setState({commandToDelete: undefined, showDeletionModal: false})
+	}
+
 	renderCommands(command, i) {
 		return(
-			<Row className="hoverable" key={i} onClick={()=>{this.editMessage(command)}}>
-				<Col className="column" md={2}>{command.commandName}</Col>
-				<Col className="column" md={6}>{command.text}</Col>
-				<Col className="column" md={2}>{command.groupName}</Col>
-				<Col className="column" md={1}><img className="checkmarks" src={command.verified ? 'http://www.clipartbest.com/cliparts/jix/og7/jixog7oAT.png' : 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/X_mark.svg/896px-X_mark.svg.png'} /></Col>
-			</Row>	
+			<MessageItem key={i} command={command} editMessage={this.editMessage} deleteMessage={this.deleteMessage}/>
 		)
 	}
 
@@ -49,17 +58,26 @@ class MessageList extends React.Component {
 			<div>
 				<Grid className="scrollGrid">
 					<Row className="tableHeader">
-						<Col className="column" md={2}>Trigger</Col>
-						<Col className="column" md={6}>Text</Col>
-						<Col className="column" md={2}>Group</Col>
-						<Col className="column" md={1}>Verified</Col>
+
+						<Col md={11}>
+							<Col className="column" md={2}>Trigger</Col>
+							<Col className="column" md={6}>Text</Col>
+							<Col className="column" md={2}>Group</Col>
+							<Col className="column" md={1}>Verified</Col>
+						</Col>
+
+						<Col md={1}>
+						</Col>
 					</Row>
 					{this.props.userCommands.map(this.renderCommands)}
 				</Grid>
-				<RaisedButton className="footerButton" type="button" label="Create new command" primary={true} 
+				<RaisedButton className="footerButton" type="button" label="Create new command" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 				onClick={this.openAddMessageModal} />
 				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
-					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> : <div></div>}
+					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> 
+					: this.state.showDeletionModal ? <ConfirmDeletionModal close={this.closeDeletionModal}
+					show={this.state.showDeletionModal} commandToDelete={this.state.commandToDelete} /> : 
+					<div></div>}
 			</div>
 		)
 	}

@@ -5,6 +5,7 @@ export const ADD_GROUP = 'ADD_GROUP';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const EDIT_COMMAND = 'EDIT_COMMAND'
 export const ADD_CONTACT = 'ADD_CONTACT'
+export const DELETE_COMMAND = 'DELETE_COMMAND'
 
 export function getUserInfo (userId, userCommands, userGroups, userRecipients) {
   console.log('you commands', userCommands)
@@ -46,5 +47,12 @@ export function addContact(newContact) {
   return {
     type: ADD_CONTACT,
     payload: newContact
+  }
+}
+
+export function deleteCommand(command) {
+  return {
+    type: DELETE_COMMAND,
+    payload: command
   }
 }
