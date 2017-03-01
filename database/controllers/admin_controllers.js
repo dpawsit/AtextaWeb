@@ -23,12 +23,9 @@ module.exports.runAdminQuery = (queryString) => {
   return new Promise ((resolve, reject) => {
     db.query(queryString, {
       type : sequelize.QueryTypes.SELECT
-    })
-    .then(queryResults => {
+    }).then(queryResults => {
       resolve(queryResults)
-    })
-    .catch(error => {
-      console.log('error');
+    }).catch(error => {
       reject(error);
     })
   })
@@ -41,11 +38,9 @@ module.exports.createNewAdminQuery = (queryInfo) => {
       queryString : queryInfo.queryString
     })
     .then(res => {
-      console.log('new query!!!!', res.dataValues)
       resolve(res.dataValues);
     })
     .catch(error => {
-      console.log('error in query', error)
       reject(error);
     })
   })

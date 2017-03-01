@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import QueryTable from './QueryTable';
+import ChartView from './ChartView';
+import { MuiThemeProvider } from 'material-ui/styles';
 
 class SingleView extends Component {
   constructor(props){
@@ -7,29 +10,24 @@ class SingleView extends Component {
     
   }
 
-
   render(){
+    let view = <div></div>
+
+    if(this.props.viewType === 'T'){
+      view = (<MuiThemeProvider><QueryTable data={this.props.singleQuery}/></MuiThemeProvider>)
+    } else if(this.props.viewType === 'C') {
+      view = <ChartView data={this.props.singleQuery}/>
+    }
     return (
-      <div>
-      {
-        (this.props.singleQuery ? this.props.singleQuery.map(row => {
-          let rowInfo = '';
-          for (var key in row){
-            if(key !== 'updatedAt'){
-              rowInfo += `${key}: ${row[key]}   `
-            }
-          }
-          return <div key={rowInfo}>{rowInfo}</div>
-        }) : <div>Loading</div>)
-      }
-      </div>
+      <div>{view}</div>
     )
   }
 }
 
 function MapStateToProps(state){
   return {
-    singleQuery : state.admin.singleQuery
+    singleQuery : state.admin.singleQuery,
+    viewType : state.admin.viewType
   }
 }
 

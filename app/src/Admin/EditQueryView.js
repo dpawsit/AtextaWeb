@@ -9,15 +9,13 @@ class EditQueryView extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedQueries : [],
-      selected : false
+      selectedQueries : []
     }
     this.handleQuerySelection = this.handleQuerySelection.bind(this);
     this.handleQueryDeletion = this.handleQueryDeletion.bind(this);
   }
 
   handleQuerySelection(selectedRows){
-    console.log(selectedRows);
     this.setState({
       selectedQueries : (selectedRows === 'none' ? [] : selectedRows)
     })
@@ -34,14 +32,10 @@ class EditQueryView extends Component {
         deleteList.push(this.props.adminQueries[index].id)
       })
     }
-    console.log(deleteList);
     let self = this;
     axios.delete('/admin/deleteAdminQuery', {params : {deleteInfo : deleteList}})
     .then(result => {
       this.props.deleteAdminQuery(deleteList)
-      this.setState({
-        selected : false
-      })
     })
     .catch(error => {
       console.log('error deleting admin queries: ', error);
@@ -54,9 +48,9 @@ class EditQueryView extends Component {
 
     if(!!this.props.adminQueries) {
       tableBody = this.props.adminQueries.map( (query, index) => (
-           <TableRow key={index} selected={false}>
-                <TableRowColumn>{query.id}</TableRowColumn>
-                <TableRowColumn>{query.queryName}</TableRowColumn>
+           <TableRow key={index}>
+                <TableRowColumn style={{ width: 50 }}>{query.id}</TableRowColumn>
+                <TableRowColumn style={{ width: 175 }}>{query.queryName}</TableRowColumn>
                 <TableRowColumn>{query.queryString}</TableRowColumn>
           </TableRow>
       ))
@@ -68,7 +62,7 @@ class EditQueryView extends Component {
 
     return (
       <div>
-        <h3>Edit Queries</h3>
+        <h3>View Queries</h3>
         <Table
           height={'550px'}
           fixedHeader={true}
@@ -81,15 +75,15 @@ class EditQueryView extends Component {
             adjustForCheckbox={true}
             enableSelectAll={true}>
             <TableRow>
-              <TableHeaderColumn>ID</TableHeaderColumn>
-              <TableHeaderColumn>Name</TableHeaderColumn>
+              <TableHeaderColumn style={{ width: 50 }}>ID</TableHeaderColumn>
+              <TableHeaderColumn style={{ width: 175 }}>Name</TableHeaderColumn>
               <TableHeaderColumn>Query</TableHeaderColumn>
             </TableRow>
           </TableHeader>
 
           <TableBody
             displayRowCheckbox={true}
-            deselectOnClickaway={false}
+            deselectOnClickaway={true}
             showRowHover={true}
             stripedRows={false}>
             {tableBody}
