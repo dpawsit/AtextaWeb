@@ -3,7 +3,8 @@ import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, D
 const INITIAL_STATE = {
   adminQueries : [],
   queryResults : {},
-  singleQuery : []
+  singleQuery : [],
+  viewType : 'T'
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -23,21 +24,24 @@ export default function (state = INITIAL_STATE, action) {
     case DELETE_ADMIN_QUERY:
 
       if(action.payload === 'all'){
+
         return INITIAL_STATE
       } else {
+
         let newQuery = [...state.adminQueries];
-        let newQueryRes = {...state.queryResults};
-        console.log('newQuery before: ', newQuery)
-        action.payload.forEach(id => {
-          console.log('id', id, 'index', newQuery.indexOf(id));
-          newQuery.splice(newQuery.indexOf(id), 1)
-          delete  newQueryRes[id]
+        let newQueryRes = {...state.queryResults}
+
+        action.payload.forEach(deleteId => {
+          delete newQueryRes[deleteId];
+          for(var i = 0; i < newQuery.length; i++){
+            if(newQuery[i].id === deleteId){
+              newQuery.splice(i, 1);
+            }
+          }
         })
-        console.log('after: ', newQuery)
 
-        return {...state, adminQueries : newQuery, queryResults : newQueryRes}
+        return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : []}
       }
-
 
     default : return state;
   }

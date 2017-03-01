@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { TextField, Drawer, RaisedButton, List, ListItem, Divider, Subheader } from 'material-ui';
-
 import {Grid, Col, Row} from 'react-bootstrap';
 import tables from './db_tables';
 import QueryTable from './QueryTable';
@@ -25,6 +25,7 @@ class CreateQuery extends Component {
     this.handleQuerySave = this.handleQuerySave.bind(this);
     this.handleQueryName = this.handleQueryName.bind(this);
     this.handleQueryString = this.handleQueryString.bind(this);
+    this.handleQueryError = this.handleQueryError.bind(this);
   }
 
   handleTableView(){
@@ -34,16 +35,36 @@ class CreateQuery extends Component {
   }
 
   handleQueryTest(){
-    axios.get('/admin/runAdminQuery', {params : {queryString : this.state.queryString}})
-    .then(result => {
+    if (this.state.queryName === ''){
       this.setState({
-        queryResult : result.data,
-        testPassed : true
+        nameError : "This field is required"
       })
-    })
-    .catch(error => {
-      console.log('Error running test query');
-    })
+    } else if (this.state.queryString === ''){
+      this.setState({
+        stringError : "This field is required"
+      })
+    } else if (this.state.queryString.toUpperCase().split(' ').indexOf('DELETE') !== -1) {
+      this.setState({
+        stringError : "Delete queries are not allowed"
+      })
+    } else if (this.state.queryString.toUpperCase().split(' ').indexOf('UPDATE') !== -1){
+      this.setState({
+        stringError : "Update queries are not allowed"
+      })
+    } else {
+      axios.get('/admin/runAdminQuery', {params : {queryString : this.state.queryString}})
+      .then(result => {
+        this.setState({
+          queryResult : result.data,
+          testPassed : true,
+          queryError : false,
+          queryErrorMessage : ''
+        })
+      })
+      .catch(error => {
+        this.handleQueryError(error);
+      })
+    }
   }
 
   handleQueryName(e){
@@ -56,7 +77,11 @@ class CreateQuery extends Component {
   handleQueryString(e){
     this.setState({
       stringError : '',
-      queryString : e.target.value
+      queryString : e.target.value,
+      queryError : false,
+      queryErrorMessage: '',
+      testPassed : false,
+      queryResult : []
     })
   }
 
@@ -76,12 +101,38 @@ class CreateQuery extends Component {
         this.props.saveNewQuery(result.data)
       })
       .catch(error => {
-        console.log('error saving new admin query: ', error)
+        this.handleQueryError(error);
+      })
+    }
+  }
+
+  handleQueryError(error){
+    let message = error.response.data.error
+
+    if (message.split(' ').indexOf('queryName') !== -1){
+      this.setState({
+      nameError : message
+      }) 
+    } else if (message.split(' ').indexOf('queryString') !== -1) {
+      this.setState({
+      stringError : message
+      }) 
+    } else {
+      this.setState({
+      queryError : true,
+      queryErrorMessage : message
       })
     }
   }
 
   render(){
+
+    const alertInstance = (
+      <Alert bsStyle="danger">
+        <strong>Query Error! </strong>{this.state.queryErrorMessage}
+      </Alert>
+      );
+
     return (
       <Grid>
         <h3>Create New Query</h3><br/>
@@ -97,7 +148,7 @@ class CreateQuery extends Component {
             {this.state.testPassed ? <RaisedButton label="Save Query" onTouchTap={this.handleQuerySave} style={{padding : '2px'}}/> : <div></div>}
             </div>
           </Col >
-        <Col xs={6} md={3}>
+          <Col xs={6} md={3}>
             <div >
               <Drawer width={250} openSecondary={true} open={this.state.tableView}>
                 <List>
@@ -121,7 +172,8 @@ class CreateQuery extends Component {
               </Drawer>
             </div>
         </Col>
-        </Row>
+        </Row><br/>
+        <div>{this.state.queryError ? alertInstance : <div></div>}</div>
         <Row>
           <Col xs={12} md={12}>
             <div>
