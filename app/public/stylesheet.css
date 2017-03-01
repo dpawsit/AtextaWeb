@@ -9,7 +9,6 @@
 	margin-left: 15px;
 }
 
-
 .nav {
 	background-color: #270943;
 }
@@ -38,9 +37,11 @@
 
 .scrollGrid {
 	overflow: auto;
-	height:550px;
-	margin-left: 30px;
-	margin-right: 0px;
+	height: 550px;
+	width: 93%;
+	border: 1px solid darkgrey;
+	padding: 5px;
+	margin: 5px;
 }
 
 .scrollable {
