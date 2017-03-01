@@ -19,6 +19,7 @@
 
 .footerButton {
 	margin-left: 50px;
+	color: white;
 }
 
 .navItems{
@@ -46,8 +47,6 @@
 
 .scrollable {
 	overflow: auto;
-	margin: auto;
-	border: 5px solid black;
 	height: 350px;
 	/*background-color:	#270943;*/
 }
@@ -61,24 +60,11 @@ input {
 
 .centered {
 	text-align: center;
-	margin: auto;
-	/*color: #fb5f26;*/
-	color: aliceblue
 }
 
 .checkmarks {
 	height: 25px;
 	width: 25px;
-}
-
-.colorBox {
-	/*background-color:	#008080;*/
-	background-color: steelblue;
-	border: 1px solid black;
-	margin: auto;
-	margin-top: 5px;
-	width: 50%;
-	text-align: center;
 }
 
 ul {

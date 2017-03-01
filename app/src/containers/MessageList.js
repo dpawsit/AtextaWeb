@@ -71,7 +71,7 @@ class MessageList extends React.Component {
 					</Row>
 					{this.props.userCommands.map(this.renderCommands)}
 				</Grid>
-				<RaisedButton className="footerButton" type="button" label="Create new command" primary={true} 
+				<RaisedButton className="footerButton" type="button" label="Create new command" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 				onClick={this.openAddMessageModal} />
 				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
 					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> 
