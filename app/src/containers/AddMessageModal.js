@@ -114,6 +114,7 @@ class AddMessageModal extends React.Component {
 			}
 			this.props.close()
 		} else {
+			console.log('this is a new command post')
 			//this is a new command post request
 			let newCommand = {
 				name: this.state.newCommandName,
@@ -122,20 +123,22 @@ class AddMessageModal extends React.Component {
 				text: this.state.newCommandText,
 				additionalContent: null
 			}
-
-			let commandToAppend = {
-				commandName: this.state.newCommandName,
-				userId: this.props.userId,
-				groupName: this.state.selectedGroup,
-				text: this.state.newCommandText,
-				additionalContent: null
-			}
-
+			
 			axios.post('command/newCommand', {
 				newCommand
 			})
 			.then(result=>{
-				this.props.addCommand(commandToAppend)
+				console.log('resulting command', result)
+				this.props.addCommand({
+					id: result.data.id,
+					commandName: result.data.name,
+					userId: result.data.userId,
+					groupName: this.state.selectedGroup,
+					groupId: result.data.groupId,
+					text: this.state.newCommandText,
+					additionalContent: null,
+					verified: result.data.verified
+				})
 			})
 			.catch(err=>{
 				console.log('error submitting command', err)
@@ -169,16 +172,14 @@ class AddMessageModal extends React.Component {
 			case 0:
 				return (
 					<div>
-						<form onSubmit={this.handleNameSubmit}>
+						<form onSubmit={this.handleNameSubmit} className="modalForms">
 							<label>
 								What do you want to name this trigger?
 								<input value={this.state.newCommandName} type='text' id='groupName' 
 								onChange={this.handleNameChange} />
             	</label>
             </form>
-						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<br/>
 					</div>
 				)
 			case 1:
@@ -191,9 +192,7 @@ class AddMessageModal extends React.Component {
 								onChange={this.handleTextChange}  />
             	</label>
             </form>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<br/>
 					</div>
 				)
 			case 2:
@@ -207,9 +206,6 @@ class AddMessageModal extends React.Component {
 								))}
 							</ul>
 						</div>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-						<RaisedButton type="button" label="Submit" primary={true}
-						onClick = {this.handleCommandSubmit}/>
 						<RaisedButton type="button" label="Create a new group" secondary={true}
 						onClick = {this.handleNewGroup}/>
 					</div>
@@ -222,6 +218,7 @@ class AddMessageModal extends React.Component {
 	}
 
 	render() {
+		console.log('this is the inital command', this.props.initialData)
 		return this.state.addingNewGroup ? 
 		(
 			<AddGroupModal show={this.state.addingNewGroup} close={this.handleNewGroupClose}
@@ -234,7 +231,6 @@ class AddMessageModal extends React.Component {
 	    		<Modal.Title>Add a message</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
-	    		{this.stepDecider()}
 					<Stepper activeStep={this.state.step}>
 						<Step>
 							<StepLabel>
@@ -252,7 +248,15 @@ class AddMessageModal extends React.Component {
 							</StepLabel>
 						</Step>
 					</Stepper>
+	    		{this.stepDecider()}
 	   		</Modal.Body>
+				<Modal.Footer>
+					<FlatButton type="button" label={this.state.step === 0 ? "Cancel" : "Back" } 
+					onClick={this.state.step === 0 ? this.props.close : this.decrementStep}/>
+					<RaisedButton type="button" label={this.state.step=== 2 ? "Submit" : "Next"}
+					secondary={true} 
+					onClick = {this.state.step === 2 ? this.handleCommandSubmit : this.incrementStep}/>
+				</Modal.Footer>
 	    </Modal>
 		)
 	}
