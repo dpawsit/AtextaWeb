@@ -2,6 +2,37 @@
 const express = require('express');
 const router = express.Router();
 const ac = require('../../database/controllers/admin_controllers');
+const util = require('../server_util');
+
+router.get('/adminLogin', (req, res) => {
+  ac.adminLogin(req.query.loginInfo)
+  .then(result => {
+    if (result.admin) {
+      util.signToken(result.id)
+      .then(signedToken => {
+        res.status(200).json({admin: result.admin, id: result.id, token : signedToken);
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      })
+    } else {
+      res.status(200).json(result);
+    }
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+router.post('/createAdmin', (req, res) => {
+  ac.createAdmin(req.body)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
 
 router.get('/getAdminQueries', (req, res) => {
   ac.getAdminQueries()
@@ -64,5 +95,6 @@ router.delete('/deleteAdminQuery', (req, res) => {
     res.status(500).send(error);
   })
 })
+
 
 module.exports = router;
