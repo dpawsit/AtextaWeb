@@ -1,4 +1,4 @@
-import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, DELETE_ADMIN_QUERY} from '../actions/admin_actions';
+import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, DELETE_ADMIN_QUERY, CHANGE_VIEW} from '../actions/admin_actions';
 
 const INITIAL_STATE = {
   adminQueries : [],
@@ -42,6 +42,9 @@ export default function (state = INITIAL_STATE, action) {
 
         return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : []}
       }
+
+    case CHANGE_VIEW:
+      return {...state, viewType : action.payload}
 
     default : return state;
   }

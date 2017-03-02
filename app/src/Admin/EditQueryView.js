@@ -51,6 +51,7 @@ class EditQueryView extends Component {
            <TableRow key={index}>
                 <TableRowColumn style={{ width: 50 }}>{query.id}</TableRowColumn>
                 <TableRowColumn style={{ width: 175 }}>{query.queryName}</TableRowColumn>
+                <TableRowColumn style={{ width: 100 }}>{query.chartOption}</TableRowColumn>
                 <TableRowColumn>{query.queryString}</TableRowColumn>
           </TableRow>
       ))
@@ -77,6 +78,7 @@ class EditQueryView extends Component {
             <TableRow>
               <TableHeaderColumn style={{ width: 50 }}>ID</TableHeaderColumn>
               <TableHeaderColumn style={{ width: 175 }}>Name</TableHeaderColumn>
+              <TableHeaderColumn style={{ width: 100 }}>Chart</TableHeaderColumn>
               <TableHeaderColumn>Query</TableHeaderColumn>
             </TableRow>
           </TableHeader>

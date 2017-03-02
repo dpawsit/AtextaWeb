@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
-import { TextField, Drawer, RaisedButton, List, ListItem, Divider, Subheader } from 'material-ui';
+import { TextField, Drawer, RaisedButton, List, ListItem, Divider, Subheader , Toggle, RadioButton, RadioButtonGroup} from 'material-ui';
 import {Grid, Col, Row} from 'react-bootstrap';
 import tables from './db_tables';
 import QueryTable from './QueryTable';
 import {saveNewQuery} from '../actions/admin_actions'
+import ChartView from './ChartView';
 
 class CreateQuery extends Component {
   constructor(props){
@@ -18,7 +19,10 @@ class CreateQuery extends Component {
       queryResult : [],
       nameError : '',
       stringError : '',
-      testPassed : false
+      testPassed : false,
+      chartTest : false,
+      chartSelection : null
+
     }
     this.handleTableView = this.handleTableView.bind(this);
     this.handleQueryTest = this.handleQueryTest.bind(this);
@@ -26,6 +30,8 @@ class CreateQuery extends Component {
     this.handleQueryName = this.handleQueryName.bind(this);
     this.handleQueryString = this.handleQueryString.bind(this);
     this.handleQueryError = this.handleQueryError.bind(this);
+    this.handleTestToggle = this.handleTestToggle.bind(this);
+    this.handleChartSelection = this.handleChartSelection.bind(this);
   }
 
   handleTableView(){
@@ -95,7 +101,7 @@ class CreateQuery extends Component {
         stringError : "This field is required"
       })
     } else {
-      let queryInfo = {name : this.state.queryName, queryString: this.state.queryString}
+      let queryInfo = {name : this.state.queryName, queryString: this.state.queryString, chartOption: this.state.chartSelection}
       axios.post('/admin/createNewAdminQuery', queryInfo)
       .then(result => {
         this.props.saveNewQuery(result.data)
@@ -125,6 +131,18 @@ class CreateQuery extends Component {
     }
   }
 
+  handleTestToggle(){
+    this.setState({
+      chartTest : !this.state.chartTest
+    })
+  }
+
+  handleChartSelection(e, v){
+    this.setState({
+      chartSelection : v
+    })
+  }
+
   render(){
 
     const alertInstance = (
@@ -132,6 +150,12 @@ class CreateQuery extends Component {
         <strong>Query Error! </strong>{this.state.queryErrorMessage}
       </Alert>
       );
+    
+    const resultBody = (
+      this.state.chartTest ? 
+      <ChartView data={this.state.queryResult} chartOption={this.state.chartSelection}/> : 
+      <QueryTable data={this.state.queryResult}/> 
+      )
 
     return (
       <Grid>
@@ -145,11 +169,27 @@ class CreateQuery extends Component {
                       rows={2} fullWidth={true} onChange={this.handleQueryString} errorText={this.state.stringError}/><br/>
             <RaisedButton label="Show Tables" onTouchTap={this.handleTableView} style={{padding : '2px'}}/>
             <RaisedButton label="Test Query" onTouchTap={this.handleQueryTest} style={{padding : '2px'}}/>
-            {this.state.testPassed ? <RaisedButton label="Save Query" onTouchTap={this.handleQuerySave} style={{padding : '2px'}}/> : <div></div>}
+            {this.state.testPassed ? (
+              <RaisedButton label="Save Query" onTouchTap={this.handleQuerySave} style={{padding : '2px'}}/> 
+              ) : <div></div>}
             </div>
-          </Col >
+          </Col>
+              <Col xs={6} md={3}>
+              <RadioButtonGroup name="chartType" defaultSelected="null" onChange={this.handleChartSelection} >
+                <RadioButton value="Doughnut" label="Doughnut"/>
+                <RadioButton value="Pie" label="Pie"/>
+                <RadioButton value="Line" label="Line"/>
+                <RadioButton value="Bar" label="Bar"/>
+                <RadioButton value="HorizontalBar" label="HorizontalBar"/>
+                <RadioButton value="Radar" label="Radar"/>
+                <RadioButton value="Polar" label="Polar"/>
+                <RadioButton value="null" label="No Chart"/>
+              </RadioButtonGroup>
+          </Col>
+          </Row>
+          <Row>
           <Col xs={6} md={3}>
-            <div >
+            <div>
               <Drawer width={250} openSecondary={true} open={this.state.tableView}>
                 <List>
                   <Subheader>Database Tables</Subheader>
@@ -177,7 +217,10 @@ class CreateQuery extends Component {
         <Row>
           <Col xs={12} md={12}>
             <div>
-                <QueryTable data={this.state.queryResult}/>        
+              {this.state.testPassed ? 
+                <Toggle label={(this.state.chartTest ?'Chart':'Table')} style={{marginBottom: 16, width: '200px'}} onToggle={this.handleTestToggle}/> 
+                : <div></div>}
+              {resultBody}      
             </div>
           </Col>
         </Row>

@@ -4,6 +4,7 @@ export const SAVE_QUERY_RESULTS = 'SAVE_QUERY_RESULTS'
 export const SELECT_SINGLE_QUERY = 'SELECT_SINGLE_QUERY'
 export const SAVE_NEW_QUERY = 'SAVE_NEW_QUERY';
 export const DELETE_ADMIN_QUERY = 'DELETE_ADMIN_QUERY';
+export const CHANGE_VIEW = 'CHANGE_VIEW'
 
 
 export function adminLogin (){
@@ -39,5 +40,12 @@ export function deleteAdminQuery (queryIds) {
   return {
     type : DELETE_ADMIN_QUERY,
     payload : queryIds
+  }
+}
+
+export function changeView (view) {
+  return {
+    type : CHANGE_VIEW,
+    payload : view
   }
 }

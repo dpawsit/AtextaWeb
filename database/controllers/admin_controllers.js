@@ -35,7 +35,8 @@ module.exports.createNewAdminQuery = (queryInfo) => {
   return new Promise ((resolve, reject) => {
     AdminQueries.create({
       queryName : queryInfo.name,
-      queryString : queryInfo.queryString
+      queryString : queryInfo.queryString,
+      chartOption : queryInfo.chartOption
     })
     .then(res => {
       resolve(res.dataValues);
