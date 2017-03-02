@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidebar from 'react-sidebar';
 import SidebarTitle from './SidebarTitle';
 import SidebarContent from './SidebarContent';
-import SingleView from './SingleView';
+import QueryView from './QueryView';
 import CreateQuery from './CreateQuery';
 import EditQueryView from './EditQueryView';
 import { MuiThemeProvider } from 'material-ui/styles';
@@ -24,7 +24,7 @@ class AdminPanel extends Component {
     this.state = {
       docked : false,
       open : false,
-      singleView : true,
+      queryView : true,
       createView : false,
       queryEditView : false
     }
@@ -36,7 +36,7 @@ class AdminPanel extends Component {
     this.toggleOpen = this.toggleOpen.bind(this);
     this.createView = this.createView.bind(this);
     this.queryEditView = this.queryEditView.bind(this);
-    this.singleView = this.singleView.bind(this);
+    this.queryView = this.queryView.bind(this);
   }
 
   componentWillMount() {
@@ -68,7 +68,7 @@ class AdminPanel extends Component {
   createView(){
     this.setState({
       createView : true,
-      singleView : false,
+      queryView : false,
       queryEditView : false
     })
   }
@@ -77,13 +77,13 @@ class AdminPanel extends Component {
     this.setState({
       queryEditView : true,
       createView : false,
-      singleView : false
+      queryView : false
     })
   }
 
-  singleView(){
+  queryView(){
     this.setState({
-      singleView : true,
+      queryView : true,
       createView : false,
       queryEditView : false
     })
@@ -91,13 +91,13 @@ class AdminPanel extends Component {
 
   render() {
    const sidebar = <SidebarContent createView={this.createView} 
-                                   singleView={this.singleView}
+                                   queryView={this.queryView}
                                    queryEditView={this.queryEditView}/>;
    
    let adminBody = <div></div>
   
   if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery/></MuiThemeProvider>}
-  if (this.state.singleView) {adminBody = <SingleView />}
+  if (this.state.queryView) {adminBody = <QueryView />}
   if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView /></MuiThemeProvider>)}
 
    const contentHeader = (

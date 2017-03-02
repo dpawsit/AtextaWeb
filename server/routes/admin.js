@@ -19,7 +19,6 @@ router.get('/runAdminQuery', (req, res) => {
     res.status(200).json(result);
   })
   .catch(error => {
-    console.log('Error running admin query: ', error.message)
     try {
       res.status(500).send({error : JSON.stringify(error.message)});
     } catch (e) {
@@ -34,7 +33,6 @@ router.post('/createNewAdminQuery', (req, res) => {
     res.status(200).json(result);
   })
   .catch(error => {
-    console.log('TESTING ERROR', error.errors[0].message)
     res.status(500).send({error: error.errors[0].message});
   })
 })

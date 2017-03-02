@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import SidebarTitle from './SidebarTitle';
-import { adminLogin, saveQueryResults, selectSingleQuery} from '../actions/admin_actions';
-import SingleView from './SingleView';
+import { adminLogin, saveQueryResults, selectSingleQuery, changeView} from '../actions/admin_actions';
+import { Toggle } from 'material-ui';
+import { MuiThemeProvider } from 'material-ui/styles';
 
 const styles = {
   sidebar: {
@@ -32,6 +33,7 @@ class SidebarContent extends Component {
   constructor(props){
     super(props)
     this.componentWillMount = this.componentWillMount.bind(this);
+    this.handleViewToggle = this.handleViewToggle.bind(this);
   }
 
 componentWillMount(){
@@ -41,7 +43,7 @@ componentWillMount(){
 handleQuerySelection(inputQueryId, inputQueryString){
   if (this.props.queryResults.hasOwnProperty(inputQueryId)){
     this.props.selectSingleQuery(inputQueryId)
-    this.props.singleView()
+    this.props.queryView()
   } else {
     axios.get('/admin/runAdminQuery', {params : {queryString : inputQueryString}})
     .then(res => {
@@ -49,11 +51,20 @@ handleQuerySelection(inputQueryId, inputQueryString){
       queryRes[inputQueryId] = res.data
       this.props.saveQueryResults(queryRes)
       this.props.selectSingleQuery(inputQueryId)
-      this.props.singleView()
+      this.props.queryView()
     })
     .catch(error => {
       console.log('Error running query: ', error);
     })
+  }
+}
+
+handleViewToggle(){
+
+  if (this.props.viewType === 'T'){
+    this.props.changeView('C')
+  } else {
+    this.props.changeView('T')
   }
 }
 
@@ -72,10 +83,22 @@ render(){
     }
   } 
 
+  const toggle = (
+    <div>
+    <MuiThemeProvider>
+    <Toggle
+      label={(this.props.viewType === 'T' ? 'Table' : 'Chart')}
+      style={{marginBottom: 16}}
+      onToggle={this.handleViewToggle}
+    />
+    </MuiThemeProvider>
+    </div>
+  )
+
   return (
     <SidebarTitle title="Analytics" style={style}>
       <div style={styles.content}>
-        <span>Views</span>
+        <span>{toggle}</span>
         <div style={styles.divider} />
         {links}
         <br/>
@@ -98,8 +121,9 @@ SidebarContent.propTypes = {
 function MapStateToProps(state){
   return {
     adminQueries : state.admin.adminQueries,
-    queryResults : state.admin.queryResults
+    queryResults : state.admin.queryResults,
+    viewType : state.admin.viewType
   }
 }
 
-export default connect(MapStateToProps, {adminLogin, saveQueryResults, selectSingleQuery})(SidebarContent);
+export default connect(MapStateToProps, {adminLogin, saveQueryResults, selectSingleQuery, changeView})(SidebarContent);

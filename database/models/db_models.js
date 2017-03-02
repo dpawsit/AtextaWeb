@@ -259,6 +259,11 @@ var AdminQueries = db.define('AdminQueries', {
     type : Sequelize.STRING,
     allowNull : false,
     unique : true
+  },
+  chartOption : {
+    type : Sequelize.STRING,
+    allowNull : true,
+    unique : false
   }
 })
 

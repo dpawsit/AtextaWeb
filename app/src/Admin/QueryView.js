@@ -4,7 +4,7 @@ import QueryTable from './QueryTable';
 import ChartView from './ChartView';
 import { MuiThemeProvider } from 'material-ui/styles';
 
-class SingleView extends Component {
+class QueryView extends Component {
   constructor(props){
     super(props)
     
@@ -31,4 +31,4 @@ function MapStateToProps(state){
   }
 }
 
-export default connect(MapStateToProps)(SingleView)
+export default connect(MapStateToProps)(QueryView)
