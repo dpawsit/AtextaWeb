@@ -4,11 +4,12 @@ export const ADD_COMMAND = 'ADD_COMMAND'
 export const ADD_GROUP = 'ADD_GROUP';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const EDIT_COMMAND = 'EDIT_COMMAND'
+export const EDIT_GROUP = 'EDIT_GROUP'
 export const ADD_CONTACT = 'ADD_CONTACT'
 export const DELETE_COMMAND = 'DELETE_COMMAND'
+export const DELETE_GROUP = 'DELETE_GROUP'
 
 export function getUserInfo (userId, userCommands, userGroups, userRecipients) {
-  console.log('you commands', userCommands)
   return {
     type: USER_LOGIN,
     payload: { userId, userCommands, userGroups, userRecipients}
@@ -54,5 +55,19 @@ export function deleteCommand(command) {
   return {
     type: DELETE_COMMAND,
     payload: command
+  }
+}
+
+export function deleteGroup(group) {
+  return {
+    type: DELETE_GROUP,
+    payload: group
+  }
+}
+
+export function editGroup(editedGroup, id) {
+  return{
+    type: EDIT_GROUP,
+    payload: {editedGroup, id}
   }
 }

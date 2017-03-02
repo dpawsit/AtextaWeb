@@ -51,6 +51,11 @@
 	/*background-color:	#270943;*/
 }
 
+.sideScroll {
+	overflow: auto;
+	white-space: nowrap;
+}
+
 input {
 	width: 100%;
 	padding: 12px 20px;
