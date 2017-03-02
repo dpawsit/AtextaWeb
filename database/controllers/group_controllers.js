@@ -220,24 +220,16 @@ module.exports.DeleteRecipient = (recId) => {
 
 module.exports.DeleteGroup = (inputGroupId) => {
   return new Promise((resolve, reject) => {
-    Promise.All([
-      db.query('delete from Recipients where id in (select recipientId from GroupRecipients where groupId = ?)',
-      {replacements: [inputGroupId], type: sequelize.QueryTypes.DELETE}),
-      GroupRecipients.destroy({
-        where: {
-          groupId: inputGroupId
-        }
-      }),
       Group.destroy({
         where: {
           id: inputGroupId
         }
       })
-    ])
     .then(result => {
       resolve(result)
     })
     .catch(error => {
+      console.log('errro deleting group', error)
       reject(error)
     })
   })

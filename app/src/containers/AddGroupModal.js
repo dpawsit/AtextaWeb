@@ -17,6 +17,7 @@ class AddGroupModal extends React.Component {
 			fetchedValidRecipients: false,
 			validRecipients: []
 		}
+		this.componentWillMount = this.componentWillMount.bind(this)
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
 		this.addRecipientToGroup = this.addRecipientToGroup.bind(this)
@@ -28,6 +29,22 @@ class AddGroupModal extends React.Component {
 		this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
 		this.decrementStep = this.decrementStep.bind(this)
 	}
+
+	componentWillMount() {
+		if(this.props.initialData) {
+			const medium = this.props.initialData.mediumType === 'T' ? 'Text' :
+			this.props.initialData.mediumType === 'E' ? 'Email' :
+			this.props.initialData.mediumType === 'S' ? 'Slack' : 'Select a medium'
+			console.log('inside here', this.props.initialData)
+			this.setState({
+				newGroupMedium: medium,	
+				newGroupName: this.props.initialData.name,
+				recipientsToAdd: this.props.initialData.recipients
+			})
+		}
+	}
+
+
 
 	fetchValidRecipients() {
 		//refactor to a filter since recipients are on app state now
@@ -92,6 +109,11 @@ class AddGroupModal extends React.Component {
 	handleGroupSubmit() {
 		let medium = this.state.newGroupMedium === 'Text' ? 'T' : 
 		this.state.newGroupMedium === 'Slack' ? 'S' : this.state.newGroupMedium === 'Email' ? 'E' : null
+		if(this.props.initialData) {
+			//this is an edit request
+		} else {
+			//this is a new post
+		}
 		axios.post('/groups/addGroup', {
 			groupInfo: {
 				name: this.state.newGroupName,
@@ -166,10 +188,6 @@ class AddGroupModal extends React.Component {
 				        <MenuItem eventKey="3" onSelect={()=> this.selectMediumType('Email')}>Email</MenuItem>
 				      </DropdownButton>
 				    </ButtonToolbar>
-				    <br/>
-						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
 					</div>
 				)
 			case 1:
@@ -181,9 +199,6 @@ class AddGroupModal extends React.Component {
 								<input value={this.state.newGroupName} onChange={this.handleNameChange} type='text' id='groupName' />
             	</label>
             </form>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
 					</div>
 				)
 			case 2:
@@ -201,9 +216,6 @@ class AddGroupModal extends React.Component {
 								{this.state.validRecipients.map(renderAvailableRecipients)}
 							</ul>
 						</div>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-						<RaisedButton type="button" label="Submit" primary={true}
-						onClick = {this.handleGroupSubmit}/>
 					</div>
 				) 
 				:
@@ -219,10 +231,9 @@ class AddGroupModal extends React.Component {
 		return(
 	    <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>
 	    	<Modal.Header closeButton>
-	    		<Modal.Title>Add a group</Modal.Title>
+	    		<Modal.Title>Update your group</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
-	    		{this.stepDecider()}
 					<Stepper activeStep={this.state.step}>
 						<Step>
 							<StepLabel>
@@ -240,7 +251,15 @@ class AddGroupModal extends React.Component {
 							</StepLabel>
 						</Step>
 					</Stepper>
+	    		{this.stepDecider()}
 	   		</Modal.Body>
+				<Modal.Footer>
+					<FlatButton type="button" label={this.state.step === 0 ? "Cancel" : "Back" } 
+					onClick={this.state.step === 0 ? this.props.close : this.decrementStep}/>
+					<RaisedButton type="button" label={this.state.step=== 2 ? "Submit" : "Next"}
+					backgroundColor="#270943" labelStyle={{ color: 'white' }}
+					onClick = {this.state.step === 2 ? this.handleGroupSubmit : this.incrementStep}/>
+				</Modal.Footer>
 	    </Modal>
 		)
 	}

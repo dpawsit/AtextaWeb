@@ -1,51 +1,82 @@
 import React from 'react'
 import AddGroupModal from './AddGroupModal'
-import { FloatingActionButton, RaisedButton } from 'material-ui'
+import GroupItem from './GroupItem'
+import ConfirmDeleteGroupModal from './ConfirmDeleteGroupModal'
+import { FloatingActionButton, RaisedButton, FlatButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
+import { Grid, Row, Col } from 'react-bootstrap'
+
 
 class GroupList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state={
-			showAddGroupModal: false
+			showAddGroupModal: false,
+			showDeleteGroupModal: false,
+			groupToEdit: undefined,
+			groupToDelete: undefined
 		}
 		this.renderGroups = this.renderGroups.bind(this)
 		this.closeAddGroupModal = this.closeAddGroupModal.bind(this)
 		this.openAddGroupModal = this.openAddGroupModal.bind(this)
+		this.editGroup = this.editGroup.bind(this)
+		this.deleteGroup = this.deleteGroup.bind(this)
+		this.closeDeleteGroupModal = this.closeDeleteGroupModal.bind(this)
 	}
 
 	closeAddGroupModal () {
-		this.setState({showAddGroupModal: false})
+		this.setState({showAddGroupModal: false, groupToEdit: undefined})
 	}
 	openAddGroupModal() {
-		this.setState({showAddGroupModal: true})
+		this.setState({showAddGroupModal: true, groupToEdit: undefined})
 	}
 
-	renderGroups(group) {
-		let medium = group.mediumType === 'T' ? 'Text' : 
-			group.mediumType === 'S' ? 'Slack' :
-			group.mediumType === 'E' ? 'Email' :
-			'none'
+	editGroup(group) {
+		this.setState({groupToEdit: group, showAddGroupModal: true})
+	}
 
-		function renderPeople(recipient) {
-			return(
-				<RaisedButton key={recipient.name} label={recipient.name} primary={true} style={{size: 10+'%', margin: 5+'px'}}/>
-			)
-		}
+	deleteGroup(group) {
+		this.setState({groupToDelete: group, showDeleteGroupModal: true})
+	}
 
+	closeDeleteGroupModal() {
+		this.setState({groupToDelete: undefined, showDeleteGroupModal: false})
+	}
+
+	renderGroups(group, i) {
 		return(
-			<tr key={group.groupId}>
-	      <td>{group.name}</td>
-	      <td>{medium}</td>
-	      <td>
-	      {group.recipients.map(renderPeople)}
-				</td>
-	 	 	</tr>	
+			<GroupItem key={i} group={group} editGroup={this.editGroup} deleteGroup={this.deleteGroup} />
 	 	 	)
 	}
 	
 	render() {
+		return(
+			<div>
+				<Grid className="scrollGrid">
+					<Row className = "tableHeader">
+
+						<Col md={11}>
+							<Col className="column" md={2}>Name</Col>
+							<Col className="column" md={1}></Col>
+							<Col className="column" md={8}>Recipients</Col>
+						</Col>
+
+						<Col md={1}>
+						</Col>
+					</Row>
+					{this.props.userGroups.map(this.renderGroups)}
+				</Grid>
+				<RaisedButton className="footerButton" type="button" label="Create a new group" 
+				backgroundColor="#270943" labelStyle={{ color: 'white' }} onClick={this.openAddGroupModal} />
+				{this.state.showAddGroupModal ?
+				<AddGroupModal close={this.closeAddGroupModal} show={this.state.showAddGroupModal} initialData={this.state.groupToEdit}/> :
+				this.state.showDeleteGroupModal ? 
+				<ConfirmDeleteGroupModal close={this.closeDeleteGroupModal} show={this.state.showDeleteGroupModal} groupToDelete={this.state.groupToDelete} /> :
+				null
+				}
+			</div>
+		)
 		return (
 			<div>
 				<table className="table">
