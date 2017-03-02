@@ -49,9 +49,12 @@ module.exports.createNewAdminQuery = (queryInfo) => {
 
 module.exports.updateAdminQuery = (queryInfo) => {
   return new Promise ((resolve, reject) => {
-    db.query(`update AdminQueries set queryString = ${queryInfo.queryString} where id = ${queryInfo.queryId}`,{
-      type : sequelize.QueryTypes.UPDATE
-    })
+    AdminQueries.update({
+      queryName: queryInfo.name,
+      queryString : queryInfo.queryString,
+      chartOption : queryInfo.chartOption
+    },
+    {where : { id : queryInfo.id}})
     .then(result => {
       resolve({update : true})
     })

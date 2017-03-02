@@ -13,6 +13,7 @@ class EditQueryView extends Component {
     }
     this.handleQuerySelection = this.handleQuerySelection.bind(this);
     this.handleQueryDeletion = this.handleQueryDeletion.bind(this);
+    this.handleQueryUpdate = this.handleQueryUpdate.bind(this);
   }
 
   handleQuerySelection(selectedRows){
@@ -42,9 +43,14 @@ class EditQueryView extends Component {
     })
   }
 
+  handleQueryUpdate(){
+    this.props.updateQuery(this.props.adminQueries[this.state.selectedQueries[0]])
+  }
+
   render(){
     let tableBody = <div></div>;
-    let button = <div></div>;
+    let deleteButton = <div key="deletebtnnull"></div>;
+    let updateButton = <div key="udpatebtnnull"></div>;
 
     if(!!this.props.adminQueries) {
       tableBody = this.props.adminQueries.map( (query, index) => (
@@ -58,7 +64,11 @@ class EditQueryView extends Component {
     }
 
     if (this.state.selectedQueries === 'all' || this.state.selectedQueries.length > 0) {
-      button = <RaisedButton label="Delete Queries" onTouchTap={this.handleQueryDeletion} style={{padding : '2px'}}/>
+      deleteButton = <RaisedButton key="deletebtn" label="Delete Queries" onTouchTap={this.handleQueryDeletion} style={{padding : '2px'}}/>
+    }
+
+    if (this.state.selectedQueries.length === 1 ) {
+      updateButton = <RaisedButton key="updatebtn" label="Update Query" onTouchTap={this.handleQueryUpdate} style={{padding : '2px'}}/>
     }
 
     return (
@@ -91,7 +101,7 @@ class EditQueryView extends Component {
             {tableBody}
           </TableBody>
         </Table><br/>
-         {button}
+         {[deleteButton, updateButton]}
       </div>
     )
   }

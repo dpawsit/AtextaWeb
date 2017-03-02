@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Doughnut, Pie, Line, Bar, HorizontalBar, Radar, Polar} from 'react-chartjs-2';
+import _ from 'underscore';
 
 class ChartView extends Component {
   constructor(props){
@@ -24,19 +25,37 @@ class ChartView extends Component {
   }
 
   render(){
+
     let body = <div></div>;
     let data = {};
+    let labels = [];
+    let charData = [];
+    let charData2 = [];
+
+    let keyVal = {};
+    let count = 0;
+    for(var key in this.props.data[0]){
+      keyVal[key] = count++;
+    }
+
+    this.props.data.forEach(set => {
+      for (var key in set) {
+        if (keyVal[key] === 0){
+          labels.push(set[key]);
+        } else if (keyVal[key] === 1) {
+          charData.push(set[key]);
+        } else if (keyVal[key] === 2 ) {
+          charData2.push(set[key]);
+        }
+      }
+    })
 
     switch (this.props.chartOption) {
       case "Doughnut":
         data = {
-          labels: [
-            'Red',
-            'Green',
-            'Yellow'
-          ],
+          labels: labels,
           datasets: [{
-            data: [300, 50, 100],
+            data: charData,
             backgroundColor: [
             '#FF6384',
             '#36A2EB',
@@ -54,13 +73,9 @@ class ChartView extends Component {
 
       case "Pie": 
         data = {
-          labels: [
-            'Red',
-            'Green',
-            'Yellow'
-          ],
+          labels: labels,
           datasets: [{
-            data: [300, 50, 100],
+            data: charData,
             backgroundColor: [
             '#FF6384',
             '#36A2EB',
@@ -78,7 +93,7 @@ class ChartView extends Component {
 
       case "Line": 
         data = {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: labels,
           datasets: [
             {
               label: 'My First dataset',
@@ -99,7 +114,7 @@ class ChartView extends Component {
               pointHoverBorderWidth: 2,
               pointRadius: 1,
               pointHitRadius: 10,
-              data: [65, 59, 80, 81, 56, 55, 40]
+              data: charData
             }
           ]
         }
@@ -108,7 +123,7 @@ class ChartView extends Component {
 
       case "Bar": 
         data = {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: labels,
           datasets: [
             {
               label: 'My First dataset',
@@ -117,7 +132,7 @@ class ChartView extends Component {
               borderWidth: 1,
               hoverBackgroundColor: 'rgba(255,99,132,0.4)',
               hoverBorderColor: 'rgba(255,99,132,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
+              data: charData
             }
           ]
         }
@@ -126,7 +141,7 @@ class ChartView extends Component {
 
       case "HorizontalBar": 
         data = {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: labels,
           datasets: [
             {
               label: 'My First dataset',
@@ -135,7 +150,7 @@ class ChartView extends Component {
               borderWidth: 1,
               hoverBackgroundColor: 'rgba(255,99,132,0.4)',
               hoverBorderColor: 'rgba(255,99,132,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
+              data: charData
             }
           ]
         }
@@ -144,7 +159,7 @@ class ChartView extends Component {
 
       case "Radar": 
         data = {
-          labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+          labels: labels,
           datasets: [
             {
               label: 'My First dataset',
@@ -154,7 +169,7 @@ class ChartView extends Component {
               pointBorderColor: '#fff',
               pointHoverBackgroundColor: '#fff',
               pointHoverBorderColor: 'rgba(179,181,198,1)',
-              data: [65, 59, 90, 81, 56, 55, 40]
+              data: charData
             },
             {
               label: 'My Second dataset',
@@ -164,7 +179,7 @@ class ChartView extends Component {
               pointBorderColor: '#fff',
               pointHoverBackgroundColor: '#fff',
               pointHoverBorderColor: 'rgba(255,99,132,1)',
-              data: [28, 48, 40, 19, 96, 27, 100]
+              data: charData2
             }
           ]
         }
@@ -174,13 +189,7 @@ class ChartView extends Component {
       case "Polar": 
         data = {
           datasets: [{
-            data: [
-              11,
-              16,
-              7,
-              3,
-              14
-            ],
+            data: charData,
             backgroundColor: [
               '#FF6384',
               '#4BC0C0',
@@ -190,19 +199,13 @@ class ChartView extends Component {
             ],
             label: 'My dataset' // for legend
           }],
-          labels: [
-            'Red',
-            'Green',
-            'Yellow',
-            'Grey',
-            'Blue'
-          ]
+          labels: labels
         }
         body = <Polar data={data} />
         break; 
 
       default: 
-        body = <div>Select a chart type for demo</div>
+        body = <div></div>
     }
 
     return (

@@ -26,7 +26,8 @@ class AdminPanel extends Component {
       open : false,
       queryView : true,
       createView : false,
-      queryEditView : false
+      queryEditView : false,
+      queryUpdateInfo : false
     }
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -37,6 +38,7 @@ class AdminPanel extends Component {
     this.createView = this.createView.bind(this);
     this.queryEditView = this.queryEditView.bind(this);
     this.queryView = this.queryView.bind(this);
+    this.createViewForEdit = this.createViewForEdit.bind(this);
   }
 
   componentWillMount() {
@@ -69,7 +71,8 @@ class AdminPanel extends Component {
     this.setState({
       createView : true,
       queryView : false,
-      queryEditView : false
+      queryEditView : false,
+      queryUpdateInfo : false
     })
   }
 
@@ -89,6 +92,16 @@ class AdminPanel extends Component {
     })
   }
 
+  createViewForEdit(queryInfo){
+    this.setState({
+      createView : true,
+      queryView : false,
+      queryEditView : false,
+      queryUpdateInfo : queryInfo
+    })
+  }
+
+
   render() {
    const sidebar = <SidebarContent createView={this.createView} 
                                    queryView={this.queryView}
@@ -96,9 +109,9 @@ class AdminPanel extends Component {
    
    let adminBody = <div></div>
   
-  if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery/></MuiThemeProvider>}
+  if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery update={this.state.queryUpdateInfo}/></MuiThemeProvider>}
   if (this.state.queryView) {adminBody = <QueryView />}
-  if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView /></MuiThemeProvider>)}
+  if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView updateQuery={this.createViewForEdit}/></MuiThemeProvider>)}
 
    const contentHeader = (
       <span>
