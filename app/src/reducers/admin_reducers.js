@@ -1,11 +1,14 @@
-import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, DELETE_ADMIN_QUERY, CHANGE_VIEW, UPDATE_QUERY} from '../actions/admin_actions';
+import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, 
+  SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, DELETE_ADMIN_QUERY, 
+  CHANGE_VIEW, UPDATE_QUERY, REFRESH_PANEL, AUTHENTICATE_ADMIN, ADMIN_LOGOUT} from '../actions/admin_actions';
 
 const INITIAL_STATE = {
   adminQueries : [],
   queryResults : {},
   singleQuery : [],
   chartOption : null,
-  viewType : 'T'
+  viewType : 'T',
+  adminId : null
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -62,6 +65,15 @@ export default function (state = INITIAL_STATE, action) {
 
       return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : [], chartOption : null}
 
+    case ADMIN_LOGOUT:
+      return INITIAL_STATE;
+    
+    case REFRESH_PANEL:
+      return {...state, adminQueries : [], queryResults : {}, singleQuery : [], chartOption : null, viewType : 'T'}
+
+    case AUTHENTICATE_ADMIN:
+      return {...state, adminId : action.payload.id}
+      
     default : return state;
   }
 }

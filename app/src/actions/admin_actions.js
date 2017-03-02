@@ -6,6 +6,9 @@ export const SAVE_NEW_QUERY = 'SAVE_NEW_QUERY'
 export const DELETE_ADMIN_QUERY = 'DELETE_ADMIN_QUERY'
 export const CHANGE_VIEW = 'CHANGE_VIEW'
 export const UPDATE_QUERY = 'UPDATE_QUERY'
+export const AUTHENTICATE_ADMIN = 'AUTHENTICATE_ADMIN'
+export const ADMIN_LOGOUT = 'ADMIN_LOGOUT'
+export const REFRESH_PANEL = 'REFRESH_PANEL'
 
 
 export function adminLogin (){
@@ -55,5 +58,26 @@ export function updateQuery (updateQuery) {
   return {
     type : UPDATE_QUERY,
     payload :  updateQuery
+  }
+}
+
+export function authenticateAdmin () {
+  return {
+    type : AUTHENTICATE_ADMIN,
+    payload : null
+  }
+}
+
+export function adminLogout (){
+  return {
+    type : ADMIN_LOGOUT,
+    payload : null
+  }
+}
+
+export function refreshPanel (){
+  return {
+    type : REFRESH_PANEL,
+    payload : null
   }
 }

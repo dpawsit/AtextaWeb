@@ -6,6 +6,9 @@ import QueryView from './QueryView';
 import CreateQuery from './CreateQuery';
 import EditQueryView from './EditQueryView';
 import { MuiThemeProvider } from 'material-ui/styles';
+import Loading from 'react-loading';
+import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 const styles = {
   contentHeaderMenuLink: {
@@ -27,7 +30,8 @@ class AdminPanel extends Component {
       queryView : true,
       createView : false,
       queryEditView : false,
-      queryUpdateInfo : false
+      queryUpdateInfo : false,
+      loading : true
     }
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -42,6 +46,7 @@ class AdminPanel extends Component {
   }
 
   componentWillMount() {
+
     const mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.mediaQueryChanged);
     this.setState({mql: mql, docked: mql.matches});
@@ -103,6 +108,17 @@ class AdminPanel extends Component {
 
 
   render() {
+   const loadingCol = {maxWidth: 500, margin: '0 auto 10px'};
+
+   if (this.state.loading) {
+
+     return (
+      <Col style={loadingCol}>
+      <Loading type="cylon" color="#001f3f" width={500} heigth={500} delay={0}/> 
+			</Col>
+     )
+   }
+
    const sidebar = <SidebarContent createView={this.createView} 
                                    queryView={this.queryView}
                                    queryEditView={this.queryEditView}/>;

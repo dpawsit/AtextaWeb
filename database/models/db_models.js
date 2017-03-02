@@ -264,6 +264,24 @@ var AdminQueries = db.define('AdminQueries', {
     type : Sequelize.STRING,
     allowNull : true,
     unique : false
+  },
+  createdBy : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
+  }
+})
+
+var AdminCreds = db.define('AdminCreds', {
+  username : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  },
+  password : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
   }
 })
 
@@ -280,5 +298,6 @@ module.exports = {
   SecretMessage : SecretMessage,
   TriggeredCommands : TriggeredCommands,
   TriggeredSecrets : TriggeredSecrets,
-  AdminQueries : AdminQueries
+  AdminQueries : AdminQueries,
+  AdminCreds : AdminCreds
 }

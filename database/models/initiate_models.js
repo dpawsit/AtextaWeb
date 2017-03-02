@@ -12,3 +12,4 @@ const SecretMessage = require('./db_models').SecretMessage;
 const TriggeredCommands = require('./db_models').TriggeredCommands;
 const TriggeredSecrets = require('./db_models').TriggeredSecrets;
 const AdminQueries = require('./db_models').AdminQueries;
+const AdminCred = require('./db_models/db_models').AdminCred;
