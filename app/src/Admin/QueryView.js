@@ -16,7 +16,7 @@ class QueryView extends Component {
     if(this.props.viewType === 'T'){
       view = (<MuiThemeProvider><QueryTable data={this.props.singleQuery}/></MuiThemeProvider>)
     } else if(this.props.viewType === 'C') {
-      view = <ChartView data={this.props.singleQuery}/>
+      view = <ChartView data={this.props.singleQuery} chartOption={this.props.chartOption}/>
     }
     return (
       <div>{view}</div>
@@ -27,7 +27,8 @@ class QueryView extends Component {
 function MapStateToProps(state){
   return {
     singleQuery : state.admin.singleQuery,
-    viewType : state.admin.viewType
+    viewType : state.admin.viewType,
+    chartOption : state.admin.chartOption
   }
 }
 

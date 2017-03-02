@@ -33,17 +33,25 @@ router.post('/createNewAdminQuery', (req, res) => {
     res.status(200).json(result);
   })
   .catch(error => {
-    res.status(500).send({error: error.errors[0].message});
+    try {
+      res.status(500).send({error: error.errors[0].message});
+    } catch (e) {
+      res.status(500).send({error : error})
+    }
   })
 })
 
 router.put('/updateAdminQuery', (req, res) => {
-  ac.updateAdminQuery()
-  .then(resutl => {
+  ac.updateAdminQuery(req.body)
+  .then(result => {
     res.status(200).json(result);
   })
   .catch(error => {
-    res.status(500).send(error);
+    try {
+      res.status(500).send({error: error.errors[0].message});
+    } catch (e) {
+      res.status(500).send({error : error})
+    }
   })
 })
 

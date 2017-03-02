@@ -1,10 +1,11 @@
-import axios from 'axios';
-export const ADMIN_LOGIN = 'ADMIN_LOGIN';
+import axios from 'axios'
+export const ADMIN_LOGIN = 'ADMIN_LOGIN'
 export const SAVE_QUERY_RESULTS = 'SAVE_QUERY_RESULTS'
 export const SELECT_SINGLE_QUERY = 'SELECT_SINGLE_QUERY'
-export const SAVE_NEW_QUERY = 'SAVE_NEW_QUERY';
-export const DELETE_ADMIN_QUERY = 'DELETE_ADMIN_QUERY';
+export const SAVE_NEW_QUERY = 'SAVE_NEW_QUERY'
+export const DELETE_ADMIN_QUERY = 'DELETE_ADMIN_QUERY'
 export const CHANGE_VIEW = 'CHANGE_VIEW'
+export const UPDATE_QUERY = 'UPDATE_QUERY'
 
 
 export function adminLogin (){
@@ -22,10 +23,10 @@ export function saveQueryResults (queryResults){
   }
 }
 
-export function selectSingleQuery (queryId){
+export function selectSingleQuery (queryId, chartOption){
   return {
     type : SELECT_SINGLE_QUERY,
-    payload : queryId
+    payload : {queryId, chartOption}
   }
 }
 
@@ -47,5 +48,12 @@ export function changeView (view) {
   return {
     type : CHANGE_VIEW,
     payload : view
+  }
+}
+
+export function updateQuery (updateQuery) {
+  return {
+    type : UPDATE_QUERY,
+    payload :  updateQuery
   }
 }

@@ -40,9 +40,9 @@ componentWillMount(){
   this.props.adminLogin();
 }
 
-handleQuerySelection(inputQueryId, inputQueryString){
+handleQuerySelection(inputQueryId, inputQueryString, inputChartOption){
   if (this.props.queryResults.hasOwnProperty(inputQueryId)){
-    this.props.selectSingleQuery(inputQueryId)
+    this.props.selectSingleQuery(inputQueryId, inputChartOption)
     this.props.queryView()
   } else {
     axios.get('/admin/runAdminQuery', {params : {queryString : inputQueryString}})
@@ -50,7 +50,7 @@ handleQuerySelection(inputQueryId, inputQueryString){
       let queryRes = {}
       queryRes[inputQueryId] = res.data
       this.props.saveQueryResults(queryRes)
-      this.props.selectSingleQuery(inputQueryId)
+      this.props.selectSingleQuery(inputQueryId, inputChartOption)
       this.props.queryView()
     })
     .catch(error => {
@@ -78,7 +78,8 @@ render(){
     links.push(
       <a key={this.props.adminQueries[i].id} 
       onClick={()=>{this.handleQuerySelection(this.props.adminQueries[i].id, 
-                                              this.props.adminQueries[i].queryString)}} 
+                                              this.props.adminQueries[i].queryString,
+                                              this.props.adminQueries[i].chartOption)}} 
       style={styles.sidebarLink}>{this.props.adminQueries[i].queryName}</a>);
     }
   } 

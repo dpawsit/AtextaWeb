@@ -6,7 +6,7 @@ import { TextField, Drawer, RaisedButton, List, ListItem, Divider, Subheader , T
 import {Grid, Col, Row} from 'react-bootstrap';
 import tables from './db_tables';
 import QueryTable from './QueryTable';
-import {saveNewQuery} from '../actions/admin_actions'
+import {saveNewQuery, updateQuery} from '../actions/admin_actions'
 import ChartView from './ChartView';
 
 class CreateQuery extends Component {
@@ -21,7 +21,10 @@ class CreateQuery extends Component {
       stringError : '',
       testPassed : false,
       chartTest : false,
-      chartSelection : null
+      chartSelection : null,
+      updateId : null,
+      updateSuccess : false,
+      createSuccess : false
 
     }
     this.handleTableView = this.handleTableView.bind(this);
@@ -32,6 +35,18 @@ class CreateQuery extends Component {
     this.handleQueryError = this.handleQueryError.bind(this);
     this.handleTestToggle = this.handleTestToggle.bind(this);
     this.handleChartSelection = this.handleChartSelection.bind(this);
+    this.handleUpdateQuery = this.handleUpdateQuery.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
+  }
+
+  componentWillMount(){
+    if(this.props.update){
+      this.setState({
+        queryName : this.props.update.queryName,
+        queryString : this.props.update.queryString,
+        queryId : this.props.update.id
+      })
+    }
   }
 
   handleTableView(){
@@ -105,6 +120,9 @@ class CreateQuery extends Component {
       axios.post('/admin/createNewAdminQuery', queryInfo)
       .then(result => {
         this.props.saveNewQuery(result.data)
+        this.setState({
+          createSuccess : true
+        })
       })
       .catch(error => {
         this.handleQueryError(error);
@@ -143,8 +161,47 @@ class CreateQuery extends Component {
     })
   }
 
-  render(){
+  handleUpdateQuery(){
+    if (this.state.queryName === ''){
+      this.setState({
+        nameError : "This field is required"
+      })
+    } else if (this.state.queryString === ''){
+      this.setState({
+        stringError : "This field is required"
+      })
+    } else {
+      let queryInfo = {id : this.props.update.id, name : this.state.queryName, queryString: this.state.queryString, chartOption: this.state.chartSelection}
+      axios.put('/admin/updateAdminQuery', queryInfo)
+      .then(result => {
+        if(result.data.update){
+          this.props.updateQuery(queryInfo)
+          this.setState({
+            updateSuccess : true
+          })
+        }
+      })
+      .catch(error => {
+        this.handleQueryError(error);
+      })
+    }
+  }
 
+  render(){
+    const pageTitle = (this.props.update ? 'Update Query' : 'Create New Query');
+
+    const alertInstanceSuccess = (
+      <Alert bsStyle="success">
+        <strong>Query Updated Successfully!</strong>
+      </Alert>
+      );
+
+    const alertInstanceCreate = (
+      <Alert bsStyle="success">
+        <strong>Query Created Successfully!</strong>
+      </Alert>
+      );
+    
     const alertInstance = (
       <Alert bsStyle="danger">
         <strong>Query Error! </strong>{this.state.queryErrorMessage}
@@ -159,23 +216,25 @@ class CreateQuery extends Component {
 
     return (
       <Grid>
-        <h3>Create New Query</h3><br/>
+        <h3>{pageTitle}</h3><br/>
         <Row>
           <Col xs={6} md={9}>
             <div>
             <TextField hintText="Enter Unique Name" floatingLabelText="Query Name" multiLine={true}
-                      rows={1} onChange={this.handleQueryName} errorText={this.state.nameError}/><br/>
+                      rows={1} onChange={this.handleQueryName} errorText={this.state.nameError} value={this.state.queryName}/><br/>
             <TextField hintText="Enter Unique Query" floatingLabelText="Query String" multiLine={true}
-                      rows={2} fullWidth={true} onChange={this.handleQueryString} errorText={this.state.stringError}/><br/>
+                      rows={2} fullWidth={true} onChange={this.handleQueryString} errorText={this.state.stringError} value={this.state.queryString}/><br/>
             <RaisedButton label="Show Tables" onTouchTap={this.handleTableView} style={{padding : '2px'}}/>
             <RaisedButton label="Test Query" onTouchTap={this.handleQueryTest} style={{padding : '2px'}}/>
             {this.state.testPassed ? (
+              this.props.update ? <RaisedButton label="Update Query" onTouchTap={this.handleUpdateQuery} style={{padding : '2px'}}/> :
               <RaisedButton label="Save Query" onTouchTap={this.handleQuerySave} style={{padding : '2px'}}/> 
               ) : <div></div>}
             </div>
           </Col>
               <Col xs={6} md={3}>
-              <RadioButtonGroup name="chartType" defaultSelected="null" onChange={this.handleChartSelection} >
+              <RadioButtonGroup name="chartType" defaultSelected={this.props.update.chartOption ? this.props.update.chartOption : "null"} 
+                                onChange={this.handleChartSelection}>
                 <RadioButton value="Doughnut" label="Doughnut"/>
                 <RadioButton value="Pie" label="Pie"/>
                 <RadioButton value="Line" label="Line"/>
@@ -214,6 +273,8 @@ class CreateQuery extends Component {
         </Col>
         </Row><br/>
         <div>{this.state.queryError ? alertInstance : <div></div>}</div>
+        <div>{this.state.updateSuccess ? alertInstanceSuccess : <div></div>}</div>
+         <div>{this.state.createSuccess ? alertInstanceCreate : <div></div>}</div>
         <Row>
           <Col xs={12} md={12}>
             <div>
@@ -229,5 +290,6 @@ class CreateQuery extends Component {
   }
 }
 
-export default connect(null, {saveNewQuery})(CreateQuery);
+
+export default connect(null, {saveNewQuery, updateQuery})(CreateQuery);
 
