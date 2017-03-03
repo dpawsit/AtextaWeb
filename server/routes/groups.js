@@ -76,9 +76,11 @@ router.put('/recipientInfo', (req, res) => {
 router.delete('/recipient/:recipientId', (req, res) => {
   gc.DeleteRecipient(req.params.recipientId)
   .then(result => {
+    console.log(result)
     res.status(200).json(result);
   })
   .catch(error => {
+    console.log(error)
     res.status(500).send(error);
   })
 })
@@ -99,6 +101,7 @@ router.delete('/groupRecipients', (req, res) => {
     res.status(200).json(result);
   })
   .catch(error => {
+    console.log('error deleting recipient', error)
     res.status(500).send(error);
   })
 })

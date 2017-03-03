@@ -1,5 +1,5 @@
 import { USER_LOGIN, ADD_COMMAND, ADD_GROUP, USER_LOGOUT, EDIT_COMMAND, 
-  ADD_CONTACT, DELETE_COMMAND, DELETE_GROUP, EDIT_GROUP} from '../actions/atexta_actions';
+  ADD_CONTACT, DELETE_COMMAND, DELETE_GROUP, EDIT_GROUP, EDIT_CONTACT, DELETE_CONTACT} from '../actions/atexta_actions';
 
 const INITIAL_STATE = {
   userId : '',
@@ -39,7 +39,6 @@ export default function (state = INITIAL_STATE, action) {
       return{...state, userCommands: prevCommands}
 
     case DELETE_GROUP:
-      console.log('delete group payload', action.payload, state.userGroups)
       const indexOfGroupToDelete = state.userGroups.findIndex(group=>group.groupId === action.payload.groupId)
       const slicedGroups = state.userGroups.slice(0, indexOfGroupToDelete).concat(state.userGroups.slice(indexOfGroupToDelete+1))
       return{...state, userGroups: slicedGroups}
@@ -49,6 +48,17 @@ export default function (state = INITIAL_STATE, action) {
       const indexOfGroupToEdit = state.userGroups.findIndex(group=>group.groupId === action.payload.groupId)
       groups[indexOfGroupToEdit] = action.payload
       return{...state, userGroups: groups}
+    
+    case EDIT_CONTACT:
+      const contacts = state.userRecipients.slice()
+      const indexOfContactToEdit = contacts.findIndex(contact=>contact.id === action.payload.id)
+      contacts[indexOfContactToEdit] = action.payload
+      return{...state, userRecipients: contacts}
+    
+    case DELETE_CONTACT:
+      const indexOfContactToDelete = state.userRecipients.findIndex(contact=>contact.id === action.payload.id)
+      const slicedContacts = state.userRecipients.slice(0, indexOfContactToDelete).concat(state.userRecipients.slice(indexOfContactToDelete+1))
+      return{...state, userRecipients: slicedContacts}
 
     default: return state;
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { addContact } from '../actions/atexta_actions';
+import { addContact, editContact } from '../actions/atexta_actions';
 import { connect } from 'react-redux';
 import {
 	Modal,
@@ -49,7 +49,24 @@ class AddContactModal extends React.Component {
 		this.renderChannels = this.renderChannels.bind(this)
 		this.renderGroups = this.renderGroups.bind(this);
 		this.renderUsers = this.renderUsers.bind(this);
+		this.componentWillMount=this.componentWillMount.bind(this)
   }
+
+	componentWillMount() {
+		console.log(this.props.initialData)
+		if(this.props.initialData) {
+			let medium = this.props.initialData.mediumType === 'T' ? 'Text' : 
+				this.props.initialData.mediumType === 'S' ? 'Slack' :
+				this.props.initialData.mediumType === 'E' ? 'Email' :
+				'Select a medium'
+			this.setState({
+				newContactName: this.props.initialData.name,
+				newContactMedium: medium,
+				newContactInfo: this.props.initialData.contactInfo,
+				step: 1
+			})
+		}
+	}
 
   handleContactSubmit (event) {
 		event.preventDefault()
@@ -60,23 +77,46 @@ class AddContactModal extends React.Component {
 			contactInfo: this.state.newContactInfo, 
 			mediumType
 		}
-    axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
-		.then(res=>{
-			console.log('recipient', res)
+		if(this.props.initialData) {
+			axios.put('/groups/recipientInfo', {
+				recipientId: this.props.initialData.id,
+				recipientInfo: {
+					name: this.state.newContactName,
+					contactInfo: this.state.newContactInfo
+				}
+			})
+			.then(res=>{
+
+			})
+			.catch(err=>{
+
+			})
 			this.props.close()
-			res.data.forEach(createdRecipient=>{
-				this.props.addContact({
-					id: createdRecipient.id,
-					contactInfo: createdRecipient.contactInfo,
-					mediumType: createdRecipient.mediumType,
-					name: createdRecipient.name
+			this.props.editContact({
+				id: this.props.initialData.id,
+				contactInfo: this.state.newContactInfo,
+				name: this.state.newContactName,
+				mediumType
+			})
+		} else {
+			axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
+			.then(res=>{
+				console.log('recipient', res)
+				this.props.close()
+				res.data.forEach(createdRecipient=>{
+					this.props.addContact({
+						id: createdRecipient.id,
+						contactInfo: createdRecipient.contactInfo,
+						mediumType: createdRecipient.mediumType,
+						name: createdRecipient.name
+					})
 				})
 			})
-		})
-		.catch(err=>{
-			console.log('error is', err)
-			this.props.close()
-		})
+			.catch(err=>{
+				console.log('error is', err)
+				this.props.close()
+			})
+		}
   }
 
 	getSlackChannels () {
@@ -297,5 +337,5 @@ function mapStateToProps({ atexta }) {
 	return ({ userId: atexta.userId, userRecipients: atexta.userRecipients })
 }
 
-export default connect(mapStateToProps, {addContact})(AddContactModal)
+export default connect(mapStateToProps, {addContact, editContact})(AddContactModal)
 

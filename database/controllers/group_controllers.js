@@ -192,7 +192,7 @@ module.exports.GetAvailableRecipients = (userId, groupId, type) => {
 
 module.exports.DeleteRecipient = (recId) => {
   return new Promise((resolve, reject) => {
-    Promise.All([
+    Promise.all([
       Recipient.destroy({
         where: {
           id: recId
