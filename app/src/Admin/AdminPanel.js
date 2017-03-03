@@ -7,8 +7,12 @@ import CreateQuery from './CreateQuery';
 import EditQueryView from './EditQueryView';
 import { MuiThemeProvider } from 'material-ui/styles';
 import Loading from 'react-loading';
-import { Col } from 'react-bootstrap';
+import { Col, Row, Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { refreshPanel, adminLogout } from '../actions/admin_actions';
+import { browserHistory } from 'react-router';
+import axios from 'axios';
+import AdminControls from './AdminControls';
 
 const styles = {
   contentHeaderMenuLink: {
@@ -31,7 +35,8 @@ class AdminPanel extends Component {
       createView : false,
       queryEditView : false,
       queryUpdateInfo : false,
-      loading : true
+      loading : true,
+      adminControlsView : false
     }
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -43,17 +48,28 @@ class AdminPanel extends Component {
     this.queryEditView = this.queryEditView.bind(this);
     this.queryView = this.queryView.bind(this);
     this.createViewForEdit = this.createViewForEdit.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.adminControlView = this.adminControlView.bind(this);
   }
 
   componentWillMount() {
-
-    const mql = window.matchMedia(`(min-width: 800px)`);
-    mql.addListener(this.mediaQueryChanged);
-    this.setState({mql: mql, docked: mql.matches});
+    if (this.props.adminId > 0) {
+      this.setState({
+        loading : false
+      })
+      axios.defaults.headers.common['Authorization'] = this.props.token;
+      const mql = window.matchMedia(`(min-width: 800px)`);
+      mql.addListener(this.mediaQueryChanged);
+      this.setState({mql: mql, docked: mql.matches});
+    } else {
+      browserHistory.replace('/adminLogin');
+    }
   }
 
   componentWillUnmount() {
-    this.state.mql.removeListener(this.mediaQueryChanged);
+    if (this.props.adminId > 0) {
+      this.state.mql.removeListener(this.mediaQueryChanged);
+    }
   }
 
   onSetOpen(open) {
@@ -77,7 +93,8 @@ class AdminPanel extends Component {
       createView : true,
       queryView : false,
       queryEditView : false,
-      queryUpdateInfo : false
+      queryUpdateInfo : false,
+      adminControlsView : false
     })
   }
 
@@ -85,7 +102,8 @@ class AdminPanel extends Component {
     this.setState({
       queryEditView : true,
       createView : false,
-      queryView : false
+      queryView : false,
+      adminControlsView : false
     })
   }
 
@@ -93,7 +111,8 @@ class AdminPanel extends Component {
     this.setState({
       queryView : true,
       createView : false,
-      queryEditView : false
+      queryEditView : false,
+      adminControlsView : false
     })
   }
 
@@ -102,8 +121,24 @@ class AdminPanel extends Component {
       createView : true,
       queryView : false,
       queryEditView : false,
-      queryUpdateInfo : queryInfo
+      queryUpdateInfo : queryInfo,
+      adminControlsView : false
     })
+  }
+
+  adminControlView(){
+    this.setState({
+      createView : false,
+      queryView : false,
+      queryEditView : false,
+      queryUpdateInfo : false,
+      adminControlsView : true
+    })
+  }
+
+  handleLogout(){
+    this.props.adminLogout();
+    browserHistory.replace('/adminLogin');
   }
 
 
@@ -111,30 +146,39 @@ class AdminPanel extends Component {
    const loadingCol = {maxWidth: 500, margin: '0 auto 10px'};
 
    if (this.state.loading) {
-
      return (
       <Col style={loadingCol}>
-      <Loading type="cylon" color="#001f3f" width={500} heigth={500} delay={0}/> 
+        <Loading type="cylon" color="#001f3f" width={500} heigth={500} delay={0}/> 
 			</Col>
      )
    }
 
    const sidebar = <SidebarContent createView={this.createView} 
-                                   queryView={this.queryView}
-                                   queryEditView={this.queryEditView}/>;
+                                   queryView={this.queryView} 
+                                   queryEditView={this.queryEditView} 
+                                   adminControlView={this.adminControlView}/>;
    
    let adminBody = <div></div>
   
   if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery update={this.state.queryUpdateInfo}/></MuiThemeProvider>}
-  if (this.state.queryView) {adminBody = <QueryView />}
-  if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView updateQuery={this.createViewForEdit}/></MuiThemeProvider>)}
-
+  else if (this.state.queryView) {adminBody = <QueryView />}
+  else if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView updateQuery={this.createViewForEdit}/></MuiThemeProvider>)}
+  else if (this.state.adminControlsView) {adminBody = <AdminControls />}
    const contentHeader = (
-      <span>
-        {!this.state.docked &&
-         <a onClick={this.toggleOpen} href="#" style={styles.contentHeaderMenuLink}>=</a>}
-        <span> Atexta Admin Panel</span>
-      </span>);
+        <Grid>
+          <Row>
+            <span>
+              <Col xs={8} md={10}>
+              {!this.state.docked &&
+              <a onClick={this.toggleOpen} href="#" style={styles.contentHeaderMenuLink}>=</a>}
+              <span> Atexta Admin Panel</span>
+              </Col>
+              <Col xs={4} md={2}>
+              <a onClick={this.handleLogout} href="#" style={{color:'white'}}>Logout</a>
+              </Col>
+            </span>
+          </Row>
+        </Grid>);
 
     const sidebarProps = {
       sidebar: sidebar,
@@ -155,4 +199,11 @@ class AdminPanel extends Component {
   }
 };
 
-export default AdminPanel;
+function MapStateToProps(state){
+  return {
+    adminId : state.admin.adminId,
+    token : state.admin.adminToken
+  }
+}
+
+export default connect(MapStateToProps, {adminLogout, refreshPanel})(AdminPanel);

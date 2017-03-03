@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   singleQuery : [],
   chartOption : null,
   viewType : 'T',
-  adminId : null
+  adminId : false
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -72,7 +72,7 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, adminQueries : [], queryResults : {}, singleQuery : [], chartOption : null, viewType : 'T'}
 
     case AUTHENTICATE_ADMIN:
-      return {...state, adminId : action.payload.id}
+      return {...state, adminId : action.payload.adminId, adminToken : action.payload.adminToken}
       
     default : return state;
   }

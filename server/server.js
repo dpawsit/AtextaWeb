@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, '../app/public')));
 
-// app.all('*', util.checkUser);
+app.all('*', util.checkUser);
 const router = require('./router.js')(app);
 
 app.get('*', function (request, response){

@@ -1,4 +1,128 @@
 import React, { Component } from 'react';
+import axios from 'axios'
+
+const styles = {
+    divider: {
+    margin: '8px 0',
+    height: 1,
+    backgroundColor: '#757575',
+  },
+    option: {
+    display: 'block',
+    padding: '16px 0px',
+    color: '#757575',
+    textDecoration: 'none',
+  }
+
+}
+
+class AdminControls extends Component {
+  constructor(props){
+    super(props)
+    this.state ={
+      currentPassword : '',
+      newPassword : '',
+      confirmPassword : '',
+      showAlert : false,
+      alertMessage : '',
+      adminUsername: '',
+      adminPassword: '',
+      adminConfirmPassword: ''
+    }
+    this.handleAdminConfirmPassword = this.handleAdminConfirmPassword.bind(this);
+    this.handleNewPassword = this.handleNewPassword.bind(this);
+    this.handleAdminConfirmPassword = this.handleAdminConfirmPassword.bind(this);
+    this.handleAlert = this.handleAlert.bind(this);
+    this.handleAdminPassword = this.handleAdminPassword.bind(this);
+    this.handleAdminConfirmPassword = this.handleAdminConfirmPassword.bind(this);
+    this.handleAdminUsername = this.handleAdminUsername.bind(this);
+  }
+
+  handleCurrentPassword(e){
+    this.setState({
+      currentPassword : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+  handleNewPassword(e){
+    this.setState({
+      newPassword : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+    handleConfirmPassword(e){
+    this.setState({
+      confirmPassword : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+    handleAlert(message){
+    this.setState({
+      showAlert : true,
+      alertMessage : message
+    })
+  }
+
+    handleAdminPassword(e){
+    this.setState({
+      adminPassword : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+    handleAdminConfirmPassword(e){
+    this.setState({
+      adminConfirmPassword : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+    handleAdminUsername(e){
+    this.setState({
+      adminUsername : e.target.value,
+      showAlert : false,
+      alertMessage : ''
+    })
+  }
+
+
+  render(){
+
+    const changePasswordForm = (
+
+    )
+
+    const newAdminForm = (
+
+    )
+
+    return (
+      <div>
+        <h3>Admin Controls</h3>
+        <span style={styles.option}>Change Password
+
+        </span>
+        <div style={styles.divider}/>
+        <span style={styles.option}>New Admin
+
+        </span>
+      </div>
+    )
+  }
+}
+
+export default AdminControls;
+
+
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { authenticateAdmin } from '../actions/admin_actions';

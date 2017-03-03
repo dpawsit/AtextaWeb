@@ -7,10 +7,13 @@ module.exports.checkUser = (req, res, next) => {
   let token = req.headers.authorization;
 
   if (req.path === '/auth/login' || 
+      req.path === '/favicon.ico' ||
       req.path === '/' || 
       req.path === '/login' ||
       req.path === '/dashboard' ||
-      req.path === '/admin') {
+      req.path === '/admin' ||
+      req.path === '/admin/adminLogin' ||
+      req.path === '/adminLogin') {
     next();
   } else {
     if (token) {

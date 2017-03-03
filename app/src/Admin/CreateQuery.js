@@ -72,7 +72,11 @@ class CreateQuery extends Component {
       this.setState({
         stringError : "Update queries are not allowed"
       })
-    } else {
+    } else if (this.state.queryString.toUpperCase().split(' ').indexOf('DROP') !== -1) {
+      this.setState({
+        stringError : "Drop queries are not allowed"
+      })    
+    }else {
       axios.get('/admin/runAdminQuery', {params : {queryString : this.state.queryString}})
       .then(result => {
         this.setState({

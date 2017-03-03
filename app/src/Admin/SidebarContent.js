@@ -5,6 +5,9 @@ import SidebarTitle from './SidebarTitle';
 import { adminLogin, saveQueryResults, selectSingleQuery, changeView} from '../actions/admin_actions';
 import { Toggle } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
+import EditIcon from 'material-ui/svg-icons/content/create'
+import RefreshIcon from 'material-ui/svg-icons/navigation/refresh'
+import AddIcon from 'material-ui/'
 
 const styles = {
   sidebar: {
@@ -99,14 +102,18 @@ render(){
   return (
     <SidebarTitle title="Analytics" style={style}>
       <div style={styles.content}>
-        <span>{toggle}</span>
+        <span>Queries
+        <MuiThemeProvider><RefreshIcon style={{float:'right'}}onClick={()=>{console.log('test')}}/></MuiThemeProvider>
+        </span>
         <div style={styles.divider} />
+        <div>{toggle}</div>
         {links}
         <br/>
         <span>Settings</span>
         <div style={styles.divider}>
           <a href="#" onClick={this.props.createView} style={styles.sidebarLink}>Create New Query</a>
           <a href="#" onClick={this.props.queryEditView} style={styles.sidebarLink}>View Queries</a>
+          <a href="#" onClick={this.props.adminControlView} style={styles.sidebarLink}>Admin Controls</a>
         </div>
       </div>
     </SidebarTitle>

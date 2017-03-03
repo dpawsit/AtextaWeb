@@ -4,13 +4,13 @@ const router = express.Router();
 const ac = require('../../database/controllers/admin_controllers');
 const util = require('../server_util');
 
-router.get('/adminLogin', (req, res) => {
-  ac.adminLogin(req.query.loginInfo)
+router.post('/adminLogin', (req, res) => {
+  ac.adminLogin(req.body.loginInfo)
   .then(result => {
     if (result.admin) {
       util.signToken(result.id)
       .then(signedToken => {
-        res.status(200).json({admin: result.admin, id: result.id, token : signedToken);
+        res.status(200).json({admin: result.admin, id: result.id, token : signedToken});
       })
       .catch(error => {
         res.status(500).send(error);

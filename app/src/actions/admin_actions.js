@@ -10,7 +10,6 @@ export const AUTHENTICATE_ADMIN = 'AUTHENTICATE_ADMIN'
 export const ADMIN_LOGOUT = 'ADMIN_LOGOUT'
 export const REFRESH_PANEL = 'REFRESH_PANEL'
 
-
 export function adminLogin (){
   let request = axios.get('/admin/getAdminQueries')
   return {
@@ -61,10 +60,10 @@ export function updateQuery (updateQuery) {
   }
 }
 
-export function authenticateAdmin () {
+export function authenticateAdmin (adminId, adminToken) {
   return {
     type : AUTHENTICATE_ADMIN,
-    payload : null
+    payload : {adminId : adminId, adminToken : adminToken}
   }
 }
 
