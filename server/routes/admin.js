@@ -120,4 +120,45 @@ router.post('/createNewAdmin', (req, res) => {
   })
 })
 
+router.get('/getSecretTriggers', (req, res) => {
+  ac.getSecretTriggers()
+  .then(result => {
+    res.status(200).json(result)
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+router.post('/createSecretTrigger', (req, res) => {
+  ac.createSecretTrigger(req.body)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+router.delete('/deActivateSecretTrigger', (req, res) => {
+  ac.deActivateSecretTrigger(req.query.secretId)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+router.post('/reActivateSecretTrigger', (req, res) => {
+  ac.reActivateSecretTrigger(req.body.secretId)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+
 module.exports = router;

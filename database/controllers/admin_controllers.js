@@ -6,6 +6,7 @@ var Models = require('../models/db_models');
 var utils = require('../util/db_utils');
 var AdminQueries = Models.AdminQueries;
 var AdminCreds = Models.AdminCreds;
+var SecretTriggers = Models.SecretTriggers;
 
 module.exports.adminLogin = (adminInfo) => {
   return new Promise ((resolve, reject) => {
@@ -57,9 +58,6 @@ module.exports.runAdminQuery = (queryString) => {
   })
 }
 
-
-
-
 module.exports.createNewAdminQuery = (queryInfo) => {
   return new Promise ((resolve, reject) => {
     AdminQueries.create({
@@ -96,7 +94,7 @@ module.exports.updateAdminQuery = (queryInfo) => {
 
 module.exports.deleteAdminQuery = (queryId) => {
   return new Promise ((resolve, reject) => {
-    let str = `where id in (${queryId.join(',')})`;
+  let str = `where id in (${queryId.join(',')})`;
     db.query('delete from AdminQueries ' + str, {
       type : sequelize.QueryTypes.DELETE
     })
@@ -167,3 +165,69 @@ module.exports.updatePassword = (adminInfo) => {
   })
 }
 
+module.exports.getSecretTriggers = () => {
+  return new Promise ((resolve, reject) => {
+    Promise.all([
+      db.query('select ST.*, AC.username from SecretTriggers ST join AdminCreds AC on AC.id = ST.createdBy where ST.status = 1', {
+        type : sequelize.QueryTypes.SELECT
+      }),
+      db.query('select ST.*, AC.username from SecretTriggers ST join AdminCreds AC on AC.id = ST.createdBy where ST.status = 0', {
+        type : sequelize.QueryTypes.SELECT
+      })
+    ])
+    .then(result => {
+      resolve(result);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+
+module.exports.createSecretTrigger = (secretInfo) => {
+  return new Promise ((resolve, reject) => {
+    SecretTriggers.create({
+      name : secretInfo.name,
+      count : 0,
+      status : 1,
+      createdBy : secretInfo.adminId
+    })
+    .then(result => {
+      resolve({created : true});
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+module.exports.deActivateSecretTrigger = (secretId) => {
+  return new Promise ((resolve, reject) => {
+    let str = `where id in (${secretId.join(',')})`;
+    db.query('update SecretTriggers set status = 0'+str , {
+      type : sequelize.QueryTypes.UPDATE
+    })
+    .then(result => {
+      resolve({deActivated : true})
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+module.exports.reActivateSecretTrigger = (secretId) => {
+  return new Promise ((resolve, reject) => {
+    let str = `where id in (${secretId.join(',')})`;
+    db.query('update SecretTriggers set status = 1' + str, {
+      type : sequelize.QueryTypes.UPDATE
+    })
+    .then(result => {
+      resolve({reActivated : true})
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
