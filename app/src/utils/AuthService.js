@@ -16,7 +16,7 @@ export default class AuthService{
 	_doAuthentication(authResult) {
 		this.setToken(authResult.idToken)
 		this.setAccesstoken(authResult.accessToken)
-		browserHistory.replace('/dashboard');
+		browserHistory.push('/dashboard');
 
 	}
 
@@ -47,7 +47,7 @@ export default class AuthService{
 	logout() {
 		localStorage.removeItem('idToken');
 		localStorage.removeItem('accessToken');
-		browserHistory.replace('/login');
+		browserHistory.push('/login');
 	}
 
 	getProfile(token) {
