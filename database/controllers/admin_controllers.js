@@ -205,7 +205,7 @@ module.exports.createSecretTrigger = (secretInfo) => {
 module.exports.deActivateSecretTrigger = (secretId) => {
   return new Promise ((resolve, reject) => {
     let str = `where id in (${secretId.join(',')})`;
-    db.query('update SecretTriggers set status = 0'+str , {
+    db.query('update SecretTriggers set status = 0 ' + str , {
       type : sequelize.QueryTypes.UPDATE
     })
     .then(result => {
@@ -220,7 +220,7 @@ module.exports.deActivateSecretTrigger = (secretId) => {
 module.exports.reActivateSecretTrigger = (secretId) => {
   return new Promise ((resolve, reject) => {
     let str = `where id in (${secretId.join(',')})`;
-    db.query('update SecretTriggers set status = 1' + str, {
+    db.query('update SecretTriggers set status = 1 ' + str, {
       type : sequelize.QueryTypes.UPDATE
     })
     .then(result => {
