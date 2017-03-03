@@ -1,6 +1,6 @@
 import { ADMIN_LOGIN, SAVE_QUERY_RESULTS, 
   SELECT_SINGLE_QUERY, SAVE_NEW_QUERY, DELETE_ADMIN_QUERY, 
-  CHANGE_VIEW, UPDATE_QUERY, REFRESH_PANEL, AUTHENTICATE_ADMIN, ADMIN_LOGOUT} from '../actions/admin_actions';
+  CHANGE_VIEW, UPDATE_QUERY, REFRESH_PANEL, AUTHENTICATE_ADMIN, ADMIN_LOGOUT, SECRET_TRIGGERS} from '../actions/admin_actions';
 
 const INITIAL_STATE = {
   adminQueries : [],
@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   singleQuery : [],
   chartOption : null,
   viewType : 'T',
-  adminId : false
+  adminId : false,
+  secretTriggers : []
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -73,6 +74,9 @@ export default function (state = INITIAL_STATE, action) {
 
     case AUTHENTICATE_ADMIN:
       return {...state, adminId : action.payload.adminId, adminToken : action.payload.adminToken}
+
+    case SECRET_TRIGGERS:
+      return {...state, secretTriggers : action.payload.data}
       
     default : return state;
   }

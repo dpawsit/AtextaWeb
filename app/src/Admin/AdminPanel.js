@@ -175,7 +175,8 @@ class AdminPanel extends Component {
    const sidebar = <SidebarContent createView={this.createView} 
                                    queryView={this.queryView} 
                                    queryEditView={this.queryEditView} 
-                                   adminControlView={this.adminControlView}/>;
+                                   adminControlView={this.adminControlView}
+                                   secretTriggerView={this.secretTriggerView}/>;
    
    let adminBody = <div></div>
   
@@ -183,7 +184,7 @@ class AdminPanel extends Component {
   else if (this.state.queryView) {adminBody = <QueryView />}
   else if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView updateQuery={this.createViewForEdit}/></MuiThemeProvider>)}
   else if (this.state.adminControlsView) {adminBody = <AdminControls />}
-  else if (this.state.secretTriggersView) {adminBody = <SecretTriggers />}
+  else if (this.state.secretTriggersView) {adminBody = (<MuiThemeProvider><SecretTriggers adminId={this.props.adminId}/></MuiThemeProvider>)}
    const contentHeader = (
         <Grid>
           <Row>

@@ -9,6 +9,7 @@ export const UPDATE_QUERY = 'UPDATE_QUERY'
 export const AUTHENTICATE_ADMIN = 'AUTHENTICATE_ADMIN'
 export const ADMIN_LOGOUT = 'ADMIN_LOGOUT'
 export const REFRESH_PANEL = 'REFRESH_PANEL'
+export const SECRET_TRIGGERS = 'SECRET_TRIGGERS'
 
 export function adminLogin (){
   let request = axios.get('/admin/getAdminQueries')
@@ -67,16 +68,24 @@ export function authenticateAdmin (adminId, adminToken) {
   }
 }
 
-export function adminLogout (){
+export function adminLogout () {
   return {
     type : ADMIN_LOGOUT,
     payload : null
   }
 }
 
-export function refreshPanel (){
+export function refreshPanel () {
   return {
     type : REFRESH_PANEL,
     payload : null
+  }
+}
+
+export function setSecretTriggers () {
+  let request = axios.get('/admin/getSecretTriggers')
+  return {
+    type : SECRET_TRIGGERS,
+    payload : request
   }
 }

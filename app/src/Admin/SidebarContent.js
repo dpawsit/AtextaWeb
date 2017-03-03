@@ -113,8 +113,8 @@ render(){
         <div style={styles.divider}>
           <a href="#" onClick={this.props.createView} style={styles.sidebarLink}>Create New Query</a>
           <a href="#" onClick={this.props.queryEditView} style={styles.sidebarLink}>View Queries</a>
-          <a href="#" onClick={this.props.adminControlView} style={styles.sidebarLink}>Secret Triggers</a>
-          <a href="#" onClick={this.props.secretTriggerView} style={styles.sidebarLink}>Admin Settings</a>
+          <a href="#" onClick={this.props.secretTriggerView} style={styles.sidebarLink}>Secret Triggers</a>
+          <a href="#" onClick={this.props.adminControlView} style={styles.sidebarLink}>Admin Settings</a>
         </div>
       </div>
     </SidebarTitle>

@@ -110,7 +110,6 @@ class EditQueryView extends Component {
               <TableHeaderColumn style={{ width: 100 }}>Created By</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-
           <TableBody
             displayRowCheckbox={true}
             deselectOnClickaway={true}
