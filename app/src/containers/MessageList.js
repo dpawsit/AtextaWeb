@@ -57,17 +57,13 @@ class MessageList extends React.Component {
 		return(
 			<div>
 				<Grid className="scrollGrid">
-					<Row className="tableHeader">
+					<Row className="tableHeader column">
 
-						<Col md={11}>
-							<Col className="column" md={2}>Trigger</Col>
-							<Col className="column" md={6}>Text</Col>
-							<Col className="column" md={2}>Group</Col>
-							<Col className="column" md={1}>Verified</Col>
-						</Col>
+							<Col md={2}>Trigger</Col>
+							<Col md={6}>Text</Col>
+							<Col md={2}>Group</Col>
+							<Col md={1}>Verified</Col>
 
-						<Col md={1}>
-						</Col>
 					</Row>
 					{this.props.userCommands.map(this.renderCommands)}
 				</Grid>

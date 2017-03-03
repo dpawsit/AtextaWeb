@@ -10,42 +10,40 @@ class GroupItem extends React.Component {
   constructor(props) {
     super(props)
     this.state={
-      deletionMode: false
+      editMode: false
     }
-    this.allowDeletion = this.allowDeletion.bind(this)
-    this.preventDeletion = this.preventDeletion.bind(this)
+    this.allowEdits = this.allowEdits.bind(this)
+    this.preventEdits = this.preventEdits.bind(this)
   }
 
-  allowDeletion() {
-    this.setState({deletionMode: true})
+  allowEdits() {
+    this.setState({editMode: true})
   }
 
-  preventDeletion() {
-    this.setState({deletionMode: false})
+  preventEdits() {
+    this.setState({editMode: false})
   }
 
   
 
   render() {
     let renderRecipients = (recipient, i) => (
-      <FlatButton key={i} label={recipient.name} primary={true} style={{size: 5+'%', margin: 5+'px'}}/>
+      <FlatButton key={i} label={recipient.name} primary={true} style={{height: 23.5+'px', margin: 5+'px'}}/>
     )
     let group = this.props.group
     let medium = group.mediumType
     return(
-        <Row onMouseEnter={this.allowDeletion} onMouseLeave={this.preventDeletion}>
-          <Col md={11} className="hoverable">
+        <Row onMouseEnter={this.allowEdits} onMouseLeave={this.preventEdits} className="hoverable column">
 
-            <Col className="column" md={2} onClick={()=>{this.props.editGroup(group)}}>{group.name}</Col>
-            <Col className="column" md={1}>
+            <Col md={2} onClick={()=>{this.props.editGroup(group)}}>{group.name}</Col>
+            <Col md={1}>
               {medium === 'T' ? <TextIcon /> : medium==='E' ? <EmailIcon /> : <em>Slack</em>}
             </Col>
-            <Col className="column sideScroll" md={8}>{group.recipients.map(renderRecipients)}</Col>
+            <Col className="sideScroll" md={8}>{group.recipients.map(renderRecipients)}</Col>
           
-          </Col>
           <Col md={1}>
             
-            {this.state.deletionMode ? <span><EditIcon onClick={()=>{this.props.editGroup(group)}}/> <TrashIcon onClick={()=>{this.props.deleteGroup(group)}}/></span> : null}
+            {this.state.editMode ? <span><EditIcon onClick={()=>{this.props.editGroup(group)}}/> <TrashIcon onClick={()=>{this.props.deleteGroup(group)}}/></span> : null}
           </Col>
 
         </Row>

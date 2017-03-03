@@ -5,7 +5,7 @@
 .column {
 	border-bottom: 1px solid darkgrey;
 	margin-bottom: 4px;
-	height: 40px;
+	height: 30px;
 	margin-left: 15px;
 }
 
@@ -18,8 +18,10 @@
 }
 
 .footerButton {
-	margin-left: 50px;
 	color: white;
+	float: left;
+	position: relative;
+	left: 39%;
 }
 
 .navItems{
@@ -32,23 +34,35 @@
 }
 
 .tableHeader {
-	font: bold 20px arial;
-	color: black;
+	background-color: #270943;
+	color: white;
+	font: 16px calibri, sans-serif;
+	padding-top: 5px;
 }
 
 .scrollGrid {
 	overflow: auto;
-	height: 550px;
-	width: 93%;
-	border: 1px solid darkgrey;
+	height: 500px;
+	width: 98%;
 	padding: 5px;
 	margin: 5px;
+	margin-right: 15px;
 }
 
 .scrollable {
 	overflow: auto;
 	height: 350px;
+	width: 95%;
 	/*background-color:	#270943;*/
+}
+
+#addressBook{
+	overflow: auto;
+	height: 500px;
+	width: 98%;
+	padding: 5px;
+	margin: 5px;
+	margin-right: 15px;
 }
 
 .sideScroll {
@@ -68,27 +82,14 @@ input {
 }
 
 .checkmarks {
-	height: 25px;
-	width: 25px;
+	height: 18px;
+	width: 18px;
 }
 
 ul {
     padding: 0;
     list-style-type: none;
 }
-
-
-/*
-tr:nth-child(even) {
-	background-color: #008080;
-	color: white;
-}
-
-tr:nth-child(odd){
-	background-color: white;
-	color: black;
-}*/
-
 
 .addressBookItems:hover{
 	background-color: #270943;
@@ -145,9 +146,3 @@ tr:nth-child(odd){
    left: 41%; 
    padding: 20px;
 }
-/*
-why doesn't this work?
-.columnLabel {
-	background-color: #270943;
-	color: white;
-}*/

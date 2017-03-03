@@ -1,5 +1,9 @@
 import React from 'react'
 import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import EditIcon from 'material-ui/svg-icons/content/create'
+import TrashIcon from 'material-ui/svg-icons/action/delete'
+import CheckCircle from 'material-ui/svg-icons/action/check-circle'
+import CrossOut from 'material-ui/svg-icons/av/not-interested'
 
 class MessageItem extends React.Component {
   constructor(props) {
@@ -27,29 +31,32 @@ class MessageItem extends React.Component {
     const tooltipForTrigger = (
       <Tooltip id="tooltipForTrigger">To use this command simply turn on Alexa and say "Alexa tell Atexta send quick message {command.commandName}"</Tooltip>
     )
+    const toolTipForSuccessTrigger = (
+      <Tooltip id="toolTipForSuccessTrigger">You have succesfully verified this command, give it a try now!</Tooltip>
+    )
     return(
       <div>
-        <Row onMouseEnter={this.allowDeletion} onMouseLeave={this.preventDeletion}>
-          <Col md={11} className="hoverable" onClick={()=>{this.props.editMessage(command)}}> 
+        <Row className="hoverable column" onMouseEnter={this.allowDeletion} onMouseLeave={this.preventDeletion}>
 
-            <Col className="column" md={2}>
+            <Col md={2}>
               <OverlayTrigger placement="right" overlay={tooltipForTrigger} animation={true}>
                 <div>{command.commandName}</div>
               </OverlayTrigger>
             </Col>
-            <Col className="column" md={6}>{command.text}</Col>
-            <Col className="column" md={2}>{command.groupName}</Col>
-            <Col className="column" md={1}>
+            <Col className="sidescroll" md={6}>{command.text}</Col>
+            <Col md={2}>{command.groupName}</Col>
+            <Col md={1}>
+            {command.verified ? 
+              <OverlayTrigger placement="top" overlay={toolTipForSuccessTrigger}>
+                <CheckCircle /> 
+              </OverlayTrigger> :
               <OverlayTrigger placement="top" overlay={tooltip} animation={true}>
-                <img className="checkmarks" src={command.verified ? 'http://www.clipartbest.com/cliparts/jix/og7/jixog7oAT.png' 
-                : 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/X_mark.svg/896px-X_mark.svg.png'} />
-              </OverlayTrigger>
+                 <CrossOut />
+              </OverlayTrigger>}
             </Col>
-          
-          </Col>
 
           <Col md={1}>
-            {this.state.deletionMode ? <svg onClick={()=>{this.props.deleteMessage(command)}} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> : null}
+            {this.state.deletionMode ? <div><EditIcon onClick={()=>{this.props.editMessage(command)}} /> <TrashIcon onClick={()=>{this.props.deleteMessage(command)}} /> </div>: null}
           </Col>
 
         </Row>
