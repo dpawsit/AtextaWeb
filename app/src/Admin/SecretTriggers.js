@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { setSecretTriggers } from '../actions/admin_actions';
+import { Alert } from 'react-bootstrap';
 import { Table, TableBody, TableFooter, TableHeader, 
   TableHeaderColumn, TableRow, TableRowColumn, RaisedButton, TextField, Toggle} from 'material-ui';
 
@@ -27,6 +28,7 @@ class SecretTriggers extends Component {
       selectedTriggers : [],
       newTriggerString : '',
       inputErrorString : '',
+      successAlert : false
     }
     this.componentWillMount = this.componentWillMount.bind(this);
     this.handleTriggerSelection = this.handleTriggerSelection.bind(this);
@@ -45,7 +47,9 @@ class SecretTriggers extends Component {
 
   handleTriggerSelection(selectedRows){
     this.setState({
-      selectedTriggers : (selectedRows === 'none' ? [] : selectedRows)
+      selectedTriggers : (selectedRows === 'none' ? [] : selectedRows),
+      successAlert : false,
+      inputErrorString : ''
     })
   }
 
@@ -53,7 +57,7 @@ class SecretTriggers extends Component {
     let deleteList = '';
 
     if (this.state.selectedTriggers === 'all') {
-      deleteList = this.props.secretTriggers.map(trigger => {
+      deleteList = this.props.secretTriggers[0].map(trigger => {
         return trigger.id;
       });
     } else {
@@ -73,16 +77,14 @@ class SecretTriggers extends Component {
 
   handleTriggerReactivate(){
   let activateList = '';
-  console.log(this.state.selectedTriggers)
   if (this.state.selectedTriggers === 'all') {
-    activateList = this.props.secretTriggers.map(trigger => {
+    activateList = this.props.secretTriggers[1].map(trigger => {
       return trigger.id;
     });
   } else {
       activateList = [];
     this.state.selectedTriggers.forEach(index => {
       activateList.push(this.props.secretTriggers[1][index].id)
-      console.log('id in looop', this.props.secretTriggers[1][index].id)
     })
   }
   axios.post('/admin/reActivateSecretTrigger', {secretId : activateList})
@@ -103,6 +105,10 @@ class SecretTriggers extends Component {
       axios.post('/admin/createSecretTrigger', {name : this.state.newTriggerString, adminId : this.props.adminId})
       .then(result => {
         this.props.setSecretTriggers();
+        this.setState({
+          successAlert : true,
+          inputErrorString : ''
+        })
       })
       .catch(error => {
         console.log(error);
@@ -113,7 +119,8 @@ class SecretTriggers extends Component {
   handleTriggerInput(e){
     this.setState({
       newTriggerString : e.target.value,
-      inputErrorString : ''
+      inputErrorString : '',
+      successAlert : false
     })
   }
 
@@ -125,8 +132,8 @@ class SecretTriggers extends Component {
 
 
   render(){
-    let activeTableBody = <div></div>;
-    let inactiveTableBody = <div></div>;
+    let activeTableBody = '';
+    let inactiveTableBody = '';
     let deleteButton = <div></div>;
     let activateButton = <div></div>;
     let activeSelectAll = true; 
@@ -167,6 +174,12 @@ class SecretTriggers extends Component {
         activateButton = <RaisedButton label="Reactivate" onTouchTap={this.handleTriggerReactivate} style={{padding : '2px'}}/>
     }
 
+    const alertInstanceSuccess = (
+      <Alert bsStyle="success">
+        <strong>Trigger Successfully Created!</strong>
+      </Alert>
+      );
+
     return (
       <div>
         <h3>Secret Triggers</h3>
@@ -204,8 +217,9 @@ class SecretTriggers extends Component {
         <span style={styles.option}>Create New Trigger
         <br/>
         <TextField floatingLabelText="New Trigger" type="text" 
-            onChange={this.handleTriggerInput} value={this.state.newTriggerString}/>
-        <RaisedButton onTouchTap={this.handleSecretTriggerSave} label="Submit" style={{margin : 12, float:'right'}}/><br/>        
+            onChange={this.handleTriggerInput} errorText={this.state.inputErrorString} value={this.state.newTriggerString}/>
+        <RaisedButton onTouchTap={this.handleSecretTriggerSave} label="Submit" style={{margin : 12, float:'right'}} /><br/>
+        {this.state.successAlert ? alertInstanceSuccess : ''}        
         </span>
       </div>
     )

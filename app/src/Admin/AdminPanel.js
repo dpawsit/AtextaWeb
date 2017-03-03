@@ -7,7 +7,6 @@ import CreateQuery from './CreateQuery';
 import EditQueryView from './EditQueryView';
 import { MuiThemeProvider } from 'material-ui/styles';
 import Loading from 'react-loading';
-import { Col, Row, Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { refreshPanel, adminLogout } from '../actions/admin_actions';
 import { browserHistory } from 'react-router';
@@ -186,20 +185,13 @@ class AdminPanel extends Component {
   else if (this.state.adminControlsView) {adminBody = <AdminControls />}
   else if (this.state.secretTriggersView) {adminBody = (<MuiThemeProvider><SecretTriggers adminId={this.props.adminId}/></MuiThemeProvider>)}
    const contentHeader = (
-        <Grid>
-          <Row>
             <span>
-              <Col xs={8} md={10}>
               {!this.state.docked &&
               <a onClick={this.toggleOpen} href="#" style={styles.contentHeaderMenuLink}>=</a>}
               <span> Atexta Admin Panel</span>
-              </Col>
-              <Col xs={4} md={2}>
-              <a onClick={this.handleLogout} href="#" style={{color:'white'}}>Logout</a>
-              </Col>
+              <a onClick={this.handleLogout} href="#" style={{color:'white', float : 'right'}}>Logout</a>
             </span>
-          </Row>
-        </Grid>);
+            );
 
     const sidebarProps = {
       sidebar: sidebar,
