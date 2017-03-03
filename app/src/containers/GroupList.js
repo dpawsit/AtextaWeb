@@ -54,16 +54,12 @@ class GroupList extends React.Component {
 		return(
 			<div>
 				<Grid className="scrollGrid">
-					<Row className = "tableHeader">
+					<Row className = "tableHeader column">
 
-						<Col md={11}>
-							<Col className="column" md={2}>Name</Col>
-							<Col className="column" md={1}></Col>
-							<Col className="column" md={8}>Recipients</Col>
-						</Col>
-
-						<Col md={1}>
-						</Col>
+							<Col md={2}>Name</Col>
+							<Col md={1}></Col>
+							<Col md={7}>Recipients</Col>
+							<Col md={1}></Col>
 					</Row>
 					{this.props.userGroups.map(this.renderGroups)}
 				</Grid>

@@ -3,6 +3,8 @@ import AddContactModal from './AddContactModal'
 import { FlatButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
+import { Grid, Row, Col } from 'react-bootstrap'
+
 
 class AddressBook extends React.Component {
 	constructor(props) {
@@ -50,13 +52,11 @@ class AddressBook extends React.Component {
 			'none'
 
 		return(
-			<tr key={recipient.id} className="addressBookItems">
-	      <td>{recipient.name}</td>
-	      <td>{medium}</td>
-	      <td>
-	      {recipient.contactInfo}
-				</td>
-	 	 	</tr>	
+			<Row key={recipient.id} className="hoverable column">
+	      <Col md={3}>{recipient.name}</Col>
+	      <Col md={3}>{medium}</Col>
+	      <Col md={4}>{recipient.contactInfo}</Col>
+	 	 	</Row>	
 	 	 	)
 	}
 
@@ -73,19 +73,15 @@ class AddressBook extends React.Component {
 				<FlatButton type="button" label="Emails" onClick={this.showEmailContacts} />
 				<FlatButton type="button" label="Slack" onClick={this.showSlackContacts} />
 
-				<table className="table">
-					<thead>
-						<tr id="columnLabel">
-							<th>Name</th>
-							<th>Medium</th>
-							<th>Contact Info</th>
-						</tr>
-					</thead>
-					<tbody>
-						{recipientsToRender.map(this.renderRecipients)}
-					</tbody>
-				</table>
-				<RaisedButton type="button" label="add a new one" secondary={true} 
+				<Grid className= "scrollGrid">
+					<Row className = "tableHeader column">
+						<Col md={3}>Name</Col>
+						<Col md={3}>Medium</Col>
+						<Col md={4}>Contact Info</Col>
+					</Row>
+					{recipientsToRender.map(this.renderRecipients)}
+				</Grid>
+				<RaisedButton type="button" label="add a new contact" backgroundColor="#270943" labelStyle={{ color: 'white' }} className="footerButton"
 				onClick={this.openAddContactModal}/>
 				{this.state.showAddContactModal ? 
 				<AddContactModal close={this.closeAddContactModal} show={this.state.showAddContactModal}/> : <div></div>}

@@ -27,6 +27,21 @@ class SetSecretModal extends React.Component {
     this.handleResponseChange=this.handleResponseChange.bind(this)
     this.handleTextChange=this.handleTextChange.bind(this)
     this.handleEnterKeyStrokes=this.handleEnterKeyStrokes.bind(this)
+    this.componentWillMount = this.componentWillMount.bind(this)
+  }
+
+  componentWillMount() {
+    console.log(this.props.initialData)
+    if(this.props.initialData) {
+      this.setState({
+        newSecretName: this.props.initialData.name,
+        newSecretId: this.props.initialData.triggerId,
+        newSecretResponse: this.props.initialData.speech,
+        newSecretText: this.props.initialData.text,
+        newSecretGroupName: this.props.initialData.GroupName,
+        newSecretGroupId: this.props.initialData.groupId
+      })
+    }
   }
 
   componentDidMount() {
@@ -62,37 +77,112 @@ class SetSecretModal extends React.Component {
   }
 
   handleSecretSubmit(){
-    console.log('in secret submit handler')
-    axios.post('/secretCommand/newCommand', {
-      newCommand:{
-        text: this.state.newSecretText,
-        additionalContent: null,
-        responseSpeech: this.state.newSecretResponse,
-        triggerId: this.state.newSecretId,
-        groupId: this.state.newSecretGroupId,
-        userId: this.props.userId
+    if(this.props.initialData) {
+      //this is an edit
+      if(this.props.initialData.triggerId !== this.state.newSecretId) {
+        axios.put('/secretCommand/updateTrigger', {
+          commandId: this.props.initialData.id,
+          newTriggerId: this.state.newSecretId
+        })
+        .then(res=>{
+
+        })
+        .catch(err=>{
+
+        })
       }
-    })
-    .then(res=>{
-      console.log('result of secret post', res)
+
+      if(this.props.initialData.groupId !== this.state.newSecretGroupId) {
+        axios.put('/secretCommand/updateGroup', {
+          commandId: this.props.initialData.id,
+          groupId: this.state.newSecretGroupId
+        })
+        .then(res=>{
+
+        })
+        .catch(err=>{
+
+        })
+      }
+
+      if(this.props.initialData.speech !== this.state.newSecretResponse) {
+        axios.put('/secretCommand/secretResponse', {
+          commandId: this.props.initialData.id,
+          newResponse: {speech: this.state.newSecretResponse }
+        })
+        .then(res=>{
+
+        })
+        .catch(err=>{
+
+        })
+      }
+
+      if(this.props.initialData.text !== this.state.newSecretText) {
+        axios.post('/secretCommand/newMessage', {
+          commandId: this.props.initialData.id,
+          newMessage: {
+            additionalContent: null,
+            text: this.state.newSecretText
+          }
+        })
+        .then(res=>{
+
+        })
+        .catch(err=>{
+
+        })
+      }
+
       this.props.close()
-      this.props.addNewSecret({
+      this.props.updateSecret({
         GroupName: this.state.newSecretGroupName,
-        additionalContent: null,
+        additionalContent:null,
         groupId: this.state.newSecretGroupId,
-        id: res.data.id,
+        id: this.props.initialData.id,
+        mediumType: this.props.initialData.mediumType, //TOFIX, this may not be true
         name: this.state.newSecretName,
-        responseId: res.data.responseId,
-        secretMessageId: res.data.secretMessageId,
+        responseId: this.props.initialData.responseId, //TOFIX
+        secretMessageId: this.state.newSecretId,
         speech: this.state.newSecretResponse,
         text: this.state.newSecretText,
-        triggerId: res.data.triggerId,
-        verified: res.data.verified
+        triggerId: this.props.initialData.triggerId, //TOFIX
+        verified: 0
       })
-    })
-    .catch(err=>{
-      console.log('error posting secret', err)
-    })
+    } else {
+      //this is a new post
+      axios.post('/secretCommand/newCommand', {
+        newCommand:{
+          text: this.state.newSecretText,
+          additionalContent: null,
+          responseSpeech: this.state.newSecretResponse,
+          triggerId: this.state.newSecretId,
+          groupId: this.state.newSecretGroupId,
+          userId: this.props.userId
+        }
+      })
+      .then(res=>{
+        console.log('result of secret post', res)
+        this.props.close()
+        this.props.addNewSecret({
+          GroupName: this.state.newSecretGroupName,
+          additionalContent: null,
+          groupId: this.state.newSecretGroupId,
+          id: res.data.id,
+          name: this.state.newSecretName,
+          responseId: res.data.responseId,
+          secretMessageId: res.data.secretMessageId,
+          speech: this.state.newSecretResponse,
+          text: this.state.newSecretText,
+          triggerId: res.data.triggerId,
+          verified: res.data.verified
+        })
+      })
+      .catch(err=>{
+        console.log('error posting secret', err)
+      })
+    }
+
   }
 
   handleResponseChange(event) {
