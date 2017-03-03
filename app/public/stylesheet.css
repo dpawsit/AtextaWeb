@@ -123,6 +123,10 @@ tr:nth-child(odd){
   left: 25%;
 }
 
+#landingLogo img {
+	cursor: pointer
+}
+
 /*
 why doesn't this work?
 .columnLabel {
