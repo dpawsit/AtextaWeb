@@ -1,36 +1,27 @@
 import Auth0Lock from 'auth0-lock';
 import cred from '../../../keys';
-let lock = new Auth0Lock(cred.slackAuthClient, cred.domain, {
-	auth: {
-		redirect: false
-	}
+let slackLock = new Auth0Lock(cred.slackAuthClient, cred.domain)
+
+slackLock.on("authenticated", function(authResult) {
+	_doAuthentication(authResult);
 });
 
-lock.on("authenticated", function(authResult) {
-	doAuthentication(authResult);
-});
-
-let doAuthentication = function(authResult) {
-  // lock.getUserInfo(authResult.accessToken, function(error, profile) {
-  //   if (error) {
-  //     console.log('error in getting slack user info :', error);
-  //     return;
-  //   }
-	setToken(authResult.accessToken);
-	getChannels(authResult.accessToken);
-  // });
+let _doAuthentication = function(authResult) {
+  slackLock.getUserInfo(authResult.accessToken, function(error, profile) {
+    if (error) {
+      console.log('error in getting slack user info :', error);
+      return;
+    }
+		setToken(JSON.stringify(profile.accessToken));
+  });
 };
 
-lock.checkToken = function() {
-	return 
+slackLock.getToken = function() {
+	return JSON.parse(localStorage.getItem("slackToken"));
 }
 
 let setToken = (slackToken) => {
 	localStorage.setItem("slackToken", slackToken);
 };
 
-let getChannels = (token) => {
-	localStorage.setItem("slackProfile", JSON.stringify(profile));
-}
-
-export default lock;
+export default slackLock;

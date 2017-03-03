@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "webpack": "./node_modules/.bin/webpack -d --watch",
-    "start": "node ./server/server.js",
+    "start": "nodemon ./server/server.js",
     "dev": "webpack-dev-server --progress --colors",
     "devDash": "webpack-dashboard webpack-dev-server --progress --colors",
     "test": "mocha specs/index.js"
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/rnesh90/AtextaWeb#readme",
   "dependencies": {
+    "@slack/client": "^3.8.1",
     "auth0": "^2.6.0",
     "auth0-lock": "^10.11.0",
     "axios": "^0.15.3",

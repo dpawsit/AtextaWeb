@@ -4,7 +4,7 @@ import { addContact } from '../actions/atexta_actions';
 import { connect } from 'react-redux';
 import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col } from 'react-bootstrap';
 import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui';
-import lock from '../utils/SlackAuthService';
+import slackLock from '../utils/SlackAuthService';
 
 class AddContactModal extends React.Component {
   constructor(props) {
@@ -13,7 +13,8 @@ class AddContactModal extends React.Component {
       step: 0,
       newContactName: '',
       newContactMedium: 'Select a medium',
-      newContactInfo: ''
+      newContactInfo: '',
+			slackChannels: null
     }
     this.incrementStep = this.incrementStep.bind(this)
     this.decrementStep = this.decrementStep.bind(this)
@@ -24,6 +25,7 @@ class AddContactModal extends React.Component {
     this.handleNameSubmit = this.handleNameSubmit.bind(this)
     this.handleInfoSubmit = this.handleInfoSubmit.bind(this)
     this.handleContactSubmit = this.handleContactSubmit.bind(this)
+		this.getSlackChannels = this.getSlackChannels.bind(this)
   }
 
   handleContactSubmit (event) {
@@ -54,6 +56,21 @@ class AddContactModal extends React.Component {
 		})
   }
 
+	getSlackChannels () {
+		let token = slackLock.getToken();
+		console.log('token in get channels: ', token);
+		axios.get('/slack/getChannels', {params: {token: token}})
+		.then(results => {
+			console.log('result from getting channels: ', results.data);
+			this.setState({
+				slackChannels: results.data
+			})
+		})
+		.catch(error => {
+			console.log('error from getting channels: ', error);
+		})
+}
+
   selectMediumType(medium) {
 		//add a check
 		this.setState({newContactMedium: medium})
@@ -79,13 +96,12 @@ class AddContactModal extends React.Component {
   }
 
 	incrementStep() {
-		this.setState({step: this.state.step+1})
+		this.setState({step: this.state.step + 1})
 	}
 
 	decrementStep() {
-		const { step } = this.state
-		if(step > 0) {
-			this.setState({step: step-1})
+		if(this.state.step > 0) {
+			this.setState({step: this.state.step - 1})
 		}
 	}
 
@@ -104,39 +120,63 @@ class AddContactModal extends React.Component {
 				    </ButtonToolbar>
 				    <br/>
 						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
 					</div>
 				)
       case 1:
-				if (this.state.newContactMedium === 'Slack') {
-					lock.show();
-					lock.on("hide", function() {
-						lock.checkToken();
-					})
+				if (this.state.newContactMedium === 'Slack' && !localStorage.getItem("slackToken")) {
+					slackLock.show();
+				}	else if (this.state.newContactMedium === 'Slack' && !this.state.slackChannels) {
+					this.getSlackChannels();
 				}
         return (
           <div>
             <form onSubmit={this.handleNameSubmit}>
 							<label>
 								Name this new contact:
-								<input value={this.state.newContactName}
-                onChange={this.handleNameChange} type='text'/>
+								<input 
+									type='text' 
+									value={this.state.newContactName}
+                	onChange={this.handleNameChange} 
+									required
+									/>
             	</label>
             </form>
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
           </div>
         )
-      case 2: 
+      case 2:
+				if (this.state.newContactMedium === 'Slack') {
+					return (
+						<div>
+							<form onSubmit={this.handleContactSubmit}>
+								<label>
+									Input the contact info
+									<input 
+										required
+										value={this.state.newContactInfo}
+										onChange={this.handleInfoChange} 
+										type='text'
+										/>
+								</label>
+							</form>
+							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
+							<RaisedButton type="button" label="Submit" primary={true}
+							onClick = {this.handleContactSubmit}/>
+						</div>
+					)
         return (
           <div>
             <form onSubmit={this.handleContactSubmit}>
 							<label>
 								Input the contact info
-								<input value={this.state.newContactInfo}
-                onChange={this.handleInfoChange} type='text'/>
+								<input 
+									required
+									value={this.state.newContactInfo}
+                	onChange={this.handleInfoChange} 
+									type='text'
+									/>
             	</label>
             </form>
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
@@ -152,6 +192,7 @@ class AddContactModal extends React.Component {
   }
 
 	render() {
+		console.log('slack channels before rendering: ', this.state.slackChannels)
 		return(
 	    <Modal show={this.props.show} bsSize="large">
 	    	<Modal.Header closeButton onHide={this.props.close}>
