@@ -17,7 +17,6 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
    })
    .then(createdGroup => {
      var newRecipients = []
-     console.log('about to map with', inputRecipients)
      Promise.map(inputRecipients, (recipient) => {
       console.log('about to create new recipient with', recipient.name, recipient.contactInfo)
       return Recipient.create({
@@ -36,20 +35,17 @@ module.exports.CreateNewGroup = (inputGroupInfo, inputRecipients, savedRecipient
     })
     .then(createdRecipients => {
       Promise.map(savedRecipients, recipient => {
-        console.log('about to create second wave of group recipients with', createdGroup.dataValues.id, recipient)
         return GroupRecipients.create({
           groupId: createdGroup.dataValues.id,
           recipientId: recipient.id
         })
       })
       .then(joinedRecipients => {
-        console.log('successfully created group', joinedRecipients.dataValues, newRecipients)
         resolve({group: createdGroup, recipients: newRecipients})
       })
     })
    })
    .catch(error => {
-     console.log('error adding group tp db', error)
      reject(error)
    })
  })
@@ -107,7 +103,6 @@ module.exports.GetUserGroups = (inputUserId) => {
               'groupId': group.id,
               'recipients': groupRecipients
             }
-
             groups.push(thisGroup)
           })
       })
@@ -181,14 +176,12 @@ module.exports.RemoveRecipient = (inputGroupId, recipientIds) => {
 }
 
 module.exports.GetAvailableRecipients = (userId, groupId, type) => {
-  console.log(userId, groupId, type)
   return new Promise((resolve, reject) => {
     let queryString = (groupId === 0 ? '' : 'and mediumType = ? and id not in (select recipientId from GroupRecipients where groupId = ?)')
     let rep = (groupId === 0 ? [userId] : [userId, type, groupId])
     db.query(`select name, contactInfo, id, mediumType from Recipients where userId = ? ${queryString}`,
     {replacements: rep, type: sequelize.QueryTypes.SELECT})
     .then(availableUsers => {
-      console.log(availableUsers)
       resolve(availableUsers)
     })
     .catch(error => {
@@ -231,7 +224,6 @@ module.exports.DeleteGroup = (inputGroupId) => {
       resolve(result)
     })
     .catch(error => {
-      console.log('errro deleting group', error)
       reject(error)
     })
   })

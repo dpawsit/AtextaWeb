@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { AppBar } from 'material-ui';
 
-// const MyNavbar = () => (
-//   <AppBar
-//     title="Title"
-//     iconClassNameRight="muidocs-icon-navigation-expand-more"
-//   />
-// );
-
 class MyNavbar extends Component {
   constructor(props){
     super(props)
@@ -40,7 +33,6 @@ class MyNavbar extends Component {
             <NavItem className="navHeaders" eventKey={4} onClick={this.props.renderAddressBook} href="#"><span className="navItems">Address Book</span></NavItem>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={5} href="#"><span className="navItems">My profile</span></NavItem>
             <NavItem eventKey={6} onClick={this.props.logout} href="#"><span className="navItems">Log out</span></NavItem>
           </Nav>
       </Navbar>

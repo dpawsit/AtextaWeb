@@ -1,7 +1,6 @@
 import React from 'react'
 import axios from 'axios'
 import { RaisedButton } from 'material-ui'
-// import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui'
 import { connect } from 'react-redux'
 import AddMessageModal from './AddMessageModal'
 import MessageItem from './MessageItem'

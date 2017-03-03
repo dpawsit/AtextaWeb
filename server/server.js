@@ -1,13 +1,11 @@
 "use strict"
 const express = require('express')
 const path = require('path')
-const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const database = require('../database/config.js')
 const helmet = require('helmet');
 const util = require('./server_util');
-const port = process.env.PORT || 3000;
-const jwt = require('jsonwebtoken');
+const port = process.env.PORT || 80;
 
 const app = express()
 
@@ -27,7 +25,6 @@ database.sync()
   .then(res => {
     app.listen(port, function(){
       console.log('Listening on localhost:', port);
-
     })
   })
   .catch(error => {

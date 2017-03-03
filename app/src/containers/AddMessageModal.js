@@ -223,7 +223,6 @@ class AddMessageModal extends React.Component {
 	}
 
 	render() {
-		console.log('this is the inital command', this.props.initialData)
 		return this.state.addingNewGroup ? 
 		(
 			<AddGroupModal show={this.state.addingNewGroup} close={this.handleNewGroupClose}

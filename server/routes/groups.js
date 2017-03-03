@@ -4,7 +4,6 @@ const router = express.Router();
 const gc = require('../../database/controllers/group_controllers');
 
 router.post('/addGroup', (req, res) => {
-  console.log('inside create group with', req.body.groupInfo, req.body.newRecipients, req.body.savedRecipients)
   gc.CreateNewGroup(req.body.groupInfo, req.body.newRecipients, req.body.savedRecipients)
   .then(result => {
     res.status(200).json(result);
@@ -107,11 +106,9 @@ router.delete('/groupRecipients', (req, res) => {
 router.delete('/deleteGroup/:groupId', (req, res) => {
   gc.DeleteGroup(req.params.groupId)
   .then(result => {
-    console.log('res', result)
     res.status(200).json(result);
   })
   .catch(error => {
-    console.log('err', error)
     res.status(500).send(error);
   })
 })

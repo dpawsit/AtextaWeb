@@ -5,7 +5,7 @@ import { authenticateAdmin } from '../actions/admin_actions';
 import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
-import { Alert, Well } from 'react-bootstrap';
+import { Alert, Well, Col } from 'react-bootstrap';
 
 
 const wellStyle = {maxWidth: '800px', margin: '0 auto 10px'};
