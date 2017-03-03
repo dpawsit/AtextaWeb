@@ -8,6 +8,8 @@ export const EDIT_GROUP = 'EDIT_GROUP'
 export const ADD_CONTACT = 'ADD_CONTACT'
 export const DELETE_COMMAND = 'DELETE_COMMAND'
 export const DELETE_GROUP = 'DELETE_GROUP'
+export const EDIT_CONTACT = 'EDIT_CONTACT'
+export const DELETE_CONTACT = 'DELETE_CONTACT'
 
 export function getUserInfo (userId, userCommands, userGroups, userRecipients) {
   return {
@@ -69,5 +71,19 @@ export function editGroup(editedGroup) {
   return{
     type: EDIT_GROUP,
     payload: editedGroup
+  }
+}
+
+export function editContact(editedContact) {
+  return{
+    type: EDIT_CONTACT,
+    payload: editedContact
+  }
+}
+
+export function deleteContact(deletedContact) {
+  return {
+    type: DELETE_CONTACT,
+    payload: deletedContact
   }
 }

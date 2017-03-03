@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { addContact } from '../actions/atexta_actions';
+import { addContact, editContact } from '../actions/atexta_actions';
 import { connect } from 'react-redux';
 import {
 	Modal,
@@ -49,7 +49,24 @@ class AddContactModal extends React.Component {
 		this.renderChannels = this.renderChannels.bind(this)
 		this.renderGroups = this.renderGroups.bind(this);
 		this.renderUsers = this.renderUsers.bind(this);
+		this.componentWillMount=this.componentWillMount.bind(this)
   }
+
+	componentWillMount() {
+		console.log(this.props.initialData)
+		if(this.props.initialData) {
+			let medium = this.props.initialData.mediumType === 'T' ? 'Text' : 
+				this.props.initialData.mediumType === 'S' ? 'Slack' :
+				this.props.initialData.mediumType === 'E' ? 'Email' :
+				'Select a medium'
+			this.setState({
+				newContactName: this.props.initialData.name,
+				newContactMedium: medium,
+				newContactInfo: this.props.initialData.contactInfo,
+				step: 1
+			})
+		}
+	}
 
   handleContactSubmit (event) {
 		event.preventDefault()
@@ -60,23 +77,46 @@ class AddContactModal extends React.Component {
 			contactInfo: this.state.newContactInfo, 
 			mediumType
 		}
-    axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
-		.then(res=>{
-			console.log('recipient', res)
+		if(this.props.initialData) {
+			axios.put('/groups/recipientInfo', {
+				recipientId: this.props.initialData.id,
+				recipientInfo: {
+					name: this.state.newContactName,
+					contactInfo: this.state.newContactInfo
+				}
+			})
+			.then(res=>{
+
+			})
+			.catch(err=>{
+
+			})
 			this.props.close()
-			res.data.forEach(createdRecipient=>{
-				this.props.addContact({
-					id: createdRecipient.id,
-					contactInfo: createdRecipient.contactInfo,
-					mediumType: createdRecipient.mediumType,
-					name: createdRecipient.name
+			this.props.editContact({
+				id: this.props.initialData.id,
+				contactInfo: this.state.newContactInfo,
+				name: this.state.newContactName,
+				mediumType
+			})
+		} else {
+			axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
+			.then(res=>{
+				console.log('recipient', res)
+				this.props.close()
+				res.data.forEach(createdRecipient=>{
+					this.props.addContact({
+						id: createdRecipient.id,
+						contactInfo: createdRecipient.contactInfo,
+						mediumType: createdRecipient.mediumType,
+						name: createdRecipient.name
+					})
 				})
 			})
-		})
-		.catch(err=>{
-			console.log('error is', err)
-			this.props.close()
-		})
+			.catch(err=>{
+				console.log('error is', err)
+				this.props.close()
+			})
+		}
   }
 
 	getSlackChannels () {
@@ -184,7 +224,7 @@ class AddContactModal extends React.Component {
 				    </ButtonToolbar>
 						<br/>
 						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" backgroundColor="#270943" labelStyle={{ color: 'white' }} onClick = {this.incrementStep}/>
 					</div>
 				)
       case 1:
@@ -198,17 +238,17 @@ class AddContactModal extends React.Component {
             <form onSubmit={this.handleNameSubmit}>
 							<label>
 								Name this new contact:
-								<br/>
 								<input 
 									type='text' 
 									value={this.state.newContactName}
                 	onChange={this.handleNameChange} 
 									required
+									id="groupName"
 									/>
             	</label>
             </form>
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" backgroundColor="#270943" labelStyle={{ color: 'white' }} onClick = {this.incrementStep}/>
           </div>
         )
       case 2:
@@ -228,7 +268,7 @@ class AddContactModal extends React.Component {
 							</ButtonToolbar>
 							<br/>
 							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-							<RaisedButton type="button" label="Submit" primary={true}
+							<RaisedButton type="button" label="Submit" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 							onClick = {this.handleContactSubmit}/>
 						</div>
 					)
@@ -248,7 +288,7 @@ class AddContactModal extends React.Component {
 							</form>
 							<br/>
 							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-							<RaisedButton type="button" label="Submit" primary={true}
+							<RaisedButton type="button" label="Submit" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 							onClick = {this.handleContactSubmit}/>
 						</div>
 					)
@@ -269,7 +309,6 @@ class AddContactModal extends React.Component {
 	    		<Modal.Title>Create a new contact</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
-	    		{this.stepDecider()}
 					<Stepper activeStep={this.state.step}>
 						<Step>
 							<StepLabel>
@@ -287,6 +326,7 @@ class AddContactModal extends React.Component {
 							</StepLabel>
 						</Step>
 					</Stepper>
+	    		{this.stepDecider()}
 	   		</Modal.Body>
 	    </Modal>
 		)
@@ -297,5 +337,5 @@ function mapStateToProps({ atexta }) {
 	return ({ userId: atexta.userId, userRecipients: atexta.userRecipients })
 }
 
-export default connect(mapStateToProps, {addContact})(AddContactModal)
+export default connect(mapStateToProps, {addContact, editContact})(AddContactModal)
 

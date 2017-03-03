@@ -1,5 +1,7 @@
 import React from 'react'
 import AddContactModal from './AddContactModal'
+import DeleteContactModal from './DeleteContactModal'
+import AddressBookItem from './AddressBookItem'
 import { FlatButton, RaisedButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
@@ -11,7 +13,10 @@ class AddressBook extends React.Component {
 		super(props)
 		this.state={
 			showAddContactModal: false,
-			showType: "all"
+			showType: "all",
+			contactToEdit: null,
+			contactToDelete: null,
+			showDeleteContactModal: false
 		}
 		this.closeAddContactModal = this.closeAddContactModal.bind(this)
 		this.openAddContactModal = this.openAddContactModal.bind(this)
@@ -20,13 +25,28 @@ class AddressBook extends React.Component {
 		this.showEmailContacts = this.showEmailContacts.bind(this)
 		this.showSlackContacts = this.showSlackContacts.bind(this)
 		this.renderRecipients = this.renderRecipients.bind(this)
+		this.editContact = this.editContact.bind(this)
+		this.deleteContact = this.deleteContact.bind(this)
+		this.closeDeleteContactModal=this.closeDeleteContactModal.bind(this)
 	}
 
 	closeAddContactModal () {
-		this.setState({showAddContactModal: false})
+		this.setState({showAddContactModal: false, contactToEdit: null})
 	}
 	openAddContactModal() {
-		this.setState({showAddContactModal: true})
+		this.setState({showAddContactModal: true, contactToEdit: null})
+	}
+
+	editContact(contact) {
+		this.setState({showAddContactModal: true, contactToEdit: contact})
+	}
+
+	deleteContact(contact) {
+		this.setState({showDeleteContactModal: true, contactToDelete: contact})
+	}
+
+	closeDeleteContactModal() {
+		this.setState({showDeleteContactModal: false, contactToDelete: null})
 	}
 
 	showAllContacts() {
@@ -46,17 +66,8 @@ class AddressBook extends React.Component {
 	}
 
 	renderRecipients(recipient) {
-		let medium = recipient.mediumType === 'T' ? 'Text' : 
-			recipient.mediumType === 'S' ? 'Slack' :
-			recipient.mediumType === 'E' ? 'Email' :
-			'none'
-
 		return(
-			<Row key={recipient.id} className="hoverable column">
-	      <Col md={3}>{recipient.name}</Col>
-	      <Col md={3}>{medium}</Col>
-	      <Col md={4}>{recipient.contactInfo}</Col>
-	 	 	</Row>	
+				<AddressBookItem key={recipient.id} contact = {recipient} editContact={this.editContact} deleteContact={this.deleteContact} />
 	 	 	)
 	}
 
@@ -68,14 +79,14 @@ class AddressBook extends React.Component {
 		this.props.userRecipients
 		return (
 			<div>
-				<FlatButton type="button" label="All" onClick={this.showAllContacts} />
-				<FlatButton type="button" label="Texts" onClick={this.showTextContacts} />
-				<FlatButton type="button" label="Emails" onClick={this.showEmailContacts} />
-				<FlatButton type="button" label="Slack" onClick={this.showSlackContacts} />
+				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white', marginLeft: 20+'px'}} label="All" onClick={this.showAllContacts} />
+				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Texts" onClick={this.showTextContacts} />
+				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Emails" onClick={this.showEmailContacts} />
+				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Slack" onClick={this.showSlackContacts} />
 
 				<Grid className= "scrollGrid">
 					<Row className = "tableHeader column">
-						<Col md={3}>Name</Col>
+						<Col md={4}>Name</Col>
 						<Col md={3}>Medium</Col>
 						<Col md={4}>Contact Info</Col>
 					</Row>
@@ -84,7 +95,10 @@ class AddressBook extends React.Component {
 				<RaisedButton type="button" label="add a new contact" backgroundColor="#270943" labelStyle={{ color: 'white' }} className="footerButton"
 				onClick={this.openAddContactModal}/>
 				{this.state.showAddContactModal ? 
-				<AddContactModal close={this.closeAddContactModal} show={this.state.showAddContactModal}/> : <div></div>}
+				<AddContactModal close={this.closeAddContactModal} show={this.state.showAddContactModal} initialData={this.state.contactToEdit}/> 
+				: this.state.showDeleteContactModal ?
+				<DeleteContactModal show={this.state.showDeleteContactModal} close={this.closeDeleteContactModal} contactToDelete={this.state.contactToDelete}/>
+				:<div></div>}
 			</div>
 		)
 	}
