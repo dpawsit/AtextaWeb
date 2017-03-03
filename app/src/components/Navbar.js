@@ -34,9 +34,9 @@ class MyNavbar extends Component {
           <Navbar.Toggle />
         </Navbar.Header>
           <Nav>
-            <NavItem className="navHeaders" eventKey={1} href="#"><span className="navItems">My Secrets</span></NavItem>
+            <NavItem className="navHeaders" eventKey={1} onClick={this.props.renderSecretList} href="#"><span className="navItems">My Secrets</span></NavItem>
             <NavItem className="navHeaders" eventKey={2} onClick={this.props.renderMessageList}><span className="navItems">My Messages</span></NavItem>
-            <NavItem className="navHeaders" onClick={this.props.renderGroupList}><span className="navItems">My Groups</span></NavItem>
+            <NavItem className="navHeaders" eventKey={3} onClick={this.props.renderGroupList}><span className="navItems">My Groups</span></NavItem>
             <NavItem className="navHeaders" eventKey={4} onClick={this.props.renderAddressBook} href="#"><span className="navItems">Address Book</span></NavItem>
           </Nav>
           <Nav pullRight>

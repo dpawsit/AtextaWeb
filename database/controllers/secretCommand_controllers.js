@@ -7,16 +7,15 @@ var SecretCommand = Models.SecretCommand;
 var SecretMessage = Models.SecretMessage;
 var SecretResponse = Models.SecretResponse;
 
-
 module.exports.GetUserSecretCommands = (inputUserId) => {
-  return new Promise ((resolve, reject) => {
-    db.query('select S.triggerId, S.groupId, S.secretMessageId, S.responseId, S.verified, ST.name, SR.speech, SM.text, SM.additionalContent, G.mediumType, G.name as GroupName from SecretCommands S join SecretResponses SR on S.responseId = SR.id join SecretTriggers ST on S.triggerId = ST.id join SecretMessages SM on S.secretMessageId = SM.id left outer join Groups G on G.id = S.groupId where S.userId = ? and S.status = 1', 
-    {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
+  return new Promise((resolve, reject) => {
+    db.query('select S.id, S.triggerId, S.groupId, S.secretMessageId, S.responseId, S.verified, ST.name, SR.speech, SM.text, SM.additionalContent, G.mediumType, G.name as GroupName from SecretCommands S join SecretResponses SR on S.responseId = SR.id join SecretTriggers ST on S.triggerId = ST.id join SecretMessages SM on S.secretMessageId = SM.id left outer join Groups G on G.id = S.groupId where S.userId = ? and S.status = 1',
+    {replacements: [inputUserId], type: sequelize.QueryTypes.SELECT})
     .then(SecretCommands => {
       resolve(SecretCommands)
     })
     .catch(error => {
-      reject(error);
+      reject(error)
     })
   })
 }
@@ -35,6 +34,7 @@ module.exports.GetAvailableSecretTriggers = (inputUserId) => {
 }
 
 module.exports.CreateNewSecretCommand = (inputInfo) => {
+  console.log('got this info to create with', inputInfo)
   return new Promise ((resolve, reject) => {
     SecretMessage.create({
       text : inputInfo.text,
@@ -76,21 +76,21 @@ module.exports.CreateNewSecretCommand = (inputInfo) => {
 }
 
 module.exports.UpdateSecretResponse = (inputCommandId, newResponse) => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     SecretResponse.create({
-      speech : newResposne.speech,
-      secretCommandId : inputCommandId,
-      count : 0
+      speech: newResponse.speech,
+      secretCommandId: inputCommandId,
+      count: 0
     })
     .then(createdResponse => {
-      db.query('update SecretCommands set responseId = ? , verified = false where id = ?', 
-      {replacements : [createdResponse.dataValues.id, inputCommandId], type : sequelize.QueryTypes.UPDATE})
+      db.query('update SecretCommands set responseId = ? , verified = false where id = ?',
+      {replacements: [createdResponse.dataValues.id, inputCommandId], type: sequelize.QueryTypes.UPDATE})
       .then(updatedSecretCommand => {
-        resolve(updatedSecretCommand);
+        resolve(updatedSecretCommand)
       })
     })
     .catch(error => {
-      reject(error);
+      reject(error)
     })
   })
 }
