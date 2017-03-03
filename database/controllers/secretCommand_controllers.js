@@ -23,7 +23,7 @@ module.exports.GetUserSecretCommands = (inputUserId) => {
 
 module.exports.GetAvailableSecretTriggers = (inputUserId) => {
   return new Promise ((resolve, reject) => {
-    db.query('select * from SecretTriggers ST where ST.id not in (select SC.triggerId from SecretCommands SC where SC.userId = ? and SC.status = 1)',
+    db.query('select * from SecretTriggers ST where ST.status = 1 and ST.id not in (select SC.triggerId from SecretCommands SC where SC.userId = ? and SC.status = 1)' ,
     {replacements : [inputUserId], type : sequelize.QueryTypes.SELECT})
     .then(availableTriggers => {
       resolve(availableTriggers);

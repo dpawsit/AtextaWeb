@@ -172,6 +172,16 @@ var SecretTriggers = db.define('SecretTriggers', {
     defaulValue : 0,
     unique : false,
     allowNull : false
+  },
+  status : {
+    type : Sequelize.BOOLEAN,
+    unique : false,
+    allowNull : false
+  },
+  createdBy : {
+    type : Sequelize.INTEGER,
+    unique : false,
+    allowNull : true
   }
 })
 
@@ -216,7 +226,7 @@ var SecretMessage = db.define('SecretMessage', {
     unique : false,
     allowNull : false
   },
-  secretCommanId : {
+  secretCommandId : {
     type : Sequelize.INTEGER,
     unique : false,
     allowNull : true

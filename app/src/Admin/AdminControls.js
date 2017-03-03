@@ -210,7 +210,7 @@ class AdminControls extends Component {
 
     return (
       <div>
-        <h3>Admin Controls</h3>
+        <h3>Admin Settings</h3>
         <div style={styles.divider}/>
         {this.state.showPassAlert ? alertInstance : ''}
         <MuiThemeProvider>

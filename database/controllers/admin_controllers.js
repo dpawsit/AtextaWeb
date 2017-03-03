@@ -57,12 +57,16 @@ module.exports.runAdminQuery = (queryString) => {
   })
 }
 
+
+
+
 module.exports.createNewAdminQuery = (queryInfo) => {
   return new Promise ((resolve, reject) => {
     AdminQueries.create({
       queryName : queryInfo.name,
       queryString : queryInfo.queryString,
-      chartOption : queryInfo.chartOption
+      chartOption : queryInfo.chartOption,
+      createdBy : queryInfo.adminId
     })
     .then(res => {
       resolve(res.dataValues);
