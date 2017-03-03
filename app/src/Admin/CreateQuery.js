@@ -9,6 +9,14 @@ import QueryTable from './QueryTable';
 import {saveNewQuery, updateQuery} from '../actions/admin_actions'
 import ChartView from './ChartView';
 
+const styles = {
+    divider: {
+    margin: '8px 0',
+    height: 1,
+    backgroundColor: '#757575',
+  }  
+}
+
 class CreateQuery extends Component {
   constructor(props){
     super(props)
@@ -120,7 +128,10 @@ class CreateQuery extends Component {
         stringError : "This field is required"
       })
     } else {
-      let queryInfo = {name : this.state.queryName, queryString: this.state.queryString, chartOption: this.state.chartSelection}
+      let queryInfo = {name : this.state.queryName, 
+                       queryString: this.state.queryString, 
+                       chartOption: this.state.chartSelection,
+                      adminId : this.props.adminId}
       axios.post('/admin/createNewAdminQuery', queryInfo)
       .then(result => {
         this.props.saveNewQuery(result.data)
@@ -219,8 +230,10 @@ class CreateQuery extends Component {
       )
 
     return (
+      <div>
+      <h3>{pageTitle}</h3>
+      <div style={styles.divider}/>
       <Grid>
-        <h3>{pageTitle}</h3><br/>
         <Row>
           <Col xs={6} md={9}>
             <div>
@@ -275,10 +288,13 @@ class CreateQuery extends Component {
               </Drawer>
             </div>
         </Col>
-        </Row><br/>
+        </Row>
+        </Grid>
+        <div style={styles.divider}/>
         <div>{this.state.queryError ? alertInstance : <div></div>}</div>
         <div>{this.state.updateSuccess ? alertInstanceSuccess : <div></div>}</div>
          <div>{this.state.createSuccess ? alertInstanceCreate : <div></div>}</div>
+         <Grid>
         <Row>
           <Col xs={12} md={12}>
             <div>
@@ -290,10 +306,10 @@ class CreateQuery extends Component {
           </Col>
         </Row>
       </Grid>
+      </div>
     )
   }
 }
-
 
 export default connect(null, {saveNewQuery, updateQuery})(CreateQuery);
 

@@ -13,6 +13,7 @@ import { refreshPanel, adminLogout } from '../actions/admin_actions';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import AdminControls from './AdminControls';
+import SecretTriggers from './SecretTriggers';
 
 const styles = {
   contentHeaderMenuLink: {
@@ -36,7 +37,8 @@ class AdminPanel extends Component {
       queryEditView : false,
       queryUpdateInfo : false,
       loading : true,
-      adminControlsView : false
+      adminControlsView : false,
+      secretTriggersView : false
     }
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -50,6 +52,7 @@ class AdminPanel extends Component {
     this.createViewForEdit = this.createViewForEdit.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.adminControlView = this.adminControlView.bind(this);
+    this.secretTriggerView = this.secretTriggerView.bind(this);
   }
 
   componentWillMount() {
@@ -94,7 +97,8 @@ class AdminPanel extends Component {
       queryView : false,
       queryEditView : false,
       queryUpdateInfo : false,
-      adminControlsView : false
+      adminControlsView : false,
+      secretTriggersView : true
     })
   }
 
@@ -103,7 +107,8 @@ class AdminPanel extends Component {
       queryEditView : true,
       createView : false,
       queryView : false,
-      adminControlsView : false
+      adminControlsView : false,
+      secretTriggersView : true
     })
   }
 
@@ -112,7 +117,8 @@ class AdminPanel extends Component {
       queryView : true,
       createView : false,
       queryEditView : false,
-      adminControlsView : false
+      adminControlsView : false,
+      secretTriggersView : true
     })
   }
 
@@ -122,7 +128,8 @@ class AdminPanel extends Component {
       queryView : false,
       queryEditView : false,
       queryUpdateInfo : queryInfo,
-      adminControlsView : false
+      adminControlsView : false,
+      secretTriggersView : true
     })
   }
 
@@ -132,7 +139,19 @@ class AdminPanel extends Component {
       queryView : false,
       queryEditView : false,
       queryUpdateInfo : false,
-      adminControlsView : true
+      adminControlsView : true,
+      secretTriggersView : true
+    })
+  }
+
+  secretTriggerView(){
+      this.setState({
+      createView : false,
+      queryView : false,
+      queryEditView : false,
+      queryUpdateInfo : false,
+      adminControlsView : false,
+      secretTriggersView : true
     })
   }
 
@@ -160,10 +179,11 @@ class AdminPanel extends Component {
    
    let adminBody = <div></div>
   
-  if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery update={this.state.queryUpdateInfo}/></MuiThemeProvider>}
+  if (this.state.createView) {adminBody = <MuiThemeProvider><CreateQuery update={this.state.queryUpdateInfo} adminId={this.props.adminId}/></MuiThemeProvider>}
   else if (this.state.queryView) {adminBody = <QueryView />}
   else if (this.state.queryEditView) {adminBody = (<MuiThemeProvider><EditQueryView updateQuery={this.createViewForEdit}/></MuiThemeProvider>)}
   else if (this.state.adminControlsView) {adminBody = <AdminControls />}
+  else if (this.state.secretTriggersView) {adminBody = <SecretTriggers />}
    const contentHeader = (
         <Grid>
           <Row>

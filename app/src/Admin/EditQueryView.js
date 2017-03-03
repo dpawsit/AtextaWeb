@@ -5,6 +5,14 @@ import { connect } from 'react-redux';
 import { deleteAdminQuery } from '../actions/admin_actions';
 import axios from 'axios';
 
+const styles = {
+    divider: {
+    margin: '8px 0',
+    height: 1,
+    backgroundColor: '#757575',
+  }  
+}
+
 class EditQueryView extends Component {
   constructor(props){
     super(props)
@@ -65,7 +73,7 @@ class EditQueryView extends Component {
                 <TableRowColumn style={{ width: 50 }}>{query.id}</TableRowColumn>
                 <TableRowColumn style={{ width: 175 }}>{query.queryName}</TableRowColumn>
                 <TableRowColumn style={{ width: 100 }}>{query.chartOption}</TableRowColumn>
-                <TableRowColumn>{query.queryString}</TableRowColumn>
+                <TableRowColumn style={{ whiteSpace:'normal', wordWrap:'break-word' }}>{query.queryString}</TableRowColumn>
                 <TableRowColumn style={{ width: 100 }}>{query.username}</TableRowColumn>
           </TableRow>
       )})
@@ -82,6 +90,7 @@ class EditQueryView extends Component {
     return (
       <div>
         <h3>View Queries</h3>
+        <div style={styles.divider}/>
         <Table
           height={'550px'}
           fixedHeader={true}
