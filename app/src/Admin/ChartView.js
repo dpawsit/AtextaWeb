@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Doughnut, Pie, Line, Bar, HorizontalBar, Radar, Polar} from 'react-chartjs-2';
-import _ from 'underscore';
 
 class ChartView extends Component {
   constructor(props){
@@ -96,7 +95,7 @@ class ChartView extends Component {
           labels: labels,
           datasets: [
             {
-              label: 'My First dataset',
+              label: this.props.label,
               fill: false,
               lineTension: 0.1,
               backgroundColor: 'rgba(75,192,192,0.4)',
@@ -126,7 +125,7 @@ class ChartView extends Component {
           labels: labels,
           datasets: [
             {
-              label: 'My First dataset',
+              label: this.props.label,
               backgroundColor: 'rgba(255,99,132,0.2)',
               borderColor: 'rgba(255,99,132,1)',
               borderWidth: 1,
@@ -144,7 +143,7 @@ class ChartView extends Component {
           labels: labels,
           datasets: [
             {
-              label: 'My First dataset',
+              label: this.props.label,
               backgroundColor: 'rgba(255,99,132,0.2)',
               borderColor: 'rgba(255,99,132,1)',
               borderWidth: 1,
@@ -162,7 +161,7 @@ class ChartView extends Component {
           labels: labels,
           datasets: [
             {
-              label: 'My First dataset',
+              label: this.props.label,
               backgroundColor: 'rgba(179,181,198,0.2)',
               borderColor: 'rgba(179,181,198,1)',
               pointBackgroundColor: 'rgba(179,181,198,1)',
@@ -197,7 +196,7 @@ class ChartView extends Component {
               '#E7E9ED',
               '#36A2EB'
             ],
-            label: 'My dataset' // for legend
+            label: this.props.label
           }],
           labels: labels
         }

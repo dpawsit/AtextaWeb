@@ -227,7 +227,7 @@ class CreateQuery extends Component {
     
     const resultBody = (
       this.state.chartTest ? 
-      <ChartView data={this.state.queryResult} chartOption={this.state.chartSelection}/> : 
+      <ChartView label={this.state.queryName} data={this.state.queryResult} chartOption={this.state.chartSelection}/> : 
       <QueryTable data={this.state.queryResult}/> 
       )
 

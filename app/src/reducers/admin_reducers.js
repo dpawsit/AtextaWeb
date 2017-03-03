@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   queryResults : {},
   singleQuery : [],
   chartOption : null,
+  queryName : '',
   viewType : 'T',
   adminId : false,
   secretTriggers : []
@@ -21,7 +22,9 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, queryResults : {...state.queryResults, ...action.payload}}
 
     case SELECT_SINGLE_QUERY:
-      return {...state, singleQuery: state.queryResults[action.payload.queryId], chartOption : action.payload.chartOption}
+      return {...state, singleQuery: state.queryResults[action.payload.queryId], 
+                        chartOption : action.payload.chartOption, 
+                        inputQueryName : action.payload.inputQueryName}
 
     case SAVE_NEW_QUERY:
       return {...state, adminQueries : [...state.adminQueries, action.payload]}
@@ -45,7 +48,8 @@ export default function (state = INITIAL_STATE, action) {
           }
         })
 
-        return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : [], chartOption : null}
+        return {...state, adminQueries : newQuery, queryResults : newQueryRes, 
+                          singleQuery : [], chartOption : null}
       }
 
     case CHANGE_VIEW:
@@ -70,7 +74,7 @@ export default function (state = INITIAL_STATE, action) {
       return INITIAL_STATE;
     
     case REFRESH_PANEL:
-      return {...state, adminQueries : [], queryResults : {}, singleQuery : [], chartOption : null, viewType : 'T'}
+      return {...state, queryResults : {}, singleQuery : []}
 
     case AUTHENTICATE_ADMIN:
       return {...state, adminId : action.payload.adminId, adminToken : action.payload.adminToken}
