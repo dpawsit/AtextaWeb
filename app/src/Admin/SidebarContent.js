@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import SidebarTitle from './SidebarTitle';
-import { adminLogin, saveQueryResults, selectSingleQuery, changeView} from '../actions/admin_actions';
+import { adminLogin, saveQueryResults, selectSingleQuery, changeView, refreshPanel} from '../actions/admin_actions';
 import { Toggle } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
 import EditIcon from 'material-ui/svg-icons/content/create'
 import RefreshIcon from 'material-ui/svg-icons/navigation/refresh'
-import AddIcon from 'material-ui/'
 
 const styles = {
   sidebar: {
@@ -43,9 +42,9 @@ componentWillMount(){
   this.props.adminLogin();
 }
 
-handleQuerySelection(inputQueryId, inputQueryString, inputChartOption){
+handleQuerySelection(inputQueryId, inputQueryString, inputChartOption, inputQueryName){
   if (this.props.queryResults.hasOwnProperty(inputQueryId)){
-    this.props.selectSingleQuery(inputQueryId, inputChartOption)
+    this.props.selectSingleQuery(inputQueryId, inputChartOption, inputQueryName)
     this.props.queryView()
   } else {
     axios.get('/admin/runAdminQuery', {params : {queryString : inputQueryString}})
@@ -53,7 +52,7 @@ handleQuerySelection(inputQueryId, inputQueryString, inputChartOption){
       let queryRes = {}
       queryRes[inputQueryId] = res.data
       this.props.saveQueryResults(queryRes)
-      this.props.selectSingleQuery(inputQueryId, inputChartOption)
+      this.props.selectSingleQuery(inputQueryId, inputChartOption, inputQueryName)
       this.props.queryView()
     })
     .catch(error => {
@@ -63,7 +62,6 @@ handleQuerySelection(inputQueryId, inputQueryString, inputChartOption){
 }
 
 handleViewToggle(){
-
   if (this.props.viewType === 'T'){
     this.props.changeView('C')
   } else {
@@ -82,7 +80,8 @@ render(){
       <a key={this.props.adminQueries[i].id} 
       onClick={()=>{this.handleQuerySelection(this.props.adminQueries[i].id, 
                                               this.props.adminQueries[i].queryString,
-                                              this.props.adminQueries[i].chartOption)}} 
+                                              this.props.adminQueries[i].chartOption,
+                                              this.props.adminQueries[i].queryName)}} 
       style={styles.sidebarLink}>{this.props.adminQueries[i].queryName}</a>);
     }
   } 
@@ -92,7 +91,6 @@ render(){
     <MuiThemeProvider>
     <Toggle
       label={(this.props.viewType === 'T' ? 'Table' : 'Chart')}
-      style={{marginBottom: 16}}
       onToggle={this.handleViewToggle}
     />
     </MuiThemeProvider>
@@ -103,7 +101,7 @@ render(){
     <SidebarTitle title="Analytics" style={style}>
       <div style={styles.content}>
         <span style={{'fontSize': '17px'}}><strong>Queries</strong>
-        <MuiThemeProvider><RefreshIcon style={{float:'right'}}onClick={()=>{console.log('test')}}/></MuiThemeProvider>
+        <MuiThemeProvider><RefreshIcon style={{float:'right'}}onClick={this.props.refreshPanel}/></MuiThemeProvider>
         </span>
         <div style={styles.divider} />
         <div>{toggle}</div>
@@ -135,4 +133,4 @@ function MapStateToProps(state){
   }
 }
 
-export default connect(MapStateToProps, {adminLogin, saveQueryResults, selectSingleQuery, changeView})(SidebarContent);
+export default connect(MapStateToProps, {adminLogin, saveQueryResults, selectSingleQuery, changeView, refreshPanel})(SidebarContent);

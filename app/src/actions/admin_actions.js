@@ -26,10 +26,10 @@ export function saveQueryResults (queryResults){
   }
 }
 
-export function selectSingleQuery (queryId, chartOption){
+export function selectSingleQuery (queryId, chartOption, inputQueryName){
   return {
     type : SELECT_SINGLE_QUERY,
-    payload : {queryId, chartOption}
+    payload : {queryId, chartOption, inputQueryName}
   }
 }
 

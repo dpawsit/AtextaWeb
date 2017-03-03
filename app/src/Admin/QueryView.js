@@ -13,10 +13,18 @@ class QueryView extends Component {
   render(){
     let view = <div></div>
 
-    if(this.props.viewType === 'T'){
-      view = (<MuiThemeProvider><QueryTable data={this.props.singleQuery}/></MuiThemeProvider>)
-    } else if(this.props.viewType === 'C') {
-      view = <ChartView data={this.props.singleQuery} chartOption={this.props.chartOption}/>
+    if (this.props.viewType === 'T'){
+
+      view = (<MuiThemeProvider>
+                <QueryTable data={this.props.singleQuery}/>
+              </MuiThemeProvider>
+             )
+
+    } else if (this.props.viewType === 'C') {
+      
+      view = <ChartView data={this.props.singleQuery} 
+                        label={this.props.inputQueryName} 
+                        chartOption={this.props.chartOption}/>
     }
     return (
       <div>{view}</div>
@@ -28,7 +36,8 @@ function MapStateToProps(state){
   return {
     singleQuery : state.admin.singleQuery,
     viewType : state.admin.viewType,
-    chartOption : state.admin.chartOption
+    chartOption : state.admin.chartOption,
+    inputQueryName : state.admin.inputQueryName
   }
 }
 
