@@ -224,7 +224,7 @@ class AddContactModal extends React.Component {
 				    </ButtonToolbar>
 						<br/>
 						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" backgroundColor="#270943" labelStyle={{ color: 'white' }} onClick = {this.incrementStep}/>
 					</div>
 				)
       case 1:
@@ -238,17 +238,17 @@ class AddContactModal extends React.Component {
             <form onSubmit={this.handleNameSubmit}>
 							<label>
 								Name this new contact:
-								<br/>
 								<input 
 									type='text' 
 									value={this.state.newContactName}
                 	onChange={this.handleNameChange} 
 									required
+									id="groupName"
 									/>
             	</label>
             </form>
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" backgroundColor="#270943" labelStyle={{ color: 'white' }} onClick = {this.incrementStep}/>
           </div>
         )
       case 2:
@@ -268,7 +268,7 @@ class AddContactModal extends React.Component {
 							</ButtonToolbar>
 							<br/>
 							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-							<RaisedButton type="button" label="Submit" primary={true}
+							<RaisedButton type="button" label="Submit" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 							onClick = {this.handleContactSubmit}/>
 						</div>
 					)
@@ -288,7 +288,7 @@ class AddContactModal extends React.Component {
 							</form>
 							<br/>
 							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-							<RaisedButton type="button" label="Submit" primary={true}
+							<RaisedButton type="button" label="Submit" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 							onClick = {this.handleContactSubmit}/>
 						</div>
 					)
@@ -309,7 +309,6 @@ class AddContactModal extends React.Component {
 	    		<Modal.Title>Create a new contact</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
-	    		{this.stepDecider()}
 					<Stepper activeStep={this.state.step}>
 						<Step>
 							<StepLabel>
@@ -327,6 +326,7 @@ class AddContactModal extends React.Component {
 							</StepLabel>
 						</Step>
 					</Stepper>
+	    		{this.stepDecider()}
 	   		</Modal.Body>
 	    </Modal>
 		)
