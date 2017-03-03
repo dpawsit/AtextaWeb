@@ -26,7 +26,9 @@ class EditQueryView extends Component {
     let deleteList = '';
 
     if (this.state.selectedQueries === 'all') {
-      deleteList = 'all';
+      deleteList = this.props.adminQueries.map(query => {
+        return query.id;
+      });
     } else {
        deleteList = [];
       this.state.selectedQueries.forEach(index => {
@@ -51,16 +53,22 @@ class EditQueryView extends Component {
     let tableBody = <div></div>;
     let deleteButton = <div key="deletebtnnull"></div>;
     let updateButton = <div key="udpatebtnnull"></div>;
+    let selectAll = true;
 
     if(!!this.props.adminQueries) {
-      tableBody = this.props.adminQueries.map( (query, index) => (
-           <TableRow key={index}>
+      tableBody = this.props.adminQueries.map( (query, index) => {
+        if(this.props.adminId !== query.createdBy){
+          selectAll = false;
+        }
+        return (
+           <TableRow key={index} selectable={query.createdBy === this.props.adminId}>
                 <TableRowColumn style={{ width: 50 }}>{query.id}</TableRowColumn>
                 <TableRowColumn style={{ width: 175 }}>{query.queryName}</TableRowColumn>
                 <TableRowColumn style={{ width: 100 }}>{query.chartOption}</TableRowColumn>
                 <TableRowColumn>{query.queryString}</TableRowColumn>
+                <TableRowColumn style={{ width: 100 }}>{query.username}</TableRowColumn>
           </TableRow>
-      ))
+      )})
     }
 
     if (this.state.selectedQueries === 'all' || this.state.selectedQueries.length > 0) {
@@ -84,12 +92,13 @@ class EditQueryView extends Component {
           <TableHeader
             displaySelectAll={true}
             adjustForCheckbox={true}
-            enableSelectAll={true}>
+            enableSelectAll={selectAll}>
             <TableRow>
               <TableHeaderColumn style={{ width: 50 }}>ID</TableHeaderColumn>
               <TableHeaderColumn style={{ width: 175 }}>Name</TableHeaderColumn>
               <TableHeaderColumn style={{ width: 100 }}>Chart</TableHeaderColumn>
               <TableHeaderColumn>Query</TableHeaderColumn>
+              <TableHeaderColumn style={{ width: 100 }}>Created By</TableHeaderColumn>
             </TableRow>
           </TableHeader>
 
@@ -109,7 +118,8 @@ class EditQueryView extends Component {
 
 function MapStateToProps(state){
   return {
-    adminQueries : state.admin.adminQueries
+    adminQueries : state.admin.adminQueries,
+    adminId : state.admin.adminId
   }
 }
 

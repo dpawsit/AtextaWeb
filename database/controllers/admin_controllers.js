@@ -54,7 +54,7 @@ module.exports.createAdmin = (adminInfo) => {
 
 module.exports.getAdminQueries = () => {
   return new Promise ((resolve, reject) => {
-    db.query('select * from AdminQueries', {
+    db.query('select AQ.*, AC.username from AdminQueries AQ join AdminCreds AC on AQ.createdBy = AC.id', {
       type : sequelize.QueryTypes.SELECT
     })
     .then(queries => {
@@ -113,7 +113,7 @@ module.exports.updateAdminQuery = (queryInfo) => {
 
 module.exports.deleteAdminQuery = (queryId) => {
   return new Promise ((resolve, reject) => {
-    let str = (queryId === 'all' ? '' : `where id in (${queryId.join(',')})`)
+    let str = `where id in (${queryId.join(',')})`;
     db.query('delete from AdminQueries ' + str, {
       type : sequelize.QueryTypes.DELETE
     })
