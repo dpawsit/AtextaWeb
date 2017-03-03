@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar'
 import MessageList from './MessageList'
 import GroupList from './GroupList'
 import AddressBook from './AddressBook'
+import MySecretsList from './MySecretsList'
 import { connect } from 'react-redux'
 import { getUserInfo, userLogout } from '../actions/atexta_actions'
 import Loading from 'react-loading';
@@ -25,6 +26,7 @@ class Dashboard extends React.Component {
 		this.renderGroupList = this.renderGroupList.bind(this)
 		this.handleLogout = this.handleLogout.bind(this);
 		this.renderAddressBook = this.renderAddressBook.bind(this)
+		this.renderSecretList = this.renderSecretList.bind(this)
 	}
 
 	componentWillMount() {
@@ -43,7 +45,8 @@ class Dashboard extends React.Component {
 		this.setState({
 			showMessageList: true,
 			showGroupList: false,
-			showAddressBook: false
+			showAddressBook: false,
+			showSecretList: false
 		})
 	}
 
@@ -51,13 +54,24 @@ class Dashboard extends React.Component {
 		this.setState({
 			showGroupList: true,
 			showMessageList: false,
-			showAddressBook: false
+			showAddressBook: false,
+			showSecretList: false
 		})
 	}
 
 	renderAddressBook() {
 		this.setState({
 			showAddressBook: true,
+			showMessageList: false,
+			showGroupList: false,
+			showSecretList: false
+		})
+	}
+
+	renderSecretList() {
+		this.setState({
+			showSecretList: true,
+			showAddressBook: false,
 			showMessageList: false,
 			showGroupList: false
 		})
@@ -76,12 +90,15 @@ class Dashboard extends React.Component {
 				<MuiThemeProvider>
 					<div>
 						<Navbar	renderGroupList={this.renderGroupList} renderMessageList={this.renderMessageList} 
-						renderAddressBook={this.renderAddressBook} logout={this.handleLogout}/>
-						 {this.state.showMessageList ? <MessageList /> : 
-							this.state.showGroupList ? <GroupList /> :
-							this.state.showAddressBook ? <AddressBook /> :
-							<div></div>
-						 }
+						renderAddressBook={this.renderAddressBook} renderSecretList={this.renderSecretList} logout={this.handleLogout}/>
+						<div className = "mainContainer">
+							{this.state.showMessageList ? <MessageList /> : 
+								this.state.showGroupList ? <GroupList /> :
+								this.state.showAddressBook ? <AddressBook /> :
+								this.state.showSecretList ? <MySecretsList /> :
+								<div></div>
+							}
+						</div>
 					</div>
 				</MuiThemeProvider>
       </div>

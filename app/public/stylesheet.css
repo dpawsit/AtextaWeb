@@ -1,33 +1,82 @@
+.mainContainer {
+	margin: 10px;
+}
+
+.column {
+	border-bottom: 1px solid darkgrey;
+	margin-bottom: 4px;
+	height: 40px;
+	margin-left: 15px;
+}
+
+.nav {
+	background-color: #270943;
+}
+
+.navHeaders{
+	margin-left: 50px;
+}
+
+.footerButton {
+	margin-left: 50px;
+	color: white;
+}
+
+.navItems{
+	color: white;
+	margin-left: 15px;
+}
+
+.hoverable:hover {
+	box-shadow: inset 0 0 2em #270943, 0 0 2em darkgrey;
+}
+
+.tableHeader {
+	font: bold 20px arial;
+	color: black;
+}
+
+.scrollGrid {
+	overflow: auto;
+	height: 550px;
+	width: 93%;
+	border: 1px solid darkgrey;
+	padding: 5px;
+	margin: 5px;
+}
+
 .scrollable {
 	overflow: auto;
-	margin: auto;
-	border: 5px solid black;
 	height: 350px;
 	/*background-color:	#270943;*/
+}
 
+.sideScroll {
+	overflow: auto;
+	white-space: nowrap;
+}
+
+input {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
 }
 
 .centered {
 	text-align: center;
-	margin: auto;
-	/*color: #fb5f26;*/
-	color: aliceblue
 }
 
-.colorBox {
-	/*background-color:	#008080;*/
-	background-color: steelblue;
-	border: 1px solid black;
-	margin: auto;
-	margin-top: 5px;
-	width: 50%;
-	text-align: center;
+.checkmarks {
+	height: 25px;
+	width: 25px;
 }
 
 ul {
     padding: 0;
     list-style-type: none;
 }
+
 
 /*
 tr:nth-child(even) {
@@ -40,14 +89,61 @@ tr:nth-child(odd){
 	color: black;
 }*/
 
-/*tr:hover{
+
+.addressBookItems:hover{
 	background-color: #270943;
 	color: white;	
-}*/
+}
 
 #columnLabel {
 	background-color: #270943;
 	color: white;
+}
+
+#bg {
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+
+#bg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+}
+
+#landingLogo {
+  position: fixed;
+  top: 18%;
+  left: 25%;
+}
+
+#landingLogo img {
+	cursor: pointer
+}
+
+#adminContainer img{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    min-width: 50%;
+    min-height: 50%;
+}
+
+#adminWell {
+	 position: fixed;
+   top: 42%;
+   left: 41%; 
+   padding: 20px;
 }
 /*
 why doesn't this work?

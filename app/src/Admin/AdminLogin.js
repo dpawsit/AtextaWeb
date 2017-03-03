@@ -7,7 +7,8 @@ import { TextField, RaisedButton } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { Alert, Well } from 'react-bootstrap';
 
-const wellStyle = {maxWidth: 400, margin: '0 auto 10px'};
+
+const wellStyle = {maxWidth: '800px', margin: '0 auto 10px'};
 
 class AdminLogin extends Component {
   constructor(props){
@@ -17,7 +18,8 @@ class AdminLogin extends Component {
       usernameError : '',
       password : '',
       passwordError : '',
-      invalidLogin : false
+      invalidLogin : false,
+       imgSrc: './images/logoAdmin.png'
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -81,11 +83,11 @@ class AdminLogin extends Component {
     
     const loginForm = (
       <form onSubmit={this.handleLogin}>
-       <TextField hintText ="Username Field" floatingLabelText="Username" type="text" 
+       <TextField hintText ="Username Field" floatingLabelText="Username" type="text" floatingLabelStyle={{color : 'white'}}
         onChange={this.handleUsername} value={this.state.username} errorText={this.state.usernameError}/><br/> 
-       <TextField hintText="Password Field" floatingLabelText="Password" type="password" 
+       <TextField hintText="Password Field" floatingLabelText="Password" type="password" floatingLabelStyle={{color : 'white'}}
         onChange={this.handlePassword} value={this.state.password} errorText={this.state.passwordError}/><br/>
-       <RaisedButton onTouchTap={this.handleLogin} label="Login" style={{margin : 12}}  type="submit"/><br/>
+       <RaisedButton onTouchTap={this.handleLogin} label="Login" style={{visibility : 'hidden'}}  type="submit"/><br/>
        <div>
        {this.state.invalidLogin ? alertInstance : ''}
        </div>
@@ -93,10 +95,14 @@ class AdminLogin extends Component {
     )
 
     return (
-      <div className="well" style={wellStyle}>
-      <MuiThemeProvider>
-        {loginForm}
-      </MuiThemeProvider>
+      <div id="adminContainer">
+        <img src='http://cdn.wonderfulengineering.com/wp-content/uploads/2014/09/Purple-wallpaper-11.jpg' alt='' /> 
+        <div id="adminWell" >
+          <img src={this.state.imgSrc}/>
+          <MuiThemeProvider>
+          {loginForm}
+          </MuiThemeProvider>
+        </div>
       </div>
     )
   }

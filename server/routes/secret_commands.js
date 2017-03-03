@@ -24,7 +24,7 @@ router.get('/availableSecretTriggers/:userId', (req, res) => {
 })
 
 router.post('/newCommand', (req, res) => {
-  sc.CreateNewSecretCommand(req.body)
+  sc.CreateNewSecretCommand(req.body.newCommand)
   .then(result => {
     res.status(200).json(result);
   })

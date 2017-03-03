@@ -2,9 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import AddGroupModal from './AddGroupModal'
 import { connect } from 'react-redux'
-import { Modal, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
-import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
+import { Modal, ButtonToolbar, DropdownButton, MenuItem, Well } from 'react-bootstrap'
+import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper, List, ListItem } from 'material-ui'
 import { addCommand, editCommand } from '../actions/atexta_actions'
+import TextIcon from 'material-ui/svg-icons/communication/chat'
+import EmailIcon from 'material-ui/svg-icons/communication/email'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
@@ -114,6 +116,7 @@ class AddMessageModal extends React.Component {
 			}
 			this.props.close()
 		} else {
+			console.log('this is a new command post')
 			//this is a new command post request
 			let newCommand = {
 				name: this.state.newCommandName,
@@ -122,20 +125,22 @@ class AddMessageModal extends React.Component {
 				text: this.state.newCommandText,
 				additionalContent: null
 			}
-
-			let commandToAppend = {
-				commandName: this.state.newCommandName,
-				userId: this.props.userId,
-				groupName: this.state.selectedGroup,
-				text: this.state.newCommandText,
-				additionalContent: null
-			}
-
+			
 			axios.post('command/newCommand', {
 				newCommand
 			})
 			.then(result=>{
-				this.props.addCommand(commandToAppend)
+				console.log('resulting command', result)
+				this.props.addCommand({
+					id: result.data.id,
+					commandName: result.data.name,
+					userId: result.data.userId,
+					groupName: this.state.selectedGroup,
+					groupId: result.data.groupId,
+					text: this.state.newCommandText,
+					additionalContent: null,
+					verified: result.data.verified
+				})
 			})
 			.catch(err=>{
 				console.log('error submitting command', err)
@@ -160,25 +165,24 @@ class AddMessageModal extends React.Component {
 	}
 
 	stepDecider() {
-		const renderGroups = (groupName, groupId, index) => {
+		const renderGroups = (groupName, groupId, mediumType, index) => {
 			return(
-				<li key={index} onClick = {()=>{this.clickGroup(groupName, groupId)}} className = "centered colorBox">{groupName}</li>
+				<ListItem key={index} onClick={()=>{this.clickGroup(groupName, groupId)}} primaryText={groupName} className="centered"
+				leftIcon={mediumType==='T' ? <TextIcon /> : mediumType==='E' ? <EmailIcon /> : <strong>Slack</strong>} />
 			)
 		}
 		switch(this.state.step) {
 			case 0:
 				return (
 					<div>
-						<form onSubmit={this.handleNameSubmit}>
+						<form onSubmit={this.handleNameSubmit} className="modalForms">
 							<label>
 								What do you want to name this trigger?
 								<input value={this.state.newCommandName} type='text' id='groupName' 
 								onChange={this.handleNameChange} />
             	</label>
             </form>
-						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<br/>
 					</div>
 				)
 			case 1:
@@ -191,26 +195,23 @@ class AddMessageModal extends React.Component {
 								onChange={this.handleTextChange}  />
             	</label>
             </form>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<br/>
 					</div>
 				)
 			case 2:
 				return(
 					<div>
-						Select the group you want:  <span className="centered colorBox">{this.state.selectedGroup}</span>
+						Select the group you want:  <strong><em>{this.state.selectedGroup}</em></strong>
 						<div className = "scrollable">
-							<ul>
-								{this.props.userGroups.map((group, index) => (
-									renderGroups(group.name, group.groupId, index)
-								))}
-							</ul>
+							<Well bsSize="large">
+								<List>
+									{this.props.userGroups.map((group, index) => (
+										renderGroups(group.name, group.groupId, group.mediumType, index)
+									))}
+								</List>
+							</Well>
 						</div>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-						<RaisedButton type="button" label="Submit" primary={true}
-						onClick = {this.handleCommandSubmit}/>
-						<RaisedButton type="button" label="Create a new group" secondary={true}
+						<RaisedButton type="button" label="Create a new group" backgroundColor="darkgrey" labelStyle={{color: 'white'}}
 						onClick = {this.handleNewGroup}/>
 					</div>
 				)
@@ -222,6 +223,7 @@ class AddMessageModal extends React.Component {
 	}
 
 	render() {
+		console.log('this is the inital command', this.props.initialData)
 		return this.state.addingNewGroup ? 
 		(
 			<AddGroupModal show={this.state.addingNewGroup} close={this.handleNewGroupClose}
@@ -234,7 +236,6 @@ class AddMessageModal extends React.Component {
 	    		<Modal.Title>Add a message</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
-	    		{this.stepDecider()}
 					<Stepper activeStep={this.state.step}>
 						<Step>
 							<StepLabel>
@@ -252,7 +253,15 @@ class AddMessageModal extends React.Component {
 							</StepLabel>
 						</Step>
 					</Stepper>
+	    		{this.stepDecider()}
 	   		</Modal.Body>
+				<Modal.Footer>
+					<FlatButton type="button" label={this.state.step === 0 ? "Cancel" : "Back" } 
+					onClick={this.state.step === 0 ? this.props.close : this.decrementStep}/>
+					<RaisedButton type="button" label={this.state.step=== 2 ? "Submit" : "Next"}
+					backgroundColor="#270943" labelStyle={{ color: 'white' }}
+					onClick = {this.state.step === 2 ? this.handleCommandSubmit : this.incrementStep}/>
+				</Modal.Footer>
 	    </Modal>
 		)
 	}

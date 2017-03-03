@@ -26,37 +26,23 @@ class MyNavbar extends Component {
 
   render(){
     return (
-      <Navbar inverse collapseOnSelect>
+      <Navbar className="nav" collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">Atexta</a>
+            <a href="#"><span className="navItems">Atexta</span></a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
-        <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="#">My Secrets</NavItem>
-            <NavDropdown eventKey={2} onClick={this.props.renderMessageList} title="My Messages" id="basic-nav-dropdown">
-              <MenuItem eventKey={2.1}>View my messages</MenuItem>
-              <MenuItem eventKey={2.2}>Create a new message</MenuItem>
-              <MenuItem eventKey={2.3}>Something else here</MenuItem>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <NavDropdown eventKey={3} onClick={this.props.renderGroupList} title="My Groups" id="basic-nav-dropdown">
-              <MenuItem eventKey={3.1}>View my groups</MenuItem>
-              <MenuItem eventKey={3.2}>Create a new group</MenuItem>
-              <MenuItem eventKey={3.3}>Something else here</MenuItem>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            <NavItem eventKey={4} onClick={this.props.renderAddressBook} href="#">Address Book</NavItem>
+            <NavItem className="navHeaders" eventKey={1} onClick={this.props.renderSecretList} href="#"><span className="navItems">My Secrets</span></NavItem>
+            <NavItem className="navHeaders" eventKey={2} onClick={this.props.renderMessageList}><span className="navItems">My Messages</span></NavItem>
+            <NavItem className="navHeaders" eventKey={3} onClick={this.props.renderGroupList}><span className="navItems">My Groups</span></NavItem>
+            <NavItem className="navHeaders" eventKey={4} onClick={this.props.renderAddressBook} href="#"><span className="navItems">Address Book</span></NavItem>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={5} href="#">My profile</NavItem>
-            <NavItem eventKey={6} onClick={this.props.logout} href="#">Log out</NavItem>
+            <NavItem eventKey={5} href="#"><span className="navItems">My profile</span></NavItem>
+            <NavItem eventKey={6} onClick={this.props.logout} href="#"><span className="navItems">Log out</span></NavItem>
           </Nav>
-        </Navbar.Collapse>
       </Navbar>
     )
   }

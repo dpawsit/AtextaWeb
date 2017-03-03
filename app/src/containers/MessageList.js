@@ -1,8 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import { RaisedButton } from 'material-ui'
+// import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui'
 import { connect } from 'react-redux'
 import AddMessageModal from './AddMessageModal'
+import MessageItem from './MessageItem'
+import ConfirmDeletionModal from './ConfirmDeletionModal'
+import { Thumbnail, Grid, Row, Col } from 'react-bootstrap'
 
 
 class MessageList extends React.Component {
@@ -10,13 +14,17 @@ class MessageList extends React.Component {
 		super(props)
 		this.state = {
 			showAddMessageModal: false,
-			commandToEdit: undefined
+			showDeletionModal: false,
+			commandToEdit: undefined,
+			commandToDelete: undefined
 		}	
 		
 		this.renderCommands = this.renderCommands.bind(this)
 		this.editMessage = this.editMessage.bind(this)
 		this.openAddMessageModal = this.openAddMessageModal.bind(this)
 		this.closeAddMessageModal = this.closeAddMessageModal.bind(this)
+		this.deleteMessage = this.deleteMessage.bind(this)
+		this.closeDeletionModal = this.closeDeletionModal.bind(this)
 	}
 
 	closeAddMessageModal() {
@@ -31,37 +39,45 @@ class MessageList extends React.Component {
 		this.setState({commandToEdit: command, showAddMessageModal: true})	
 	}
 
+	deleteMessage(command) {
+		this.setState({showDeletionModal: true, commandToDelete: command})
+	}
+
+	closeDeletionModal() {
+		this.setState({commandToDelete: undefined, showDeletionModal: false})
+	}
+
 	renderCommands(command, i) {
 		return(
-			<tr key={i} onClick={()=>{this.editMessage(command)}}>
-				<td>{command.commandName}</td>
-				<td>{command.text}</td>
-				<td>
-						{command.groupName}
-				</td>
-			</tr>	
+			<MessageItem key={i} command={command} editMessage={this.editMessage} deleteMessage={this.deleteMessage}/>
 		)
 	}
 
 	render() {
 		return(
 			<div>
-				<table className="table">
-					<thead>
-						<tr id="columnLabel">
-							<th>Trigger</th>
-							<th>Text</th>
-							<th>Group</th>
-						</tr>
-					</thead>
-					<tbody>
-						{this.props.userCommands.map(this.renderCommands)}
-					</tbody>
-				</table>
-				<RaisedButton type="button" label="add a new one" secondary={true} 
+				<Grid className="scrollGrid">
+					<Row className="tableHeader">
+
+						<Col md={11}>
+							<Col className="column" md={2}>Trigger</Col>
+							<Col className="column" md={6}>Text</Col>
+							<Col className="column" md={2}>Group</Col>
+							<Col className="column" md={1}>Verified</Col>
+						</Col>
+
+						<Col md={1}>
+						</Col>
+					</Row>
+					{this.props.userCommands.map(this.renderCommands)}
+				</Grid>
+				<RaisedButton className="footerButton" type="button" label="Create new command" backgroundColor="#270943" labelStyle={{ color: 'white' }}
 				onClick={this.openAddMessageModal} />
 				{this.state.showAddMessageModal ? <AddMessageModal close={this.closeAddMessageModal}
-					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> : <div></div>}
+					show={this.state.showAddMessageModal} initialData={this.state.commandToEdit}/> 
+					: this.state.showDeletionModal ? <ConfirmDeletionModal close={this.closeDeletionModal}
+					show={this.state.showDeletionModal} commandToDelete={this.state.commandToDelete} /> : 
+					<div></div>}
 			</div>
 		)
 	}

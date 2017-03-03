@@ -189,11 +189,11 @@ class AdminControls extends Component {
     const changePasswordForm = (
         <span style={styles.option}>Change Password
         <form onSubmit={this.handleChangePassword}>
-          <br/><TextField floatingLabelText="Current Password" type="password" 
+          <br/><TextField floatingLabelText="Current Password" type="password" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleCurrentPassword} value={this.state.currentPassword}/><br/> 
-          <TextField floatingLabelText="New Password" type="password" 
+          <TextField floatingLabelText="New Password" type="password" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleNewPassword} value={this.state.newPassword}/><br/>
-          <TextField floatingLabelText="Confirm New Password" type="password" 
+          <TextField floatingLabelText="Confirm New Password" type="password" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleConfirmPassword} value={this.state.confirmPassword}/><br/>
         <RaisedButton onTouchTap={this.handleChangePassword} label="Submit" style={{margin : 12, float:'right'}} type="submit"/><br/>
         </form>
@@ -203,11 +203,11 @@ class AdminControls extends Component {
     const newAdminForm = (
         <span style={styles.option}>Create New Admin
         <form onSubmit={this.handleNewAdmin}>
-          <br/><TextField floatingLabelText="Username" type="text" 
+          <br/><TextField floatingLabelText="Username" type="text" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleAdminUsername} value={this.state.adminUsername}/><br/> 
-          <TextField floatingLabelText="Password" type="password" 
+          <TextField floatingLabelText="Password" type="password" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleAdminPassword} value={this.state.adminPassword}/><br/>
-          <TextField floatingLabelText="Confirm Password" type="password" 
+          <TextField floatingLabelText="Confirm Password" type="password" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleAdminConfirmPassword} value={this.state.adminConfirmPassword}/><br/>
         <RaisedButton onTouchTap={this.handleNewAdmin} label="Create" style={{margin : 12, float :'right'}} type="submit"/><br/>
         </form>
