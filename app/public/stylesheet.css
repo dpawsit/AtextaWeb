@@ -129,6 +129,22 @@ tr:nth-child(odd){
 	cursor: pointer
 }
 
+#adminContainer img{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    min-width: 50%;
+    min-height: 50%;
+}
+
+#adminWell {
+	 position: fixed;
+   top: 42%;
+   left: 41%; 
+   padding: 20px;
+}
 /*
 why doesn't this work?
 .columnLabel {

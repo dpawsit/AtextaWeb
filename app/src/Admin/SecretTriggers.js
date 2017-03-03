@@ -219,7 +219,7 @@ class SecretTriggers extends Component {
         <span style={styles.option}>Create New Trigger
         <br/>
         <form onSubmit={this.handleSecretTriggerSave}>
-        <TextField floatingLabelText="New Trigger" type="text" 
+        <TextField floatingLabelText="New Trigger" type="text" floatingLabelFocusStyle={{color : '#270943'}}
             onChange={this.handleTriggerInput} errorText={this.state.inputErrorString} value={this.state.newTriggerString}/>
         <RaisedButton onTouchTap={this.handleSecretTriggerSave} label="Submit" style={{margin : 12, float:'right'}} type="submit"/><br/>
         </form>

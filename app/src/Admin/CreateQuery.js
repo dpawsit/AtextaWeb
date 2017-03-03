@@ -241,9 +241,9 @@ class CreateQuery extends Component {
         <Row>
           <Col xs={6} md={9}>
             <div>
-            <TextField hintText="Enter Unique Name" floatingLabelText="Query Name" multiLine={true}
+            <TextField hintText="Enter Unique Name" floatingLabelText="Query Name" multiLine={true} floatingLabelFocusStyle={{color : '#270943'}}
                       rows={1} onChange={this.handleQueryName} errorText={this.state.nameError} value={this.state.queryName}/><br/>
-            <TextField hintText="Enter Unique Query" floatingLabelText="Query String" multiLine={true}
+            <TextField hintText="Enter Unique Query" floatingLabelText="Query String" multiLine={true} floatingLabelFocusStyle={{color : '#270943'}}
                       rows={2} fullWidth={true} onChange={this.handleQueryString} errorText={this.state.stringError} value={this.state.queryString}/><br/>
             <RaisedButton label="Show Tables" onTouchTap={this.handleTableView} style={{padding : '2px'}}/>
             <RaisedButton label="Test Query" onTouchTap={this.handleQueryTest} style={{padding : '2px'}}/>
@@ -255,7 +255,7 @@ class CreateQuery extends Component {
           </Col>
               <Col xs={6} md={3}>
               <RadioButtonGroup name="chartType" defaultSelected={this.props.update.chartOption ? this.props.update.chartOption : "null"} 
-                                onChange={this.handleChartSelection}>
+                                onChange={this.handleChartSelection}> 
                 <RadioButton value="Doughnut" label="Doughnut"/>
                 <RadioButton value="Pie" label="Pie"/>
                 <RadioButton value="Line" label="Line"/>
