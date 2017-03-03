@@ -1,64 +1,27 @@
-import Auth0Lock from 'auth0-lock'
+import Auth0Lock from 'auth0-lock';
+import cred from '../../../keys';
+let slackLock = new Auth0Lock(cred.slackAuthClient, cred.domain)
 
-export default class SlackAuth{
-	constructor(clientId, domain) {
-		this.lock = new Auth0Lock(clientId, domain, {
-			auth: {
-				redirectUrl: 'http://localhost:3000/',
-				responseType: 'token'
-			}
-		})
-		this.lock.on('authenticated', this._doAuthentication.bind(this))
-		this.login = this.login.bind(this)
-	}
+slackLock.on("authenticated", function(authResult) {
+	_doAuthentication(authResult);
+});
 
-	_doAuthentication(authResult) {
-		this.setToken(authResult.idToken)
-		this.setAccesstoken(authResult.accessToken)
-		this.lock.hide();
+let _doAuthentication = function(authResult) {
+  slackLock.getUserInfo(authResult.accessToken, function(error, profile) {
+    if (error) {
+      console.log('error in getting slack user info :', error);
+      return;
+    }
+		setToken(JSON.stringify(profile.accessToken));
+  });
+};
 
-	}
-
-	login() {
-		this.lock.show()
-	}
-
-	loggedIn() {
-		return !!this.getToken()
-	}
-
-	setToken(idToken) {
-		localStorage.setItem('idToken', idToken)
-	}
-
-	getToken() {
-		return localStorage.getItem('idToken')
-	}
-
-	setAccesstoken(accessToken) {
-		localStorage.setItem('accessToken', accessToken)
-	}
-
-	getAccessToken() {
-		return localStorage.getItem('accessToken')
-	}
-
-	logout() {
-		// localStorage.removeItem('idToken');
-		// localStorage.removeItem('accessToken');
-		// browserHistory.replace('/login');
-	}
-
-	getProfile(token) {
-		return new Promise((resolve, reject)=>{
-			this.lock.getUserInfo(token, function(err, profile) {
-				if(err) {
-					reject(err)
-				} else {
-					resolve(profile)
-				}
-			})
-		})
-	}
-
+slackLock.getToken = function() {
+	return JSON.parse(localStorage.getItem("slackToken"));
 }
+
+let setToken = (slackToken) => {
+	localStorage.setItem("slackToken", slackToken);
+};
+
+export default slackLock;
