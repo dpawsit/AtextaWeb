@@ -5,7 +5,9 @@ import { authenticateAdmin } from '../actions/admin_actions';
 import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
-import { Alert } from 'react-bootstrap';
+import { Alert, Well } from 'react-bootstrap';
+
+const wellStyle = {maxWidth: 400, margin: '0 auto 10px'};
 
 class AdminLogin extends Component {
   constructor(props){
@@ -38,7 +40,8 @@ class AdminLogin extends Component {
     })
   }
 
-  handleLogin(){
+  handleLogin(e){
+    e.preventDefault();
     if (this.state.username === '') {
       this.setState({
         usernameError : "Username is required"
@@ -77,20 +80,20 @@ class AdminLogin extends Component {
       );
     
     const loginForm = (
-      <div>
+      <form onSubmit={this.handleLogin}>
        <TextField hintText ="Username Field" floatingLabelText="Username" type="text" 
         onChange={this.handleUsername} value={this.state.username} errorText={this.state.usernameError}/><br/> 
        <TextField hintText="Password Field" floatingLabelText="Password" type="password" 
         onChange={this.handlePassword} value={this.state.password} errorText={this.state.passwordError}/><br/>
-       <RaisedButton onTouchTap={this.handleLogin} label="Login" style={{margin : 12}}/><br/>
+       <RaisedButton onTouchTap={this.handleLogin} label="Login" style={{margin : 12}}  type="submit"/><br/>
        <div>
        {this.state.invalidLogin ? alertInstance : ''}
        </div>
-       </div>
+       </form>
     )
 
     return (
-      <div>
+      <div className="well" style={wellStyle}>
       <MuiThemeProvider>
         {loginForm}
       </MuiThemeProvider>
