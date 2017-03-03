@@ -28,7 +28,7 @@ class GroupItem extends React.Component {
 
   render() {
     let renderRecipients = (recipient, i) => (
-      <FlatButton key={recipient.name} label={recipient.name} primary={true} style={{size: 5+'%', margin: 5+'px'}}/>
+      <FlatButton key={i} label={recipient.name} primary={true} style={{size: 5+'%', margin: 5+'px'}}/>
     )
     let group = this.props.group
     let medium = group.mediumType

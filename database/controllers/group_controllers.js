@@ -161,14 +161,16 @@ module.exports.UpdateRecipientInfo = (inputRecipId, inputInfo) => {
   })
 }
 
-module.exports.RemoveRecipient = (inputGroupId, recId) => {
+module.exports.RemoveRecipient = (inputGroupId, recipientIds) => {
   return new Promise((resolve, reject) => {
-   GroupRecipients.destroy({
-    where: {
-      recipientId: recId,
-      groupId: inputGroupId
-    }
-  })
+    Promise.map(recipientIds, id => {
+      return  GroupRecipients.destroy({
+                 where: {
+                  recipientId: id,
+                  groupId: inputGroupId
+                }
+            })
+    })
   .then(result => {
     resolve(result)
   })
