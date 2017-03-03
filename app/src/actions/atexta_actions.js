@@ -65,9 +65,9 @@ export function deleteGroup(group) {
   }
 }
 
-export function editGroup(editedGroup, id) {
+export function editGroup(editedGroup) {
   return{
     type: EDIT_GROUP,
-    payload: {editedGroup, id}
+    payload: editedGroup
   }
 }

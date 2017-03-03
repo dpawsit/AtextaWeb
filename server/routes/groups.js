@@ -94,6 +94,16 @@ router.delete('/groupRecipient/:groupId/:recipientId', (req, res) => {
   })
 })
 
+router.delete('/groupRecipients', (req, res) => {
+  gc.RemoveRecipient(req.query.groupId, req.query.recipients)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 router.delete('/deleteGroup/:groupId', (req, res) => {
   gc.DeleteGroup(req.params.groupId)
   .then(result => {

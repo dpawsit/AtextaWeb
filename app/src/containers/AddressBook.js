@@ -50,7 +50,7 @@ class AddressBook extends React.Component {
 			'none'
 
 		return(
-			<tr key={recipient.id}>
+			<tr key={recipient.id} className="addressBookItems">
 	      <td>{recipient.name}</td>
 	      <td>{medium}</td>
 	      <td>
@@ -67,7 +67,7 @@ class AddressBook extends React.Component {
 		this.state.showType === "slack" ? this.props.userRecipients.filter(rec=>rec.mediumType==="S") :
 		this.props.userRecipients
 		return (
-			<div>"
+			<div>
 				<FlatButton type="button" label="All" onClick={this.showAllContacts} />
 				<FlatButton type="button" label="Texts" onClick={this.showTextContacts} />
 				<FlatButton type="button" label="Emails" onClick={this.showEmailContacts} />

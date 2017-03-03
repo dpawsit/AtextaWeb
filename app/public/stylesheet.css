@@ -88,7 +88,7 @@ tr:nth-child(odd){
 	color: black;
 }*/
 
-tr:hover{
+.addressBookItems:hover{
 	background-color: #270943;
 	color: white;	
 }
