@@ -1,9 +1,10 @@
-import React from 'react'
-import axios from 'axios'
-import { addContact } from '../actions/atexta_actions'
-import { connect } from 'react-redux'
-import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col } from 'react-bootstrap'
-import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
+import React from 'react';
+import axios from 'axios';
+import { addContact } from '../actions/atexta_actions';
+import { connect } from 'react-redux';
+import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col } from 'react-bootstrap';
+import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui';
+import lock from '../utils/SlackAuthService';
 
 class AddContactModal extends React.Component {
   constructor(props) {
@@ -109,7 +110,10 @@ class AddContactModal extends React.Component {
 				)
       case 1:
 				if (this.state.newContactMedium === 'Slack') {
-					console.log("slack has been selected");
+					lock.show();
+					lock.on("hide", function() {
+						lock.checkToken();
+					})
 				}
         return (
           <div>
