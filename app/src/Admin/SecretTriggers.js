@@ -96,7 +96,9 @@ class SecretTriggers extends Component {
   })
 }
 
-  handleSecretTriggerSave() {
+  handleSecretTriggerSave(e) {
+    e.preventDefault();
+    
     if (this.state.newTriggerString === ''){
       this.setState({
         inputErrorString : 'This Field Is Required'
@@ -216,9 +218,11 @@ class SecretTriggers extends Component {
         <div style={styles.divider}/>
         <span style={styles.option}>Create New Trigger
         <br/>
+        <form onSubmit={this.handleSecretTriggerSave}>
         <TextField floatingLabelText="New Trigger" type="text" 
             onChange={this.handleTriggerInput} errorText={this.state.inputErrorString} value={this.state.newTriggerString}/>
-        <RaisedButton onTouchTap={this.handleSecretTriggerSave} label="Submit" style={{margin : 12, float:'right'}} /><br/>
+        <RaisedButton onTouchTap={this.handleSecretTriggerSave} label="Submit" style={{margin : 12, float:'right'}} type="submit"/><br/>
+        </form>
         {this.state.successAlert ? alertInstanceSuccess : ''}        
         </span>
       </div>

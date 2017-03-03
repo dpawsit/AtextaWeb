@@ -104,7 +104,8 @@ class CreateQuery extends Component {
     this.setState({
       nameError : '',
       queryName : e.target.value,
-      updateSuccess : false
+      updateSuccess : false,
+      createSuccess : false
     })
   }
 
@@ -116,7 +117,8 @@ class CreateQuery extends Component {
       queryErrorMessage: '',
       testPassed : false,
       queryResult : [],
-      updateSuccess : false
+      updateSuccess : false,
+      createSuccess : false
     })
   }
 

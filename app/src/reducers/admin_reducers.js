@@ -68,7 +68,7 @@ export default function (state = INITIAL_STATE, action) {
         }
         delete newQueryRes[action.payload.id]
 
-      return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : [], chartOption : null}
+      return {...state, adminQueries : newQuery, queryResults : newQueryRes, singleQuery : [], chartOption : null, queryName : ''}
 
     case ADMIN_LOGOUT:
       return INITIAL_STATE;
