@@ -2,8 +2,6 @@ import React from 'react'
 import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import TrashIcon from 'material-ui/svg-icons/action/delete'
 import EditIcon from 'material-ui/svg-icons/content/create'
-// import TextIcon from 'material-ui/svg-icons/communication/chat'
-// import EmailIcon from 'material-ui/svg-icons/communication/email'
 
 class MySecretItem extends React.Component {
   constructor(props) {

@@ -13,6 +13,7 @@ import { browserHistory } from 'react-router';
 import axios from 'axios';
 import AdminControls from './AdminControls';
 import SecretTriggers from './SecretTriggers';
+import { Col } from 'react-bootstrap';
 
 const styles = {
   contentHeaderMenuLink: {

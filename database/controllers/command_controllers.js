@@ -46,7 +46,6 @@ module.exports.UpdateCommandName = (inputCommandId, NewCommandName) => {
 }
 
 module.exports.CreateNewCommand = (inputCommand) => {
-  console.log('got to create command controller with', inputCommand)
   return new Promise ((resolve, reject) => {
     Message.create({
       text : inputCommand.text,

@@ -183,7 +183,6 @@ class AddGroupModal extends React.Component {
 				})
 			}
 
-			//do a deep check of initial recipients and recipients now
 			let toDelete = []
 			this.props.initialData.recipients.forEach(initialRecipient => {
 				let found = false;
@@ -229,7 +228,6 @@ class AddGroupModal extends React.Component {
 			}
 
 		} else {
-			//this is a new post
 			axios.post('/groups/addGroup', {
 				groupInfo: {
 					name: this.state.newGroupName,
@@ -355,8 +353,6 @@ class AddGroupModal extends React.Component {
 	}
 
 	render() {
-		console.log('the list of crrent reci', this.state.recipientsToAdd)
-		console.log('other list of reci', this.state.validRecipients)
 		return(
 	    <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>
 	    	<Modal.Header closeButton>

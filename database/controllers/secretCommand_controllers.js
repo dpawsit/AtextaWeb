@@ -34,7 +34,6 @@ module.exports.GetAvailableSecretTriggers = (inputUserId) => {
 }
 
 module.exports.CreateNewSecretCommand = (inputInfo) => {
-  console.log('got this info to create with', inputInfo)
   return new Promise ((resolve, reject) => {
     SecretMessage.create({
       text : inputInfo.text,
