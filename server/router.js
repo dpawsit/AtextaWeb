@@ -4,4 +4,5 @@ module.exports = app => {
   app.use('/groups', require('./routes/groups.js'));
   app.use('/auth', require('./routes/auth.js'));
   app.use('/admin', require('./routes/admin.js'));
+  app.use('/slack', require('./routes/slack.js'));
 }

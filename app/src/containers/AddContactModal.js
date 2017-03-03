@@ -1,9 +1,29 @@
-import React from 'react'
-import axios from 'axios'
-import { addContact } from '../actions/atexta_actions'
-import { connect } from 'react-redux'
-import { Modal, ButtonToolbar, DropdownButton, MenuItem, Grid, Row, Col } from 'react-bootstrap'
-import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Stepper } from 'material-ui'
+import React from 'react';
+import axios from 'axios';
+import { addContact } from '../actions/atexta_actions';
+import { connect } from 'react-redux';
+import {
+	Modal,
+	ButtonToolbar,
+	DropdownButton,
+	MenuItem,
+	Grid,
+	Row,
+	Col,
+	FormGroup,
+	FormControl,
+	ControlLabel
+} from 'react-bootstrap';
+import {
+	RaisedButton,
+	FlatButton,
+	Step,
+	StepButton,
+	StepContent,
+	StepLabel,
+	Stepper
+} from 'material-ui';
+import slackLock from '../utils/SlackAuthService';
 
 class AddContactModal extends React.Component {
   constructor(props) {
@@ -12,7 +32,9 @@ class AddContactModal extends React.Component {
       step: 0,
       newContactName: '',
       newContactMedium: 'Select a medium',
-      newContactInfo: ''
+      newContactInfo: '',
+			slackName: '',
+			slackChannels: null
     }
     this.incrementStep = this.incrementStep.bind(this)
     this.decrementStep = this.decrementStep.bind(this)
@@ -23,6 +45,10 @@ class AddContactModal extends React.Component {
     this.handleNameSubmit = this.handleNameSubmit.bind(this)
     this.handleInfoSubmit = this.handleInfoSubmit.bind(this)
     this.handleContactSubmit = this.handleContactSubmit.bind(this)
+		this.getSlackChannels = this.getSlackChannels.bind(this)
+		this.renderChannels = this.renderChannels.bind(this)
+		this.renderGroups = this.renderGroups.bind(this);
+		this.renderUsers = this.renderUsers.bind(this);
   }
 
   handleContactSubmit (event) {
@@ -53,6 +79,21 @@ class AddContactModal extends React.Component {
 		})
   }
 
+	getSlackChannels () {
+		let token = slackLock.getToken();
+		console.log('token in get channels: ', token);
+		axios.get('/slack/getChannels', {params: {token: token}})
+		.then(results => {
+			console.log('result from getting channels: ', results.data);
+			this.setState({
+				slackChannels: results.data
+			})
+		})
+		.catch(error => {
+			console.log('error from getting channels: ', error);
+		})
+}
+
   selectMediumType(medium) {
 		//add a check
 		this.setState({newContactMedium: medium})
@@ -77,15 +118,54 @@ class AddContactModal extends React.Component {
     this.incrementStep()
   }
 
+	handleInfoSelect(recipient, displayName) {
+		this.setState({
+			newContactInfo: recipient,
+			slackName: displayName
+		})
+	}
+
 	incrementStep() {
-		this.setState({step: this.state.step+1})
+		this.setState({step: this.state.step + 1})
 	}
 
 	decrementStep() {
-		const { step } = this.state
-		if(step > 0) {
-			this.setState({step: step-1})
+		if(this.state.step > 0) {
+			this.setState({step: this.state.step - 1})
 		}
+	}
+
+	renderChannels(channels, i) {
+		return(
+			<MenuItem
+				eventKey={channels}
+				onSelect={()=> this.handleInfoSelect(channels, channels)}
+			>
+				Channel:  #{channels}
+			</MenuItem>	
+		)
+	}
+
+	renderGroups(groups, i) {
+		return(
+			<MenuItem
+				eventKey={groups}
+				onSelect={()=> this.handleInfoSelect(groups, groups)}
+			>
+				Private Group:  {groups}
+			</MenuItem>
+	 	)
+	}
+
+	renderUsers(users, i) {
+		return(
+			<MenuItem
+				eventKey={users.id}
+				onSelect={()=> this.handleInfoSelect(users.id, users.name)}
+			>
+				Private Group:  {users.name}
+			</MenuItem>
+	 	)
 	}
 
   stepDecider() {
@@ -93,7 +173,8 @@ class AddContactModal extends React.Component {
       case 0:
 				return (
 					<div>
-						What medium is this?
+						<b>What medium is this?</b>
+						<br/>
 						<ButtonToolbar>
 				      <DropdownButton title={this.state.newContactMedium} id="dropdown-size-medium">
 				        <MenuItem eventKey="1" onSelect={()=> this.selectMediumType('Text')}>Text(Twilio)</MenuItem>
@@ -101,42 +182,77 @@ class AddContactModal extends React.Component {
 				        <MenuItem eventKey="3" onSelect={()=> this.selectMediumType('Email')}>Email</MenuItem>
 				      </DropdownButton>
 				    </ButtonToolbar>
-				    <br/>
+						<br/>
 						<FlatButton type="button" label="Cancel" onClick = {this.props.close}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
 					</div>
 				)
       case 1:
+				if (this.state.newContactMedium === 'Slack' && !localStorage.getItem("slackToken")) {
+					slackLock.show();
+				}	else if (this.state.newContactMedium === 'Slack' && !this.state.slackChannels) {
+					this.getSlackChannels();
+				}
         return (
           <div>
             <form onSubmit={this.handleNameSubmit}>
 							<label>
 								Name this new contact:
-								<input value={this.state.newContactName}
-                onChange={this.handleNameChange} type='text'/>
+								<br/>
+								<input 
+									type='text' 
+									value={this.state.newContactName}
+                	onChange={this.handleNameChange} 
+									required
+									/>
             	</label>
             </form>
 						<FlatButton type="button" label="Back" onClick = {this.decrementStep}/>
-						<RaisedButton type="button" label="Next" secondary={true} 
-						onClick = {this.incrementStep}/>
+						<RaisedButton type="button" label="Next" secondary={true} onClick = {this.incrementStep}/>
           </div>
         )
-      case 2: 
-        return (
-          <div>
-            <form onSubmit={this.handleContactSubmit}>
-							<label>
-								Input the contact info
-								<input value={this.state.newContactInfo}
-                onChange={this.handleInfoChange} type='text'/>
-            	</label>
-            </form>
-						<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
-						<RaisedButton type="button" label="Submit" primary={true}
-						onClick = {this.handleContactSubmit}/>
-          </div>
-        )
+      case 2:
+				if (this.state.newContactMedium === 'Slack') {
+					return (
+						<div>
+							<b>Select Slack Recipient</b>
+							<ButtonToolbar>
+								<DropdownButton 
+									title={this.state.slackName ? this.state.slackName : "Select"} 
+									id="dropdown-size-large"
+								>
+									{this.state.slackChannels.channels.map(this.renderChannels)}
+									{this.state.slackChannels.groups.map(this.renderGroups)}
+									{this.state.slackChannels.users.map(this.renderUsers)}
+								</DropdownButton>
+							</ButtonToolbar>
+							<br/>
+							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
+							<RaisedButton type="button" label="Submit" primary={true}
+							onClick = {this.handleContactSubmit}/>
+						</div>
+					)
+				}	else {
+					return (
+						<div>
+							<form onSubmit={this.handleContactSubmit}>
+								<label>
+									Input the contact info
+									<input 
+										required
+										value={this.state.newContactInfo}
+										onChange={this.handleInfoChange} 
+										type='text'
+										/>
+								</label>
+							</form>
+							<br/>
+							<FlatButton type="button" label="Back" onClick = {this.decrementStep} /> 
+							<RaisedButton type="button" label="Submit" primary={true}
+							onClick = {this.handleContactSubmit}/>
+						</div>
+					)
+				}
       default: 
         return (
           <div>error handling request, please try refreshing</div>
@@ -145,9 +261,11 @@ class AddContactModal extends React.Component {
   }
 
 	render() {
+		console.log('slack channels before rendering: ', this.state.slackChannels);
+		console.log('slack recipient before sending: ', this.state.newContactInfo);
 		return(
-	    <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>
-	    	<Modal.Header closeButton>
+	    <Modal show={this.props.show} bsSize="large">
+	    	<Modal.Header closeButton onHide={this.props.close}>
 	    		<Modal.Title>Create a new contact</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
