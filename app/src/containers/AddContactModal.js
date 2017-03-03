@@ -108,6 +108,9 @@ class AddContactModal extends React.Component {
 					</div>
 				)
       case 1:
+				if (this.state.newContactMedium === 'Slack') {
+					console.log("slack has been selected");
+				}
         return (
           <div>
             <form onSubmit={this.handleNameSubmit}>
@@ -146,8 +149,8 @@ class AddContactModal extends React.Component {
 
 	render() {
 		return(
-	    <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>
-	    	<Modal.Header closeButton>
+	    <Modal show={this.props.show} bsSize="large">
+	    	<Modal.Header closeButton onHide={this.props.close}>
 	    		<Modal.Title>Create a new contact</Modal.Title>
 	    	</Modal.Header>
 	    	<Modal.Body>
