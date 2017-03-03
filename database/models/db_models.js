@@ -172,6 +172,16 @@ var SecretTriggers = db.define('SecretTriggers', {
     defaulValue : 0,
     unique : false,
     allowNull : false
+  },
+  status : {
+    type : Sequelize.BOOLEAN,
+    unique : false,
+    allowNull : false
+  },
+  createdBy : {
+    type : Sequelize.INTEGER,
+    unique : false,
+    allowNull : true
   }
 })
 
@@ -216,7 +226,7 @@ var SecretMessage = db.define('SecretMessage', {
     unique : false,
     allowNull : false
   },
-  secretCommanId : {
+  secretCommandId : {
     type : Sequelize.INTEGER,
     unique : false,
     allowNull : true
@@ -249,6 +259,47 @@ var TriggeredSecrets = db.define('TriggeredSecrets', {
   }
 })
 
+var AdminQueries = db.define('AdminQueries', {
+  queryName : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  }, 
+  queryString : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  },
+  chartOption : {
+    type : Sequelize.STRING,
+    allowNull : true,
+    unique : false
+  },
+  createdBy : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
+  }
+})
+
+var AdminCreds = db.define('AdminCreds', {
+  username : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : true
+  },
+  password : {
+    type : Sequelize.STRING,
+    allowNull : false,
+    unique : false
+  },
+  createdBy : {
+    type : Sequelize.INTEGER,
+    allowNull : false,
+    unique : false
+  }
+})
+
 module.exports = {
   User : User,
   Group : Group, 
@@ -261,5 +312,7 @@ module.exports = {
   SecretResponse : SecretResponse,
   SecretMessage : SecretMessage,
   TriggeredCommands : TriggeredCommands,
-  TriggeredSecrets : TriggeredSecrets
+  TriggeredSecrets : TriggeredSecrets,
+  AdminQueries : AdminQueries,
+  AdminCreds : AdminCreds
 }

@@ -1,18 +1,23 @@
 "use strict"
 const jwt = require('jsonwebtoken');
-const config = require('../keys').secret;
+const secret = require('../keys').secret;
+const Promise = require('bluebird');
 
 module.exports.checkUser = (req, res, next) => {
   let token = req.headers.authorization;
 
   if (req.path === '/auth/login' || 
+      req.path === '/favicon.ico' ||
       req.path === '/' || 
       req.path === '/login' ||
-      req.path === '/dashboard') {
+      req.path === '/dashboard' ||
+      req.path === '/admin' ||
+      req.path === '/admin/adminLogin' ||
+      req.path === '/adminLogin') {
     next();
   } else {
     if (token) {
-      jwt.verify(token, config, (error, decoded) => {
+      jwt.verify(token, secret, (error, decoded) => {
         if (error) {
           res.status(403).json({message : 'Failed to authenticate token.'});
         } else {
@@ -23,4 +28,18 @@ module.exports.checkUser = (req, res, next) => {
       res.status(403).json({message : 'No token provided'});
     }
   }
+}
+
+module.exports.signToken = (userId) => {
+  return new Promise ((resolve, reject) => {
+    jwt.sign({userId}, secret, {
+      expiresIn : '1h'
+    }, (error, token) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(token)
+      }
+    })
+  })
 }
