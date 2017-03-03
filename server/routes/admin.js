@@ -96,5 +96,28 @@ router.delete('/deleteAdminQuery', (req, res) => {
   })
 })
 
+router.post('/updatePassword', (req, res) => {
+  ac.updatePassword(req.body)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+router.post('/createNewAdmin', (req, res) => {
+  ac.createNewAdmin(req.body)
+  .then(result => {
+    res.status(200).json(result);
+  })
+  .catch(error => {
+    try {
+      res.status(500).send({error: error.errors[0].message})
+    } catch (e) {
+      res.status(500).send({error: error});
+    }
+  })
+})
 
 module.exports = router;

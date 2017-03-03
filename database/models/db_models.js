@@ -282,6 +282,11 @@ var AdminCreds = db.define('AdminCreds', {
     type : Sequelize.STRING,
     allowNull : false,
     unique : false
+  },
+  createdBy : {
+    type : Sequelize.INTEGER,
+    allowNull : false,
+    unique : false
   }
 })
 

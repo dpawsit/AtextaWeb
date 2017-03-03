@@ -31,27 +31,6 @@ module.exports.adminLogin = (adminInfo) => {
   })
 }
 
-module.exports.createAdmin = (adminInfo) => {
-  return new Promise ((resolve, reject) => {
-    utils.cipher(adminInfo.password)
-    .then(hashedPassword => {
-      AdminCreds.Create({
-      username : adminInfo.username,
-      password : hashedPassword
-      })
-      .then(newAdmin => {
-        resolve(newAdmin)
-      })
-      .catch(error => {
-        reject(error);
-      })
-    })
-    .catch(error => {
-      reject(error);
-    })
-  })
-}
-
 module.exports.getAdminQueries = () => {
   return new Promise ((resolve, reject) => {
     db.query('select AQ.*, AC.username from AdminQueries AQ join AdminCreds AC on AQ.createdBy = AC.id', {
@@ -119,6 +98,64 @@ module.exports.deleteAdminQuery = (queryId) => {
     })
     .then(res => {
       resolve({deleted: true})
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+module.exports.createNewAdmin = (adminInfo) => {
+  return new Promise ((resolve, reject) => {
+    utils.cipher(adminInfo.password)
+    .then(hashedPassword => {
+      AdminCreds.create({
+      username : adminInfo.username,
+      password : hashedPassword,
+      createdBy : adminInfo.adminId
+      })
+      .then(newAdmin => {
+        resolve({created : true})
+      })
+      .catch(error => {
+        reject(error);
+      })
+    })
+    .catch(error => {
+      reject(error);
+    })
+  })
+}
+
+module.exports.updatePassword = (adminInfo) => {
+  return new Promise ((resolve, reject) => {
+    AdminCreds.findOne({where : {
+      id : adminInfo.id
+    }})
+    .then(admin => {
+      utils.comparePassword(adminInfo.currentPassword, admin.password)
+      .then(match => {
+        if (match) {
+          utils.cipher(adminInfo.newPassword)
+          .then(hashedPassword => {
+            db.query('update AdminCreds set password = ? where id =?',{
+              replacements: [hashedPassword, admin.id], type : sequelize.QueryTypes.UPDATE
+            }).then(updatedPassword => {
+              resolve({update:true})
+            }).catch(error => {
+              reject(error);
+            })
+          })
+          .catch(error => {
+            reject(error);
+          })
+        } else {
+          resolve({update : false})
+        }
+      })
+      .catch(error => {
+        reject(error);
+      })
     })
     .catch(error => {
       reject(error);
