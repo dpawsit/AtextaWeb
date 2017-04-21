@@ -7,6 +7,7 @@ import { RaisedButton, FlatButton, Step, StepButton, StepContent, StepLabel, Ste
 import { addCommand, editCommand } from '../actions/atexta_actions'
 import TextIcon from 'material-ui/svg-icons/communication/chat'
 import EmailIcon from 'material-ui/svg-icons/communication/email'
+import {lengthExceedsMaxTrigger, triggerLengthIsTooShort} from '../utils/formValidation'
 
 class AddMessageModal extends React.Component {
 	constructor(props) {
@@ -17,8 +18,11 @@ class AddMessageModal extends React.Component {
 			selectedGroupId: this.props.initialData.groupId,
 			newCommandName: this.props.initialData.commandName,
 			newCommandText: this.props.initialData.text,
-			addingNewGroup: false
+			addingNewGroup: false,
+			nameTooLong: false,
+			nameTooShort: true
 		}
+		this.componentDidMount = this.componentDidMount.bind(this)
 		this.stepDecider = this.stepDecider.bind(this)
 		this.incrementStep = this.incrementStep.bind(this)
 		this.clickGroup = this.clickGroup.bind(this)
@@ -32,13 +36,25 @@ class AddMessageModal extends React.Component {
 		this.handleNewGroupClose = this.handleNewGroupClose.bind(this)
 	}
 
+	componentDidMount() {
+		if(this.state.newCommandName.length) {
+			this.setState({nameTooShort: false})
+		}
+	}
+
 	handleNameChange(event) {
     this.setState({newCommandName: event.target.value});
+		if(lengthExceedsMaxTrigger(event.target.value)) {
+			this.setState({nameTooLong:true, nameTooShort:false})
+		} else if(triggerLengthIsTooShort(event.target.value)) {
+			this.setState({nameTooLong: false, nameTooShort: true})
+		} else {
+			this.setState({nameTooLong:false, nameTooShort: false})
+		}
 	}
 
 	handleNameSubmit(event) {
 		event.preventDefault()
-		//check if it's empty, if so don't let them 
 		this.incrementStep()
 	}
 
@@ -61,7 +77,6 @@ class AddMessageModal extends React.Component {
 	}
 
 	handleCommandSubmit() {
-		console.log('this is the command', this.state.selectedGroupId, this.state.newCommandName, this.state.newCommandText)
 		if(this.props.initialData.id) {
 			//this is an edit request
 			const editedCommand = {
@@ -116,7 +131,6 @@ class AddMessageModal extends React.Component {
 			}
 			this.props.close()
 		} else {
-			console.log('this is a new command post')
 			//this is a new command post request
 			let newCommand = {
 				name: this.state.newCommandName,
@@ -150,7 +164,11 @@ class AddMessageModal extends React.Component {
 	}
 
 	incrementStep() {
-		this.setState({step: this.state.step+1})
+		if(this.state.nameTooLong || this.state.nameTooShort) {
+			window.alert('Please fix the name of this trigger')
+		}  else {
+			this.setState({step: this.state.step+1})
+		}
 	}
 
 	decrementStep() {
@@ -175,24 +193,36 @@ class AddMessageModal extends React.Component {
 			case 0:
 				return (
 					<div>
-						<form onSubmit={this.handleNameSubmit} className="modalForms">
+						<form onSubmit={this.handleNameSubmit} className="modalForms" autoComplete="off">
 							<label>
 								What do you want to name this trigger?
-								<input value={this.state.newCommandName} type='text' id='groupName' 
-								onChange={this.handleNameChange} />
+								<input 
+									required={true}  
+									value={this.state.newCommandName} 
+									type='text' 
+									id='groupName' 
+									onChange={this.handleNameChange} 
+								/>
             	</label>
             </form>
-						<br/>
+						{this.state.nameTooLong ? <p className="warnings">Please choose a shorter trigger - if a trigger is too long Alexa loses accuracy</p> : 
+						this.state.nameTooShort ? <p className="warnings">This input is required</p> : 
+						<p>&nbsp;</p>}
 					</div>
 				)
 			case 1:
 				return (
 					<div>
-						<form onSubmit={this.handleTextSubmit}>
+						<form onSubmit={this.handleTextSubmit} autoComplete="on">
 							<label>
 								Input the text you want to send
-								<input value={this.state.newCommandText} type='text' id='groupName' 
-								onChange={this.handleTextChange}  />
+								<input 
+									value={this.state.newCommandText} 
+									type='text' 
+									id='groupName' 
+									onChange={this.handleTextChange}
+									maxLength="139"
+								/>
             	</label>
             </form>
 						<br/>

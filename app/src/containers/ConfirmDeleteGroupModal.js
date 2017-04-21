@@ -16,6 +16,7 @@ class ConfirmDeleteGroupModal extends React.Component {
     this.props.deleteGroup(this.props.groupToDelete)
     axios.delete('/groups/deleteGroup/'+this.props.groupToDelete.groupId)
     .then(result=>{
+      //also gotta delete it from the store, or rehydrate it?
       console.log('result is', result)
       this.props.close()
     })

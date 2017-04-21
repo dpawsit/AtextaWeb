@@ -135,7 +135,7 @@ class AddGroupModal extends React.Component {
 	}
 
 	selectMediumType(medium) {
-		//add a check
+		//add a check if that matches
 		this.setState({newGroupMedium: medium})
 	}
 
@@ -289,7 +289,13 @@ class AddGroupModal extends React.Component {
 						<form onSubmit={this.handleNameSubmit}>
 							<label>
 								What do you want to name this group?
-								<input value={this.state.newGroupName} onChange={this.handleNameChange} type='text' id='groupName' />
+								<input 
+									value={this.state.newGroupName} 
+									onChange={this.handleNameChange} 
+									type='text' 
+									id='groupName' 
+									maxLength = "30"
+								/>
             	</label>
             </form>
 					</div>

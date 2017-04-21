@@ -56,6 +56,11 @@
 	/*background-color:	#270943;*/
 }
 
+.warnings {
+	color: darkred;
+	font-weight: bold;
+}
+
 #addressBook{
 	overflow: auto;
 	height: 500px;
