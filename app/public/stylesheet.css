@@ -13,6 +13,13 @@
 	background-color: #270943;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
+.normalCursor {
+	cursor: default;
+}
 .navHeaders{
 	margin-left: 50px;
 }

@@ -30,7 +30,7 @@ class MySecretItem extends React.Component {
       <div>
         <Row className="hoverable column" onMouseEnter={this.allowEdits} onMouseLeave={this.preventEdits}>
 
-            <Col md={2}>
+            <Col className="normalCursor" md={2}>
               <OverlayTrigger placement="right" overlay={tooltipForTrigger} animation={true}>
                 <div>{secret.name}</div>
               </OverlayTrigger>
@@ -39,7 +39,7 @@ class MySecretItem extends React.Component {
             <Col md={4}>{secret.text}</Col>
             <Col md={2}>{secret.GroupName}</Col>
             <Col md={1}>
-              {this.state.editMode ? <div><EditIcon onClick={()=>{this.props.editSecret(secret)}} /> <TrashIcon onClick={()=>{this.props.deleteSecret(secret)}} /> </div>: null}
+              {this.state.editMode ? <div><EditIcon className="pointer" onClick={()=>{this.props.editSecret(secret)}} /> <TrashIcon className="pointer" onClick={()=>{this.props.deleteSecret(secret)}} /> </div>: null}
             </Col>
 
         </Row>

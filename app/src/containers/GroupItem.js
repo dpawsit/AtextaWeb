@@ -28,22 +28,23 @@ class GroupItem extends React.Component {
 
   render() {
     let renderRecipients = (recipient, i) => (
-      <FlatButton key={i} label={recipient.name} primary={true} style={{height: 23.5+'px', margin: 5+'px'}}/>
+      recipient.name + (i === this.props.group.recipients.length - 1 ? ' ' : ', ')
+      // <FlatButton key={i} label={recipient.name} primary={true} style={{height: 23.5+'px', margin: 5+'px'}}/>
     )
     let group = this.props.group
     let medium = group.mediumType
     return(
         <Row onMouseEnter={this.allowEdits} onMouseLeave={this.preventEdits} className="hoverable column">
 
-            <Col md={2} onClick={()=>{this.props.editGroup(group)}}>{group.name}</Col>
+            <Col md={2} className="pointer" onClick={()=>{this.props.editGroup(group)}} >{group.name}</Col>
             <Col md={1}>
               {medium === 'T' ? <TextIcon /> : medium==='E' ? <EmailIcon /> : <em>Slack</em>}
             </Col>
-            <Col className="sideScroll" md={8}>{group.recipients.map(renderRecipients)}</Col>
+            <Col md={8}>{group.recipients.map(renderRecipients)}</Col>
           
           <Col md={1}>
             
-            {this.state.editMode ? <span><EditIcon onClick={()=>{this.props.editGroup(group)}}/> <TrashIcon onClick={()=>{this.props.deleteGroup(group)}}/></span> : null}
+            {this.state.editMode ? <span><EditIcon className="pointer" onClick={()=>{this.props.editGroup(group)}}/> <TrashIcon className="pointer" onClick={()=>{this.props.deleteGroup(group)}}/></span> : null}
           </Col>
 
         </Row>

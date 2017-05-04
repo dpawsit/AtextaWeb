@@ -33,7 +33,7 @@ class AddressBookItem extends React.Component {
         <Col md={3}>{medium}</Col>
         <Col md={4}>{contact.contactInfo}</Col>
         <Col md={1}>
-          {this.state.editMode ? <div><EditIcon onClick={()=>{this.props.editContact(contact)}} /> <TrashIcon onClick={()=>{this.props.deleteContact(contact)}} /> </div>: null}
+          {this.state.editMode ? <div><EditIcon className="pointer" onClick={()=>{this.props.editContact(contact)}} /> <TrashIcon className="pointer" onClick={()=>{this.props.deleteContact(contact)}} /> </div>: null}
         </Col>
       </Row>	
     )

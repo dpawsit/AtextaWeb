@@ -38,7 +38,7 @@ class MessageItem extends React.Component {
       <div>
         <Row className="hoverable column" onMouseEnter={this.allowDeletion} onMouseLeave={this.preventDeletion}>
 
-            <Col md={2}>
+            <Col className="normalCursor" md={2}>
               <OverlayTrigger placement="right" overlay={tooltipForTrigger} animation={true}>
                 <div>{command.commandName}</div>
               </OverlayTrigger>
@@ -56,7 +56,7 @@ class MessageItem extends React.Component {
             </Col>
 
           <Col md={1}>
-            {this.state.deletionMode ? <div><EditIcon onClick={()=>{this.props.editMessage(command)}} /> <TrashIcon onClick={()=>{this.props.deleteMessage(command)}} /> </div>: null}
+            {this.state.deletionMode ? <div><EditIcon className="pointer" onClick={()=>{this.props.editMessage(command)}} /> <TrashIcon className="pointer" onClick={()=>{this.props.deleteMessage(command)}} /> </div>: null}
           </Col>
 
         </Row>
