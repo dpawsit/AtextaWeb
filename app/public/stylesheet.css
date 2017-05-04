@@ -1,27 +1,101 @@
+.mainContainer {
+	margin: 10px;
+}
+
+.column {
+	border-bottom: 1px solid darkgrey;
+	margin-bottom: 4px;
+	height: 30px;
+	margin-left: 15px;
+}
+
+.nav {
+	background-color: #270943;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.normalCursor {
+	cursor: default;
+}
+.navHeaders{
+	margin-left: 50px;
+}
+
+.footerButton {
+	color: white;
+	float: left;
+	position: relative;
+	left: 39%;
+}
+
+.navItems{
+	color: white;
+	margin-left: 15px;
+}
+
+.hoverable:hover {
+	box-shadow: inset 0 0 2em #270943, 0 0 2em darkgrey;
+}
+
+.tableHeader {
+	background-color: #270943;
+	color: white;
+	font: 16px calibri, sans-serif;
+	padding-top: 5px;
+}
+
+.scrollGrid {
+	overflow: auto;
+	height: 500px;
+	width: 98%;
+	padding: 5px;
+	margin: 5px;
+	margin-right: 15px;
+}
+
 .scrollable {
 	overflow: auto;
-	margin: auto;
-	border: 5px solid black;
 	height: 350px;
+	width: 95%;
 	/*background-color:	#270943;*/
+}
 
+.warnings {
+	color: darkred;
+	font-weight: bold;
+}
+
+#addressBook{
+	overflow: auto;
+	height: 500px;
+	width: 98%;
+	padding: 5px;
+	margin: 5px;
+	margin-right: 15px;
+}
+
+.sideScroll {
+	overflow: auto;
+	white-space: nowrap;
+}
+
+input {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
 }
 
 .centered {
 	text-align: center;
-	margin: auto;
-	/*color: #fb5f26;*/
-	color: aliceblue
 }
 
-.colorBox {
-	/*background-color:	#008080;*/
-	background-color: steelblue;
-	border: 1px solid black;
-	margin: auto;
-	margin-top: 5px;
-	width: 50%;
-	text-align: center;
+.checkmarks {
+	height: 18px;
+	width: 18px;
 }
 
 ul {
@@ -29,18 +103,7 @@ ul {
     list-style-type: none;
 }
 
-
-tr:nth-child(even) {
-	background-color: #008080;
-	color: white;
-}
-
-tr:nth-child(odd){
-	background-color: white;
-	color: black;
-}
-
-tr:hover{
+.addressBookItems:hover{
 	background-color: #270943;
 	color: white;	
 }
@@ -49,9 +112,49 @@ tr:hover{
 	background-color: #270943;
 	color: white;
 }
-/*
-why doesn't this work?
-.columnLabel {
-	background-color: #270943;
-	color: white;
-}*/
+
+#bg {
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+
+#bg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+}
+
+#landingLogo {
+  position: fixed;
+  top: 18%;
+  left: 25%;
+}
+
+#landingLogo img {
+	cursor: pointer
+}
+
+#adminContainer img{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    min-width: 50%;
+    min-height: 50%;
+}
+
+#adminWell {
+	 position: fixed;
+   top: 42%;
+   left: 41%; 
+   padding: 20px;
+}
