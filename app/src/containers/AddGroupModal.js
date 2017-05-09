@@ -40,7 +40,7 @@ class AddGroupModal extends React.Component {
 			const medium = this.props.initialData.mediumType === 'T' ? 'Text' :
 			this.props.initialData.mediumType === 'E' ? 'Email' :
 			this.props.initialData.mediumType === 'S' ? 'Slack' : 'Select a medium'
-			console.log('inside here', this.props.initialData)
+			// console.log('inside here', this.props.initialData)
 			this.setState({
 				newGroupMedium: medium,	
 				newGroupName: this.props.initialData.name,
@@ -68,11 +68,11 @@ class AddGroupModal extends React.Component {
 				}
 				if(!flag) uniqueResults.push(result.data[i])
 			}
-			console.log(result.data)
+			// console.log(result.data)
 			this.setState({validRecipients: uniqueResults, fetchedValidRecipients: true})
 		})
 		.catch(err=>{
-			console.log('error fetching avilable recipients:', err)
+			// console.log('error fetching avilable recipients:', err)
 		})
 
 	}
@@ -96,14 +96,14 @@ class AddGroupModal extends React.Component {
 	}
 
 	removeRecipientFromQueue(indexes) {
-		console.log('queried me', indexes)
+		// console.log('queried me', indexes)
 		indexes = indexes === 'none' ? [] : indexes
 		this.setState({recipientsToRemoveQueue: indexes})
 	}
 
 	addRecipientToGroup() {
 		let indexesOfValidRec = this.state.recipientsToAddQueue.slice()
-		console.log('trying to add', indexesOfValidRec)
+		// console.log('trying to add', indexesOfValidRec)
 		let prevToAdd = this.state.recipientsToAdd.slice()
 		let prevAvailable = this.state.validRecipients.slice()
 		if(indexesOfValidRec==='all') {
@@ -120,7 +120,7 @@ class AddGroupModal extends React.Component {
 
 	removeRecipientFromGroup() {
 		let indexesOfRecToAdd = this.state.recipientsToRemoveQueue.slice()
-		console.log('trying to remove', indexesOfRecToAdd)
+		// console.log('trying to remove', indexesOfRecToAdd)
 		let prevToAdd = this.state.recipientsToAdd.slice()
 		let prevAvailable = this.state.validRecipients.slice()
 		if(indexesOfRecToAdd==='all') {
@@ -161,7 +161,7 @@ class AddGroupModal extends React.Component {
 				recipients: this.state.recipientsToAdd
 			})
 			this.props.close()
-			console.log('recognized as an edit request')
+			// console.log('recognized as an edit request')
 			const editedGroup = {
 				name: this.state.newGroupName,
 				mediumType: medium,
@@ -202,20 +202,20 @@ class AddGroupModal extends React.Component {
 			}) 
 
 			if(toDelete.length) {
-				console.log('attempting to delete', toDelete)
+				// console.log('attempting to delete', toDelete)
 				axios.delete('/groups/groupRecipients', {params : {groupId : this.props.initialData.groupId, recipients: toDelete}
 				})
 				.then(result=>{
-					console.log('result of deleting recipients', result)
+					// console.log('result of deleting recipients', result)
 				})
 				.catch(error=>{
-					console.log('error eleting group recipients', error)
+					// console.log('error eleting group recipients', error)
 				})
 			}
 
 
 			if(toAdd.length) {
-				console.log('attempintg to add', toAdd)
+				// console.log('attempintg to add', toAdd)
 				axios.put('/groups/linkRecipient', {
 						groupId: this.props.initialData.groupId,
 						recipients: toAdd
@@ -238,7 +238,7 @@ class AddGroupModal extends React.Component {
 				savedRecipients: this.state.recipientsToAdd
 			})
 			.then(result=> {
-				console.log('group added', result)
+				// console.log('group added', result)
 				this.props.addGroup({
 					name: result.data.group.name,
 					mediumType: result.data.group.mediumType,
@@ -251,7 +251,7 @@ class AddGroupModal extends React.Component {
 				this.props.close()
 			})
 			.catch(err=> {
-				console.log('error submitting group:', err)
+				// console.log('error submitting group:', err)
 			})
 		}
 	}
@@ -277,7 +277,7 @@ class AddGroupModal extends React.Component {
 						<ButtonToolbar>
 				      <DropdownButton title={this.state.newGroupMedium} id="dropdown-size-medium">
 				        <MenuItem eventKey="1" onSelect={()=> this.selectMediumType('Text')}>Text(Twilio)</MenuItem>
-				        <MenuItem eventKey="2" onSelect={()=> this.selectMediumType('Slack')}>Slack</MenuItem>
+				        {/*<MenuItem eventKey="2" onSelect={()=> this.selectMediumType('Slack')}>Slack</MenuItem>*/}
 				        <MenuItem eventKey="3" onSelect={()=> this.selectMediumType('Email')}>Email</MenuItem>
 				      </DropdownButton>
 				    </ButtonToolbar>

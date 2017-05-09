@@ -71,7 +71,7 @@ class SecretTriggers extends Component {
       this.props.setSecretTriggers()
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
     })
   }
 
@@ -113,7 +113,7 @@ class SecretTriggers extends Component {
         })
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
       })
     }
   }

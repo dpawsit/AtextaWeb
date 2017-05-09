@@ -24,7 +24,7 @@ export default function (state = INITIAL_STATE, action) {
       return{...state, userCommands: commands}
 
     case ADD_GROUP:
-      console.log('adding group with', action.payload)
+      // console.log('adding group with', action.payload)
       return{...state, userGroups: state.userGroups.concat(action.payload)}
 
     case USER_LOGOUT:

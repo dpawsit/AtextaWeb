@@ -31,6 +31,7 @@ class MyNavbar extends Component {
             <NavItem className="navHeaders" eventKey={2} onClick={this.props.renderMessageList}><span className="navItems">My Messages</span></NavItem>
             <NavItem className="navHeaders" eventKey={3} onClick={this.props.renderGroupList}><span className="navItems">My Groups</span></NavItem>
             <NavItem className="navHeaders" eventKey={4} onClick={this.props.renderAddressBook} href="#"><span className="navItems">Address Book</span></NavItem>
+            <NavItem className="navHeaders" eventKey={5} onClick={this.props.renderPrivacy} href="#"><span className="navItems">Privacy</span></NavItem>
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={6} onClick={this.props.logout} href="#"><span className="navItems">Log out</span></NavItem>

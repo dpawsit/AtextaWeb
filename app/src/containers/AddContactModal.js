@@ -53,7 +53,7 @@ class AddContactModal extends React.Component {
   }
 
 	componentWillMount() {
-		console.log(this.props.initialData)
+		// console.log(this.props.initialData)
 		if(this.props.initialData) {
 			let medium = this.props.initialData.mediumType === 'T' ? 'Text' : 
 				this.props.initialData.mediumType === 'S' ? 'Slack' :
@@ -101,7 +101,7 @@ class AddContactModal extends React.Component {
 		} else {
 			axios.post('/groups/newRecipient', {userId: this.props.userId, recipients: [newContact]})
 			.then(res=>{
-				console.log('recipient', res)
+				// console.log('recipient', res)
 				this.props.close()
 				res.data.forEach(createdRecipient=>{
 					this.props.addContact({
@@ -113,7 +113,7 @@ class AddContactModal extends React.Component {
 				})
 			})
 			.catch(err=>{
-				console.log('error is', err)
+				// console.log('error is', err)
 				this.props.close()
 			})
 		}
@@ -121,16 +121,16 @@ class AddContactModal extends React.Component {
 
 	getSlackChannels () {
 		let token = slackLock.getToken();
-		console.log('token in get channels: ', token);
+		// console.log('token in get channels: ', token);
 		axios.get('/slack/getChannels', {params: {token: token}})
 		.then(results => {
-			console.log('result from getting channels: ', results.data);
+			// console.log('result from getting channels: ', results.data);
 			this.setState({
 				slackChannels: results.data
 			})
 		})
 		.catch(error => {
-			console.log('error from getting channels: ', error);
+			// console.log('error from getting channels: ', error);
 		})
 }
 
@@ -218,7 +218,7 @@ class AddContactModal extends React.Component {
 						<ButtonToolbar>
 				      <DropdownButton title={this.state.newContactMedium} id="dropdown-size-medium">
 				        <MenuItem eventKey="1" onSelect={()=> this.selectMediumType('Text')}>Text(Twilio)</MenuItem>
-				        <MenuItem eventKey="2" onSelect={()=> this.selectMediumType('Slack')}>Slack</MenuItem>
+				        {/*<MenuItem eventKey="2" onSelect={()=> this.selectMediumType('Slack')}>Slack</MenuItem>*/}
 				        <MenuItem eventKey="3" onSelect={()=> this.selectMediumType('Email')}>Email</MenuItem>
 				      </DropdownButton>
 				    </ButtonToolbar>
@@ -301,8 +301,8 @@ class AddContactModal extends React.Component {
   }
 
 	render() {
-		console.log('slack channels before rendering: ', this.state.slackChannels);
-		console.log('slack recipient before sending: ', this.state.newContactInfo);
+		// console.log('slack channels before rendering: ', this.state.slackChannels);
+		// console.log('slack recipient before sending: ', this.state.newContactInfo);
 		return(
 	    <Modal show={this.props.show} bsSize="large">
 	    	<Modal.Header closeButton onHide={this.props.close}>

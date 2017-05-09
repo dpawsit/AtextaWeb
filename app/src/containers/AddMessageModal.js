@@ -99,7 +99,7 @@ class AddMessageModal extends React.Component {
 				.then(result=> {
 				})
 				.catch(err=> {
-					console.log('error updating name:', err)
+					// console.log('error updating name:', err)
 				})
 			}
 			if(this.state.selectedGroupId !== this.props.initialData.groupId) {
@@ -144,7 +144,7 @@ class AddMessageModal extends React.Component {
 				newCommand
 			})
 			.then(result=>{
-				console.log('resulting command', result)
+				// console.log('resulting command', result)
 				this.props.addCommand({
 					id: result.data.id,
 					commandName: result.data.name,
@@ -157,7 +157,7 @@ class AddMessageModal extends React.Component {
 				})
 			})
 			.catch(err=>{
-				console.log('error submitting command', err)
+				// console.log('error submitting command', err)
 			})
 			this.props.close()
 		}

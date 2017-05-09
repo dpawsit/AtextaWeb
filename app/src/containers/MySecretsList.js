@@ -35,11 +35,11 @@ class MySecretsList extends React.Component {
   componentDidMount(){
     axios.get('/secretCommand/userCommands/'+this.props.userId)
     .then(res=>{
-      console.log('my secrets', res.data)
+      // console.log('my secrets', res.data)
       this.setState({setCommands: res.data})
     })
     .catch(err=>{
-      console.log('error getting', err)
+      // console.log('error getting', err)
     })
   }
 

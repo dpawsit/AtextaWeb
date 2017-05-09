@@ -49,7 +49,7 @@ class EditQueryView extends Component {
       this.props.deleteAdminQuery(deleteList)
     })
     .catch(error => {
-      console.log('error deleting admin queries: ', error);
+      // console.log('error deleting admin queries: ', error);
     })
   }
 

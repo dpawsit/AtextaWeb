@@ -31,5 +31,7 @@ configureStore().then(store => {
 			<Router history={browserHistory} routes={routes}/>
 		</Provider>, document.getElementById('App'))
 	})
-	.catch(error=>{console.log('this is the error', error)})
+	.catch(error=>{
+		// console.log('this is the error', error)
+	})
 

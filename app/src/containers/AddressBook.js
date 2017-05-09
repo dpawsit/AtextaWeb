@@ -82,7 +82,7 @@ class AddressBook extends React.Component {
 				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white', marginLeft: 20+'px'}} label="All" onClick={this.showAllContacts} />
 				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Texts" onClick={this.showTextContacts} />
 				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Emails" onClick={this.showEmailContacts} />
-				<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Slack" onClick={this.showSlackContacts} />
+				{/*<FlatButton className="standardButton" backgroundColor="darkgray" type="button"  labelStyle={{ color: 'white'}} label="Slack" onClick={this.showSlackContacts} />*/}
 
 				<Grid className= "scrollGrid">
 					<Row className = "tableHeader column">

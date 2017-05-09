@@ -9,7 +9,7 @@ slackLock.on("authenticated", function(authResult) {
 let _doAuthentication = function(authResult) {
   slackLock.getUserInfo(authResult.accessToken, function(error, profile) {
     if (error) {
-      console.log('error in getting slack user info :', error);
+      // console.log('error in getting slack user info :', error);
       return;
     }
 		setToken(JSON.stringify(profile.accessToken));

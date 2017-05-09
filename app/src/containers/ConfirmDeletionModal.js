@@ -16,16 +16,16 @@ class ConfirmDeletionModal extends React.Component {
     this.props.deleteCommand(this.props.commandToDelete)
     axios.delete('/command/deleteCommand/'+this.props.commandToDelete.id)
     .then(result=>{
-      console.log('result is', result)
+      // console.log('result is', result)
       this.props.close()
     })
     .catch(err=>{
-      console.log('error in deleting command', err)
+      // console.log('error in deleting command', err)
     })
   }
 
   render() {
-    console.log(this.props.commandToDelete)
+    // console.log(this.props.commandToDelete)
     let command = this.props.commandToDelete
     return(
       <Modal show={this.props.show} bsSize="large" onHide={this.props.close}>

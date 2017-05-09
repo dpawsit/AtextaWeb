@@ -31,7 +31,7 @@ class SetSecretModal extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props.initialData)
+    // console.log(this.props.initialData)
     if(this.props.initialData) {
       this.setState({
         newSecretName: this.props.initialData.name,
@@ -47,11 +47,11 @@ class SetSecretModal extends React.Component {
   componentDidMount() {
     axios.get('/secretCommand/availableSecretTriggers/'+this.props.userId)
     .then(res=>{
-      console.log('avilable secrest', res.data)
+      // console.log('avilable secrest', res.data)
       this.setState({unusedSecrets: res.data})
     })
     .catch(err=>{
-      console.log('err in getting', err)
+      // console.log('err in getting', err)
     })
   }
 
@@ -162,7 +162,7 @@ class SetSecretModal extends React.Component {
         }
       })
       .then(res=>{
-        console.log('result of secret post', res)
+        // console.log('result of secret post', res)
         this.props.close()
         this.props.addNewSecret({
           GroupName: this.state.newSecretGroupName,
@@ -179,7 +179,7 @@ class SetSecretModal extends React.Component {
         })
       })
       .catch(err=>{
-        console.log('error posting secret', err)
+        // console.log('error posting secret', err)
       })
     }
 

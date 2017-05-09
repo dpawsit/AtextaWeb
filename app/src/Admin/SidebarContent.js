@@ -56,7 +56,7 @@ handleQuerySelection(inputQueryId, inputQueryString, inputChartOption, inputQuer
       this.props.queryView()
     })
     .catch(error => {
-      console.log('Error running query: ', error);
+      // console.log('Error running query: ', error);
     })
   }
 }
