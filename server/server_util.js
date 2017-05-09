@@ -13,7 +13,8 @@ module.exports.checkUser = (req, res, next) => {
       req.path === '/dashboard' ||
       req.path === '/admin' ||
       req.path === '/admin/adminLogin' ||
-      req.path === '/adminLogin') {
+      req.path === '/adminLogin'||
+      req.path === '/privacy') {
     next();
   } else {
     if (token) {

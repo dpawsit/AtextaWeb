@@ -7,6 +7,7 @@ import AdminPanel from './Admin/AdminPanel'
 import Login from './components/Login'
 import Dashboard from './containers/Dashboard'
 import AuthService from './utils/AuthService'
+import Privacy from './containers/Privacy'
 import AdminLogin from './Admin/AdminLogin'
 
 const auth = new AuthService(items.client, items.domain);
@@ -25,6 +26,7 @@ export default (
 		<Route path="admin" component={AdminPanel} />
 		<Route path="login" component={Login} />
 		<Route path="adminLogin" component={AdminLogin} />
+		<Route path="privacy" component={Privacy} />
 	</Route>
 )
 
